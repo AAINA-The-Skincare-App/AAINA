@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="24506" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24504"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="none" indentationWidth="10" reuseIdentifier="EntryCollectionViewCell" id="ent-cl-001" customClass="EntryCollectionViewCell" customModule="skinCare" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="393" height="100"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="ent-cv-002">
+                <rect key="frame" x="0.0" y="0.0" width="393" height="100"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <!-- Container card (glass applied in awakeFromNib) -->
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ent-cn-003">
+                        <rect key="frame" x="16" y="8" width="361" height="84"/>
+                        <subviews>
+                            <!-- Entry note label (2 lines max) -->
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" numberOfLines="2" text="Journal entry note" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ent-el-004">
+                                <rect key="frame" x="16" y="14" width="329" height="36"/>
+                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="15"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <!-- Meta row: time + tags side by side -->
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="horizontal" spacing="10" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="ent-mr-005">
+                                <rect key="frame" x="16" y="58" width="329" height="16"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="752" verticalHuggingPriority="251" text="10:30 AM" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ent-tl-006">
+                                        <rect key="frame" x="0.0" y="0.0" width="70" height="16"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                        <color key="textColor" systemColor="secondaryLabelColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <!-- Tags stack — populated dynamically in configure() -->
+                                    <stackView opaque="NO" contentMode="scaleToFill" axis="horizontal" spacing="6" translatesAutoresizingMaskIntoConstraints="NO" id="ent-ts-007">
+                                        <rect key="frame" x="80" y="0.0" width="249" height="16"/>
+                                    </stackView>
+                                </subviews>
+                            </stackView>
+                        </subviews>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="ent-el-004" firstAttribute="top" secondItem="ent-cn-003" secondAttribute="top" constant="14" id="ec-c01"/>
+                            <constraint firstItem="ent-el-004" firstAttribute="leading" secondItem="ent-cn-003" secondAttribute="leading" constant="16" id="ec-c02"/>
+                            <constraint firstItem="ent-cn-003" firstAttribute="trailing" secondItem="ent-el-004" secondAttribute="trailing" constant="16" id="ec-c03"/>
+                            <constraint firstItem="ent-mr-005" firstAttribute="top" secondItem="ent-el-004" secondAttribute="bottom" constant="8" id="ec-c04"/>
+                            <constraint firstItem="ent-mr-005" firstAttribute="leading" secondItem="ent-cn-003" secondAttribute="leading" constant="16" id="ec-c05"/>
+                            <constraint firstItem="ent-cn-003" firstAttribute="trailing" secondItem="ent-mr-005" secondAttribute="trailing" relation="greaterThanOrEqual" constant="16" id="ec-c06"/>
+                            <constraint firstItem="ent-cn-003" firstAttribute="bottom" secondItem="ent-mr-005" secondAttribute="bottom" constant="14" id="ec-c07"/>
+                        </constraints>
+                    </view>
+                </subviews>
+                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                <constraints>
+                    <constraint firstItem="ent-cn-003" firstAttribute="top" secondItem="ent-cv-002" secondAttribute="top" constant="8" id="ec-c08"/>
+                    <constraint firstItem="ent-cn-003" firstAttribute="leading" secondItem="ent-cv-002" secondAttribute="leading" constant="16" id="ec-c09"/>
+                    <constraint firstItem="ent-cv-002" firstAttribute="trailing" secondItem="ent-cn-003" secondAttribute="trailing" constant="16" id="ec-c10"/>
+                    <constraint firstItem="ent-cv-002" firstAttribute="bottom" secondItem="ent-cn-003" secondAttribute="bottom" constant="8" id="ec-c11"/>
+                </constraints>
+            </tableViewCellContentView>
+            <connections>
+                <outlet property="containerView" destination="ent-cn-003" id="out-ent-cn"/>
+                <outlet property="entryLabel" destination="ent-el-004" id="out-ent-el"/>
+                <outlet property="timeLabel" destination="ent-tl-006" id="out-ent-tl"/>
+                <outlet property="tagsStack" destination="ent-ts-007" id="out-ent-ts"/>
+            </connections>
+        </tableViewCell>
+    </objects>
+    <resources>
+        <systemColor name="secondaryLabelColor">
+            <color red="0.23529411759999999" green="0.23529411759999999" blue="0.26274509800000001" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+    </resources>
+</document>
