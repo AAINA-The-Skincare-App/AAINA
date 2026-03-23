@@ -20,11 +20,16 @@ class NotesEditorViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .systemBackground
+        view.applyAINABackground()
         setupNavBar()
         setupTextView()
         setupToolbar()
         subscribeToKeyboard()
+    }
+
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        view.applyAINABackground()
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -120,7 +125,7 @@ class NotesEditorViewController: UIViewController {
         view.addSubview(toolbar)
         toolbar.applyGlass(cornerRadius: 24)
 
-        let playBtn   = makeToolbarButton(systemName: "play.fill",    tint: UIColor(red: 0.85, green: 0.2, blue: 0.2, alpha: 1))
+        let playBtn   = makeToolbarButton(systemName: "play.fill",    tint: .ainaDustyRose)
         let clipBtn   = makeToolbarButton(systemName: "paperclip",    tint: .secondaryLabel)
         let labelBtn  = makeToolbarButton(systemName: "tag",          tint: .secondaryLabel)
 

@@ -18,7 +18,7 @@ class TimelineCollectionViewCell: UICollectionViewCell {
         dayLabel.textAlignment = .center
         
         dateLabel.font = .systemFont(ofSize: 17, weight: .semibold)
-        dateLabel.backgroundColor = UIColor.systemGray5
+        dateLabel.backgroundColor = UIColor.ainaLightBlush.withAlphaComponent(0.4)
         dateLabel.clipsToBounds = true
         dateLabel.textAlignment = .center
     }
@@ -48,19 +48,19 @@ class TimelineCollectionViewCell: UICollectionViewCell {
         dateLabel.layer.borderColor = nil
 
         if isToday && isSelected {
-            dateLabel.backgroundColor = .systemRed
+            dateLabel.backgroundColor = .ainaCoralPink
             dateLabel.textColor = .white
         } else if isToday {
-            dateLabel.backgroundColor = UIColor.systemRed.withAlphaComponent(0.40)
-            dateLabel.textColor = .label
+            dateLabel.backgroundColor = UIColor.ainaCoralPink.withAlphaComponent(0.35)
+            dateLabel.textColor = .ainaTextPrimary
         } else if isSelected {
-            dateLabel.backgroundColor = UIColor(white: 0.70, alpha: 1)
-            dateLabel.textColor = .label
+            dateLabel.backgroundColor = .ainaLightBlush
+            dateLabel.textColor = .ainaTextPrimary
             dateLabel.layer.borderWidth = 0.5
-            dateLabel.layer.borderColor = UIColor.systemGray5.cgColor
+            dateLabel.layer.borderColor = UIColor.ainaCoralPink.withAlphaComponent(0.3).cgColor
         } else {
-            dateLabel.backgroundColor = UIColor(white: 0.90, alpha: 1)
-            dateLabel.textColor = .label
+            dateLabel.backgroundColor = UIColor.ainaLightBlush.withAlphaComponent(0.4)
+            dateLabel.textColor = .ainaTextPrimary
         }
     }
 }
