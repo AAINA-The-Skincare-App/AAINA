@@ -14,7 +14,7 @@ enum JournalPhotoStore {
             .appendingPathComponent("JournalPhotos", isDirectory: true)
     }
 
-    /// Saves a UIImage as JPEG and returns the filename, or nil on failure.
+    //Saves a UIImage as JPEG and returns the filename, or nil on failure.
     static func save(_ image: UIImage) -> String? {
         let dir = directory
         try? FileManager.default.createDirectory(at: dir, withIntermediateDirectories: true)
@@ -24,13 +24,13 @@ enum JournalPhotoStore {
         return name
     }
 
-    /// Loads a UIImage by filename. Returns nil if not found.
+    // Loads a UIImage by filename. Returns nil if not found.
     static func load(named name: String) -> UIImage? {
         let url = directory.appendingPathComponent(name)
         return (try? Data(contentsOf: url)).flatMap(UIImage.init)
     }
 
-    /// Deletes the file for a given filename.
+    // Deletes the file for a given filename.
     static func delete(named name: String) {
         try? FileManager.default.removeItem(at: directory.appendingPathComponent(name))
     }

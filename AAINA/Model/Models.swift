@@ -217,6 +217,7 @@ struct JournalEntry: Codable {
     let note: String
     let flareUps: [String]
     let date: Date
+    let photoFileNames: [String]
 
     enum CodingKeys: String, CodingKey {
         case id
@@ -224,14 +225,16 @@ struct JournalEntry: Codable {
         case note
         case flareUps
         case date
+        case photoFileNames
     }
 
-    init(id: String, userID: String, note: String, flareUps: [String], date: Date = Date()) {
+    init(id: String, userID: String, note: String, flareUps: [String], date: Date = Date(), photoFileNames: [String] = []) {
         self.id = id
         self.userID = userID
         self.note = note
         self.flareUps = flareUps
         self.date = date
+        self.photoFileNames = photoFileNames
     }
 
     init(from decoder: Decoder) throws {
@@ -241,6 +244,7 @@ struct JournalEntry: Codable {
         note = try c.decode(String.self, forKey: .note)
         flareUps = try c.decode([String].self, forKey: .flareUps)
         date = (try? c.decode(Date.self, forKey: .date)) ?? Date()
+        photoFileNames = (try? c.decode([String].self, forKey: .photoFileNames)) ?? []
     }
 }
 

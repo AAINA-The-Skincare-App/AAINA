@@ -1,15 +1,9 @@
-# API keys — never commit
-skinCare/AI/Config.swift
+# API Keys / Secrets
+AAINA/AI/Config.swift
 
-# Xcode
+# Xcode user data
 *.xcuserstate
 xcuserdata/
-*.xccheckout
-*.moved-aside
-DerivedData/
-*.hmap
-*.ipa
-*.xcarchive
 
 # macOS
 .DS_Store

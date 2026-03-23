@@ -1,8 +1,8 @@
 //
-//  AINAColors.swift
-//  skinCare
+//  AAINAColors.swift
+//  AAINA
 //
-//  AINA complete color & gradient system — single source of truth for the Journal module.
+//  AAINA complete color & gradient system — single source of truth.
 //
 
 import UIKit
@@ -41,8 +41,7 @@ extension UIColor {
 // MARK: - Page Background Gradient
 
 extension UIView {
-    /// Applies (or resizes) the AINA page background gradient on this view's layer.
-    /// Call from both `viewDidLoad` and `viewDidLayoutSubviews`.
+    // Call from both `viewDidLoad` and `viewDidLayoutSubviews`.
     func applyAINABackground() {
         let name = "ainaBackground"
         if let existing = layer.sublayers?.first(where: { $0.name == name }) as? CAGradientLayer {
@@ -66,4 +65,3 @@ extension UIView {
         layer.insertSublayer(gradient, at: 0)
     }
 }
-
