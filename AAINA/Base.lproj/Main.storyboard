@@ -12,7 +12,7 @@
         <!--Routine Timeline View Controller-->
         <scene sceneID="F0F-tV-AmB">
             <objects>
-                <viewController id="RtY-ht-pOv" customClass="RoutineTimelineViewController" customModule="skinCare" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="RtY-ht-pOv" customClass="RoutineTimelineViewController" customModule="AAINA" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="jLh-nU-zUk">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -59,7 +59,7 @@
         <!--Home View Controller-->
         <scene sceneID="ogw-rg-1Sb">
             <objects>
-                <viewController id="JDB-Bx-zH8" customClass="HomeViewController" customModule="skinCare" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="JDB-Bx-zH8" customClass="HomeViewController" customModule="AAINA" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="POB-Wv-fgB">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -126,7 +126,7 @@
         <!--Profile View Controller-->
         <scene sceneID="8jL-zN-zqd">
             <objects>
-                <viewController id="HK8-Zx-9xb" customClass="ProfileViewController" customModule="skinCare" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="HK8-Zx-9xb" customClass="ProfileViewController" customModule="AAINA" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="azZ-H4-4RH">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -192,7 +192,7 @@
         <!--Main Tab Bar View Controller-->
         <scene sceneID="HCS-sW-IzA">
             <objects>
-                <tabBarController storyboardIdentifier="MainTabBarViewController" automaticallyAdjustsScrollViewInsets="NO" id="7va-di-7s8" customClass="MainTabBarViewController" customModule="skinCare" customModuleProvider="target" sceneMemberID="viewController">
+                <tabBarController storyboardIdentifier="MainTabBarViewController" automaticallyAdjustsScrollViewInsets="NO" id="7va-di-7s8" customClass="MainTabBarViewController" customModule="AAINA" customModuleProvider="target" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationItem key="navigationItem" id="yDa-o5-cqb"/>
                     <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="02X-fr-2QM">
@@ -233,7 +233,7 @@
         <!--Onboarding Sensitivity View Controller-->
         <scene sceneID="dgu-0k-SDh">
             <objects>
-                <viewController id="3c2-28-3Ss" customClass="OnboardingSensitivityViewController" customModule="skinCare" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="3c2-28-3Ss" customClass="OnboardingSensitivityViewController" customModule="AAINA" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="hHF-eQ-vMG">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -373,7 +373,7 @@
         <!--Onboarding Goals View Controller-->
         <scene sceneID="Sg6-L6-9S0">
             <objects>
-                <viewController id="zAw-hc-tBA" customClass="OnboardingGoalsViewController" customModule="skinCare" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="zAw-hc-tBA" customClass="OnboardingGoalsViewController" customModule="AAINA" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="FTQ-m3-eGW">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -577,7 +577,7 @@ with your skincare?
         <!--Profile View Controller-->
         <scene sceneID="JHO-CL-hxX">
             <objects>
-                <viewController id="gGA-9q-qKC" customClass="ProfileViewController" customModule="skinCare" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="gGA-9q-qKC" customClass="ProfileViewController" customModule="AAINA" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="tGa-mi-aLX">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -680,7 +680,7 @@ with your skincare?
         <!--Routine View Controller-->
         <scene sceneID="88P-f5-3RI">
             <objects>
-                <viewController id="YGt-sv-dlf" customClass="RoutineViewController" customModule="skinCare" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="YGt-sv-dlf" customClass="RoutineViewController" customModule="AAINA" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="d4O-N5-7vz">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -743,7 +743,7 @@ with your skincare?
         <!--Journal View Controller-->
         <scene sceneID="HBV-56-0JG">
             <objects>
-                <viewController id="OjL-d4-msT" customClass="JournalViewController" customModule="skinCare" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="OjL-d4-msT" customClass="JournalViewController" customModule="AAINA" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="n1a-Zs-uof">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -820,7 +820,7 @@ with your skincare?
         <!--New Entry-->
         <scene sceneID="4e0-5U-Z4N">
             <objects>
-                <viewController storyboardIdentifier="JournalEntryViewController" id="a6C-7x-A19" customClass="JournalEntryViewController" customModule="skinCare" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="JournalEntryViewController" id="a6C-7x-A19" customClass="JournalEntryViewController" customModule="AAINA" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Ms0-wV-ORv">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -1026,7 +1026,7 @@ with your skincare?
         <!--Onboarding Exposure View Controller-->
         <scene sceneID="4JG-wg-3C4">
             <objects>
-                <viewController id="6eJ-Td-HxA" customClass="OnboardingExposureViewController" customModule="skinCare" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="6eJ-Td-HxA" customClass="OnboardingExposureViewController" customModule="AAINA" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Ezp-fP-cDi">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -1181,7 +1181,7 @@ with your skincare?
         <!--Onboarding Camera View Controller-->
         <scene sceneID="Cam-On-brd">
             <objects>
-                <viewController id="OnC-am-VCr" customClass="OnboardingCameraViewController" customModule="skinCare" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="OnC-am-VCr" customClass="OnboardingCameraViewController" customModule="AAINA" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="vCa-mV-iew">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -1197,7 +1197,7 @@ with your skincare?
         <!--Notes Editor View Controller-->
         <scene sceneID="NEV-sc-001">
             <objects>
-                <viewController storyboardIdentifier="NotesEditorViewController" id="NEV-vc-001" customClass="NotesEditorViewController" customModule="skinCare" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="NotesEditorViewController" id="NEV-vc-001" customClass="NotesEditorViewController" customModule="AAINA" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="NEV-vw-001">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -1212,7 +1212,7 @@ with your skincare?
         <!--OnboardingDOB View Controller-->
         <scene sceneID="JNo-Vk-uc2">
             <objects>
-                <viewController id="jYM-l8-CAP" customClass="OnboardingDOBViewController" customModule="skinCare" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="jYM-l8-CAP" customClass="OnboardingDOBViewController" customModule="AAINA" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" ambiguous="YES" id="oSS-0R-cow">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -1366,7 +1366,7 @@ with your skincare?
         <!--Onboarding Skin Type View Controller-->
         <scene sceneID="1Jk-dQ-a0W">
             <objects>
-                <viewController id="sen-a4-zpD" customClass="OnboardingSkinTypeViewController" customModule="skinCare" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="sen-a4-zpD" customClass="OnboardingSkinTypeViewController" customModule="AAINA" customModuleProvider="target" sceneMemberID="viewController">
                     <string key="storyboardIdentifier" base64-UTF8="YES">
 Cg
 </string>

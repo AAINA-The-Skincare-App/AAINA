@@ -13,10 +13,10 @@ class ReminderTableViewCell: UITableViewCell {
         selectionStyle = .none
         backgroundColor = .clear
         contentView.backgroundColor = .clear
-        containerView.backgroundColor = .white
+        containerView.backgroundColor = .ainaGlassSurface
         containerView.layer.cornerRadius = 16
-        containerView.layer.shadowColor = UIColor.black.cgColor
-        containerView.layer.shadowOpacity = 0.06
+        containerView.layer.shadowColor = UIColor.ainaCardShadowColor.cgColor
+        containerView.layer.shadowOpacity = 0.10
         containerView.layer.shadowOffset = CGSize(width: 0, height: 2)
         containerView.layer.shadowRadius = 8
         containerView.layer.masksToBounds = false

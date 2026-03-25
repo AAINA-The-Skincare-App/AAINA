@@ -5,7 +5,6 @@
 
 import UIKit
 import EventKit
-import EventKitUI
 import UserNotifications
 
 class JournalViewController: UIViewController {
@@ -43,7 +42,7 @@ class JournalViewController: UIViewController {
         super.viewDidLoad()
         loadPersistedData()
 
-        view.backgroundColor = .white
+        view.applyAINABackground()
         setupNavigationBar()
         setupButtons()
         setupCollectionView()
@@ -62,6 +61,7 @@ class JournalViewController: UIViewController {
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
+        view.applyAINABackground()
         scrollTimelineToSelected(animated: false)
     }
 
@@ -83,6 +83,8 @@ class JournalViewController: UIViewController {
     // MARK: - Navigation bar
     private func setupNavigationBar() {
         title = "Journal"
+        navigationController?.navigationBar.prefersLargeTitles = true
+        navigationItem.largeTitleDisplayMode = .always
 
         let calendarButton = UIBarButtonItem(
             image: UIImage(systemName: "calendar"),
@@ -101,7 +103,7 @@ class JournalViewController: UIViewController {
         let picker = UIDatePicker()
         picker.datePickerMode = .date
         picker.preferredDatePickerStyle = .inline
-        picker.tintColor = .systemRed
+        picker.tintColor = .ainaCoralPink
 
         guard let selectedDate = Calendar.current.date(byAdding: .day, value: selectedIndex, to: timelineStartDate)
         else { return }
@@ -142,50 +144,56 @@ class JournalViewController: UIViewController {
     }
 
     // MARK: - Actions
-    @IBAction func addJournalEntryTapped(_ sender: Any) {
-        // Navigation handled by the storyboard segue "JournalEntryViewController".
-        // onSave wiring happens in prepare(for:sender:) below.
+    // Block the storyboard segue — we push the VC programmatically below.
+    override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
+        if identifier == "JournalEntryViewController" { return false }
+        return super.shouldPerformSegue(withIdentifier: identifier, sender: sender)
     }
 
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "JournalEntryViewController",
-           let vc = segue.destination as? JournalEntryViewController {
-            vc.onSave = { [weak self] entry in
-                guard let self else { return }
-                self.allJournalEntries.insert(entry, at: 0)
-                self.saveEntries()
-                self.filterEntriesForSelectedDate()
-                self.tableView.reloadSections(IndexSet(integer: 1), with: .automatic)
-            }
+    @IBAction func addJournalEntryTapped(_ sender: Any) {
+        let vc = JournalEntryViewController()
+        vc.onSave = { [weak self] entry in
+            guard let self else { return }
+            self.allJournalEntries.insert(entry, at: 0)
+            self.saveEntries()
+            self.filterEntriesForSelectedDate()
+            self.tableView.reloadSections(IndexSet(integer: 1), with: .automatic)
         }
+        navigationController?.pushViewController(vc, animated: true)
     }
 
     @IBAction func addReminderTapped(_ sender: UIButton) {
-        print("Add Reminder Button Tapped")
+        let addVC = AddReminderViewController()
+        addVC.onSave = { [weak self] title, date in
+            guard let self else { return }
 
-        eventStore.requestFullAccessToEvents { granted, error in
-            
-            DispatchQueue.main.async {
-                
-                if granted {
-                    
-                    let editVC = EKEventEditViewController()
-                    editVC.eventStore = self.eventStore
-                    
-                    let event = EKEvent(eventStore: self.eventStore)
-                    event.calendar = self.eventStore.defaultCalendarForNewEvents
-                    
-                    editVC.event = event
-                    editVC.editViewDelegate = self
-                    
-                    self.present(editVC, animated: true)
-                    
-                } else {
-                    
-                    print("Calendar permission denied")
-                }
+            let startOfToday = Calendar.current.startOfDay(for: Date())
+            guard date >= startOfToday else {
+                let alert = UIAlertController(
+                    title: "Invalid Date",
+                    message: "Reminders can only be set for today or a future date.",
+                    preferredStyle: .alert
+                )
+                alert.addAction(UIAlertAction(title: "OK", style: .default))
+                self.present(alert, animated: true)
+                return
             }
+
+            let event = EKEvent(eventStore: self.eventStore)
+            event.title     = title
+            event.startDate = date
+            event.endDate   = date.addingTimeInterval(3600)
+
+            self.scheduleNotification(for: event)
+            self.allReminders.append(event)
+            self.saveReminders()
+            self.filterRemindersForSelectedDate()
+            self.tableView.reloadSections(IndexSet(integer: 0), with: .automatic)
         }
+
+        let nav = UINavigationController(rootViewController: addVC)
+        nav.modalPresentationStyle = .formSheet
+        present(nav, animated: true)
     }
 
     // MARK: - Date filtering
@@ -281,6 +289,7 @@ class JournalViewController: UIViewController {
         collectionView.dataSource = self
         collectionView.delegate = self
         collectionView.alwaysBounceVertical = false
+        collectionView.backgroundColor = .clear
 
         collectionView.register(
             UINib(nibName: "TimelineCollectionViewCell", bundle: nil),
@@ -293,7 +302,7 @@ class JournalViewController: UIViewController {
         tableView.dataSource = self
         tableView.delegate = self
         tableView.separatorStyle = .none
-        tableView.backgroundColor = .white
+        tableView.backgroundColor = .clear
         tableView.alwaysBounceVertical = true
         tableView.contentInset = UIEdgeInsets(top: 8, left: 0, bottom: 24, right: 0)
 
@@ -451,8 +460,8 @@ extension JournalViewController: UITableViewDataSource, UITableViewDelegate {
         let button = UIButton(type: .system)
         button.setTitle(expanded ? "See Less" : "See More", for: .normal)
         button.setImage(nil, for: .normal)
-        button.tintColor = .secondaryLabel
-        button.setTitleColor(.secondaryLabel, for: .normal)
+        button.tintColor = .ainaDustyRose
+        button.setTitleColor(.ainaDustyRose, for: .normal)
         button.titleLabel?.font = .systemFont(ofSize: 12, weight: .regular)
         button.tag = section
         button.addTarget(self, action: #selector(seeMoreTapped(_:)), for: .touchUpInside)
@@ -505,7 +514,7 @@ extension JournalViewController: UITableViewDataSource, UITableViewDelegate {
             done(true)
         }
         action.image = UIImage(systemName: "trash")
-        action.backgroundColor = UIColor(red: 0.93, green: 0.45, blue: 0.45, alpha: 1)
+        action.backgroundColor = .ainaSoftRed
         return UISwipeActionsConfiguration(actions: [action])
     }
 
@@ -544,34 +553,6 @@ extension JournalViewController {
     }
 }
 
-// MARK: - Event Delegate
-extension JournalViewController: EKEventEditViewDelegate {
-
-    func eventEditViewController(_ controller: EKEventEditViewController,
-                                 didCompleteWith action: EKEventEditViewAction) {
-        controller.dismiss(animated: true)
-        guard action == .saved, let event = controller.event else { return }
-
-        let startOfToday = Calendar.current.startOfDay(for: Date())
-        if let startDate = event.startDate, startDate < startOfToday {
-            let alert = UIAlertController(
-                title: "Invalid Date",
-                message: "Reminders can only be set for today or a future date.",
-                preferredStyle: .alert
-            )
-            alert.addAction(UIAlertAction(title: "OK", style: .default))
-            present(alert, animated: true)
-            return
-        }
-
-        try? eventStore.remove(event, span: .thisEvent)
-        scheduleNotification(for: event)
-        allReminders.append(event)
-        saveReminders()
-        filterRemindersForSelectedDate()
-        tableView.reloadSections(IndexSet(integer: 0), with: .automatic)
-    }
-}
 
 // MARK: - Notifications
 extension JournalViewController {

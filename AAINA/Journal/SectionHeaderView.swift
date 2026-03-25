@@ -10,10 +10,10 @@ class SectionHeaderView: UIView {
         backgroundColor = .clear
 
         titleLabel.font = UIFont.systemFont(ofSize: 20, weight: .bold)
-        titleLabel.textColor = .label
+        titleLabel.textColor = .ainaTextPrimary
 
         subtitleLabel.font = UIFont.systemFont(ofSize: 13, weight: .regular)
-        subtitleLabel.textColor = .secondaryLabel
+        subtitleLabel.textColor = .ainaTextSecondary
     }
 
     func configure(title: String, subtitle: String?) {
