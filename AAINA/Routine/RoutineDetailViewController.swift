@@ -13,10 +13,13 @@ class RoutineDetailViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.applyAINABackground()
         navigationItem.largeTitleDisplayMode = .never
+        view.backgroundColor = .clear
+        view.applyAINABackground()
         let appearance = UINavigationBarAppearance()
         appearance.configureWithTransparentBackground()
-        appearance.backgroundEffect = UIBlurEffect(style: .systemUltraThinMaterial)
+        appearance.backgroundColor = UIColor.ainaGlassSurface
         appearance.shadowColor = .clear
 
         navigationController?.navigationBar.standardAppearance = appearance
@@ -84,20 +87,17 @@ extension RoutineDetailViewController {
 
         NSLayoutConstraint.activate([
 
-            //  SCROLL VIEW (now starts below navigation bar)
             scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
 
-            //  CONTENT
-            contentStack.topAnchor.constraint(equalTo: scrollView.topAnchor, constant: 24),
+            contentStack.topAnchor.constraint(equalTo: scrollView.contentLayoutGuide.topAnchor, constant: 24),
             contentStack.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             contentStack.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
-            contentStack.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
+            contentStack.bottomAnchor.constraint(equalTo: scrollView.contentLayoutGuide.bottomAnchor),
 
-            //  IMPORTANT (for proper scrolling)
-            contentStack.widthAnchor.constraint(equalTo: scrollView.widthAnchor, constant: -40)
+            contentStack.widthAnchor.constraint(equalTo: scrollView.frameLayoutGuide.widthAnchor, constant: -40)
         ])
     }
 }
@@ -107,7 +107,7 @@ extension RoutineDetailViewController {
     private func makeVideoCard() -> UIView {
 
         let card = makeCard()
-        card.backgroundColor = .black
+        card.backgroundColor = .ainaRoseLight
         card.clipsToBounds = true
 
         guard let url = Bundle.main.url(forResource: "Cleanser", withExtension: "mp4") else {
@@ -153,7 +153,7 @@ extension RoutineDetailViewController {
         let text = UILabel()
         text.numberOfLines = 0
         text.font = .systemFont(ofSize: 15)
-        text.textColor = .secondaryLabel
+        text.textColor = .ainaTextSecondary
         text.text = aiStep?.reason ?? step?.productDescription ?? ""
 
         let divider = UIView()
@@ -247,19 +247,19 @@ extension RoutineDetailViewController {
             pill.text = item.name
             pill.textAlignment = .center
             pill.font = .systemFont(ofSize: 14, weight: .medium)
-            pill.backgroundColor = .systemGray5
+            pill.backgroundColor = .ainaTintedGlassLight
             pill.layer.cornerRadius = 18
             pill.layer.masksToBounds = true
             pill.padding = UIEdgeInsets(top: 8, left: 16, bottom: 8, right: 16)
 
             if let id = item.id {
-                pill.textColor = .systemBlue
+                pill.textColor = .ainaCoralPink
                 pill.isUserInteractionEnabled = true
                 pill.accessibilityIdentifier = id
                 let tap = UITapGestureRecognizer(target: self, action: #selector(openIngredient(_:)))
                 pill.addGestureRecognizer(tap)
             } else {
-                pill.textColor = .label
+                pill.textColor = .ainaTextPrimary
             }
 
             row?.addArrangedSubview(pill)
@@ -289,12 +289,12 @@ extension RoutineDetailViewController {
         let container = UIView()
 
         let titleLabel = UILabel()
+        titleLabel.textColor = .ainaTextPrimary
         titleLabel.font = .systemFont(ofSize: 34, weight: .bold)
 
         let subtitleLabel = UILabel()
         subtitleLabel.font = .systemFont(ofSize: 17)
-        subtitleLabel.textColor = .label.withAlphaComponent(0.6)
-
+        subtitleLabel.textColor = .ainaTextSecondary
         if let ai = aiStep {
             titleLabel.text = ai.productType.rawValue.capitalized
             subtitleLabel.text = ai.productName
@@ -330,8 +330,61 @@ extension RoutineDetailViewController {
         contentStack.addArrangedSubview(makeDescriptionSection())
         contentStack.addArrangedSubview(makeInstructionSection())
         contentStack.addArrangedSubview(makeIngredientsSection())
+        
+        let infoCard = IngredientInfoCardView()
+        contentStack.addArrangedSubview(infoCard)
     }
 
+}
+
+private func makeIngredientInfoCard() -> UIView {
+
+    let card = UIView()
+    card.layer.cornerRadius = 20
+    card.layer.borderWidth = 1
+    card.layer.borderColor = UIColor.ainaCoralPink.withAlphaComponent(0.25).cgColor
+    card.backgroundColor = UIColor.ainaTintedGlassMedium
+
+    let label = UILabel()
+    label.numberOfLines = 0
+    label.font = .systemFont(ofSize: 15)
+    label.textAlignment = .center
+
+    // 🔥 Styled text (highlight "Tap any ingredient pill")
+    let text = NSMutableAttributedString(
+        string: "💡 Curious about an ingredient? ",
+        attributes: [.foregroundColor: UIColor.secondaryLabel]
+    )
+
+    let highlight = NSAttributedString(
+        string: "Tap any ingredient pill ",
+        attributes: [
+            .foregroundColor: UIColor.ainaCoralPink
+          
+        ]
+    )
+
+    let end = NSAttributedString(
+        string: "to learn what it does for your skin.",
+        attributes: [.foregroundColor: UIColor.secondaryLabel]
+    )
+
+    text.append(highlight)
+    text.append(end)
+
+    label.attributedText = text
+
+    card.addSubview(label)
+    label.translatesAutoresizingMaskIntoConstraints = false
+
+    NSLayoutConstraint.activate([
+        label.topAnchor.constraint(equalTo: card.topAnchor, constant: 16),
+        label.leadingAnchor.constraint(equalTo: card.leadingAnchor, constant: 16),
+        label.trailingAnchor.constraint(equalTo: card.trailingAnchor, constant: -16),
+        label.bottomAnchor.constraint(equalTo: card.bottomAnchor, constant: -16)
+    ])
+
+    return card
 }
 
 // MARK: Helper
@@ -358,7 +411,11 @@ extension RoutineDetailViewController {
 
         let card = UIView()
 
-        card.backgroundColor = .systemGray5
+        card.backgroundColor = .ainaGlassElevated
+        card.layer.shadowColor = UIColor.ainaCardShadowColor.cgColor
+        card.layer.shadowOpacity = 0.10
+        card.layer.shadowRadius = 16
+        card.layer.shadowOffset = CGSize(width: 0, height: 8)
         card.layer.cornerRadius = 20
         card.clipsToBounds = true
 

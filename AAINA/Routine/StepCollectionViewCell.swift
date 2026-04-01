@@ -15,209 +15,316 @@ class StepCollectionViewCell: UICollectionViewCell {
 
     @IBOutlet weak var arrowButton: UIButton!
   
-    
-   
-        
-            var arrowTapped: (() -> Void)?
-            var checkChanged: ((Bool) -> Void)?
+  
+        var arrowTapped: (() -> Void)?
+        var checkChanged: ((Bool) -> Void)?
 
-            private var isChecked = false
-            private var ingredients: [String] = []
+        private var isChecked = false
+        private var ingredients: [String] = []
+    private let checkGradient = CAGradientLayer()
 
-            override func awakeFromNib() {
-                
-                super.awakeFromNib()
-                setupUI()
-            }
+        private let cardLayer = CAGradientLayer()
 
-            override func preferredLayoutAttributesFitting(
-                _ layoutAttributes: UICollectionViewLayoutAttributes
-            ) -> UICollectionViewLayoutAttributes {
-                let attributes = layoutAttributes.copy() as! UICollectionViewLayoutAttributes
-                let width = attributes.frame.width
-                let size = contentView.systemLayoutSizeFitting(
-                    CGSize(width: width, height: UIView.layoutFittingCompressedSize.height),
-                    withHorizontalFittingPriority: .required,
-                    verticalFittingPriority: .fittingSizeLevel
-                )
-                attributes.frame.size = CGSize(width: width, height: ceil(size.height))
-                return attributes
-            }
-
-            override func prepareForReuse() {
-                super.prepareForReuse()
-
-              
-                updateCheckboxUI()
-
-                ingredientsStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
-            }
+        override func awakeFromNib() {
+            super.awakeFromNib()
+            setupUI()
         }
+    override func layoutSubviews() {
+        super.layoutSubviews()
 
-        // MARK: - UI Setup
+        cardLayer.frame = cardView.bounds
+        checkGradient.frame = checkButton.bounds
 
-        extension StepCollectionViewCell {
-
-            private func setupUI() {
-
-                backgroundColor = .clear
-                contentView.backgroundColor = .clear
-
-                // Card
-                cardView.backgroundColor = .systemBackground
-                cardView.layer.cornerRadius = 24
-                cardView.layer.cornerCurve = .continuous
-
-                cardView.layer.shadowColor = UIColor.black.cgColor
-                cardView.layer.shadowOpacity = 0.06
-                cardView.layer.shadowOffset = CGSize(width: 0, height: 10)
-                cardView.layer.shadowRadius = 20
-
-                // Stack
-                ingredientsStackView.axis = .vertical
-                ingredientsStackView.spacing = 12
-
-                // Checkbox
-                var config = UIButton.Configuration.plain()
-                config.image = UIImage(systemName: "circle")
-                config.preferredSymbolConfigurationForImage =
-                    UIImage.SymbolConfiguration(pointSize: 22, weight: .regular)
-
-                checkButton.configuration = config
-                checkButton.tintColor = .systemGray3
-                checkButton.adjustsImageWhenHighlighted = false
-
-                checkButton.addTarget(self, action: #selector(toggleCheck), for: .touchUpInside)
-            }
-        }
-
-        // MARK: - Configure
-
-        extension StepCollectionViewCell {
-
-            func configure(step: RoutineStep, ingredients: [String], isChecked: Bool) {
-
-                stepTitleLabel.text = "Step \(step.stepOrder) : \(step.type.rawValue.capitalized)"
-                productNameLabel.text = step.stepTitle
-
-                keyIngredientsTitleLabel.text = "Key Ingredients"
-                keyIngredientsTitleLabel.textColor = .secondaryLabel
-                keyIngredientsTitleLabel.font = .systemFont(ofSize: 13, weight: .medium)
-
-                self.ingredients = Array(ingredients.prefix(4))
-                self.isChecked = isChecked
-
-                updateCheckboxUI()
-                buildIngredientsGrid()
-            }
-
-            func configure(aiStep: AIRoutineStep, isChecked: Bool) {
-
-                stepTitleLabel.text = "Step \(aiStep.stepNumber) : \(aiStep.productType.rawValue.capitalized)"
-                productNameLabel.text = aiStep.productName
-
-                keyIngredientsTitleLabel.text = "Key Ingredients"
-                keyIngredientsTitleLabel.textColor = .secondaryLabel
-                keyIngredientsTitleLabel.font = .systemFont(ofSize: 13, weight: .medium)
-
-                self.ingredients = Array(aiStep.keyIngredients.prefix(4))
-                self.isChecked = isChecked
-
-                updateCheckboxUI()
-                buildIngredientsGrid()
-            }
-        }
-
-        // MARK: - Checkbox
-
-    // MARK: - Checkbox
-
-    extension StepCollectionViewCell {
-
-        @objc private func toggleCheck() {
-            isChecked.toggle()
-
-            UIView.animate(withDuration: 0.15, animations: {
-                self.checkButton.transform = CGAffineTransform(scaleX: 0.8, y: 0.8)
-            }) { _ in
-                UIView.animate(withDuration: 0.15) {
-                    self.checkButton.transform = .identity
-                }
-            }
-
+        // ✅ MAKE IT PERFECT CIRCLE
+        let radius = checkButton.bounds.height / 2
+        checkButton.layer.cornerRadius = radius
+       
+    }
+        override func prepareForReuse() {
+            super.prepareForReuse()
             updateCheckboxUI()
-            checkChanged?(isChecked)
+            ingredientsStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
         }
 
-        private func updateCheckboxUI() {
+        override func preferredLayoutAttributesFitting(
+            _ layoutAttributes: UICollectionViewLayoutAttributes
+        ) -> UICollectionViewLayoutAttributes {
 
-            var config = checkButton.configuration
+            let attributes = layoutAttributes.copy() as! UICollectionViewLayoutAttributes
+            let width = attributes.frame.width
 
-            if isChecked {
-                config?.image = UIImage(systemName: "checkmark.circle.fill")
-                checkButton.tintColor = .systemBlue
-            } else {
-                config?.image = UIImage(systemName: "circle")
-                checkButton.tintColor = .systemGray3
-                checkButton.backgroundColor = .systemBackground
-                
-            }
+            let size = contentView.systemLayoutSizeFitting(
+                CGSize(width: width, height: UIView.layoutFittingCompressedSize.height),
+                withHorizontalFittingPriority: .required,
+                verticalFittingPriority: .fittingSizeLevel
+            )
 
-            checkButton.configuration = config
+            attributes.frame.size = CGSize(width: width, height: ceil(size.height))
+            return attributes
         }
     }
-        // MARK: - Ingredients Grid
 
-        extension StepCollectionViewCell {
+    // MARK: - UI Setup
 
-            private func buildIngredientsGrid() {
 
-                ingredientsStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
+extension StepCollectionViewCell {
 
-                var row: UIStackView?
+    // MARK: - UI SETUP
 
-                for (index, ingredient) in ingredients.enumerated() {
+    private func setupUI() {
+        // 🔥 ADD THIS (YOU MISSED THIS)
 
-                    if index % 2 == 0 {
-                        row = UIStackView()
-                        row!.axis = .horizontal
-                        row!.spacing = 12
-                        row!.distribution = .fillEqually
-                        ingredientsStackView.addArrangedSubview(row!)
-                    }
+        checkGradient.colors = [
+            UIColor(red: 255/255, green: 120/255, blue: 140/255, alpha: 1).cgColor,
+            UIColor(red: 232/255, green: 154/255, blue: 160/255, alpha: 1).cgColor
+        ]
 
-                    row?.addArrangedSubview(createPill(title: ingredient))
-                }
+        checkGradient.startPoint = CGPoint(x: 0, y: 0)
+        checkGradient.endPoint = CGPoint(x: 1, y: 1)
+        checkGradient.cornerRadius = 16
 
-                if ingredients.count % 2 != 0 {
-                    row?.addArrangedSubview(UIView())
-                }
-            }
+        checkButton.layer.insertSublayer(checkGradient, at: 0)
 
-            private func createPill(title: String) -> PaddingLabel {
+        // initially hidden
+        checkGradient.isHidden = true
 
-                let pill = PaddingLabel()
-                pill.text = title
-                pill.textAlignment = .center
-                pill.font = .systemFont(ofSize: 14, weight: .medium)
+      
+       
 
-                pill.textColor = UIColor.label.withAlphaComponent(0.85)
-                pill.backgroundColor = .systemGray5
+        // 🔥 IMPORTANT
+        contentView.layer.masksToBounds = false
+        checkButton.adjustsImageWhenHighlighted = false
+        checkButton.adjustsImageWhenDisabled = false
+        checkButton.showsTouchWhenHighlighted = false
+     
+        cardView.clipsToBounds = false
+        contentView.clipsToBounds = false
+        self.clipsToBounds = false
+        cardView.layer.borderWidth = 2
+        cardView.layer.borderColor = UIColor.white.cgColor
 
-                pill.layer.cornerRadius = 14
-                pill.layer.masksToBounds = true
+        // ✨ soft white glow
+     //   cardView.layer.shadowColor = UIColor.white.cgColor
+      //  cardView.layer.shadowOpacity = 1
+       // cardView.layer.shadowRadius = 8
+       // cardView.layer.shadowOffset = .zero
 
-                pill.padding = UIEdgeInsets(top: 10, left: 16, bottom: 10, right: 16)
+       
+        checkButton.layer.masksToBounds = false
+        
 
-                return pill
+        layer.shadowColor = UIColor.black.cgColor
+        layer.shadowOpacity = 0.04
+        layer.shadowRadius = 14
+        layer.shadowOffset = CGSize(width: 0, height: 6)
+
+        // MARK: TEXT
+
+        stepTitleLabel.font = .systemFont(ofSize: 17, weight: .semibold)
+        stepTitleLabel.textColor = UIColor.ainaTextPrimary
+
+        productNameLabel.font = .systemFont(ofSize: 15, weight: .regular)
+        productNameLabel.textColor = UIColor.ainaTextPrimary   // 🔥 now black
+        keyIngredientsTitleLabel.font = .systemFont(ofSize: 12, weight: .semibold)
+        keyIngredientsTitleLabel.textColor = UIColor(
+            red: 150/255,
+            green: 150/255,
+            blue: 165/255,
+            alpha: 1
+        )
+        keyIngredientsTitleLabel.text = "Key Ingredients".uppercased()
+        // MARK: STACK (🔥 IMPORTANT)
+
+        ingredientsStackView.axis = .vertical
+        ingredientsStackView.spacing = 10
+
+        // MARK: CHECK BUTTON
+
+        var config = UIButton.Configuration.plain()
+        config.image = UIImage(systemName: "circle")
+        config.preferredSymbolConfigurationForImage =
+            UIImage.SymbolConfiguration(pointSize: 22, weight: .regular)
+
+       
+        checkButton.tintColor = .systemGray3
+        checkButton.backgroundColor = .clear
+        checkButton.layer.masksToBounds = false
+        checkButton.adjustsImageWhenHighlighted = false
+
+        checkButton.addTarget(self, action: #selector(toggleCheck), for: .touchUpInside)
+    }
+}
+
+///////////////////////////////////////////////////////////////
+
+extension StepCollectionViewCell {
+
+    // MARK: - CONFIGURE
+
+    func configure(step: RoutineStep, ingredients: [String], isChecked: Bool) {
+
+        stepTitleLabel.text = "Step \(step.stepOrder) : \(step.type.rawValue.capitalized)"
+        productNameLabel.text = step.stepTitle
+
+        keyIngredientsTitleLabel.text = "Key Ingredients".uppercased()
+        keyIngredientsTitleLabel.font = .systemFont(ofSize: 11, weight: .semibold)
+        keyIngredientsTitleLabel.textColor = UIColor(
+            red: 150/255,
+            green: 150/255,
+            blue: 165/255,
+            alpha: 1
+        )
+
+        self.ingredients = Array(ingredients.prefix(4)) // max 4 for grid
+        self.isChecked = isChecked
+
+        updateCheckboxUI()
+        buildIngredientsGrid()
+    }
+
+    func configure(aiStep: AIRoutineStep, isChecked: Bool) {
+
+        stepTitleLabel.text = "Step \(aiStep.stepNumber) : \(aiStep.productType.rawValue.capitalized)"
+        productNameLabel.text = aiStep.productName
+        keyIngredientsTitleLabel.text = "Key Ingredients".uppercased()
+        self.ingredients = Array(aiStep.keyIngredients.prefix(4))
+        self.isChecked = isChecked
+
+        updateCheckboxUI()
+        buildIngredientsGrid()
+    }
+}
+
+///////////////////////////////////////////////////////////////
+
+extension StepCollectionViewCell {
+    
+    // MARK: - CHECKBOX
+    
+    @objc private func toggleCheck() {
+        isChecked.toggle()
+        UIView.performWithoutAnimation {
+            self.checkButton.layoutIfNeeded()
+        }
+        UIView.animate(withDuration: 0.15,
+                       animations: {
+            self.checkButton.transform = CGAffineTransform(scaleX: 0.9, y: 0.9)
+        }) { _ in
+            UIView.animate(withDuration: 0.2) {
+                self.checkButton.transform = .identity
             }
         }
-
-        // MARK: - Actions
-
-        extension StepCollectionViewCell {
-
-            @IBAction func arrowPressed(_ sender: UIButton) {
-                arrowTapped?()
-            }
+        updateCheckboxUI()
+        checkChanged?(isChecked)
+    }
+    private func updateCheckboxUI() {
+        
+        if isChecked {
+            
+            // ✅ SOLID SYSTEM PINK
+            checkButton.backgroundColor = UIColor.systemPink.withAlphaComponent(0.3)
+            
+            // ✅ CHECKMARK
+            checkButton.setImage(
+                UIImage(systemName: "checkmark")?
+                    .withConfiguration(
+                        UIImage.SymbolConfiguration(pointSize: 12, weight: .bold)
+                    ),
+                for: .normal
+            )
+            
+            checkButton.tintColor = .white
+            
+            // ✨ GLOW (SOFT + PREMIUM)
+            checkButton.layer.shadowColor = UIColor.systemPink.cgColor
+            checkButton.layer.shadowOpacity = 0.6
+            checkButton.layer.shadowRadius = 10
+            checkButton.layer.shadowOffset = .zero
+            
+            // 💫 subtle scale
+            checkButton.transform = CGAffineTransform(scaleX: 1.05, y: 1.05)
+            
+        } else {
+            
+            // ❌ RESET
+            checkButton.backgroundColor = .clear
+            
+            checkButton.setImage(
+                UIImage(systemName: "circle"),
+                for: .normal
+            )
+            
+            checkButton.tintColor = UIColor.systemGray3
+            checkButton.layer.shadowOpacity = 0
+            checkButton.transform = .identity
         }
+    }
+}
+///////////////////////////////////////////////////////////////
+
+extension StepCollectionViewCell {
+
+    // MARK: - GRID (🔥 MAIN FIX)
+
+    private func buildIngredientsGrid() {
+
+        ingredientsStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
+
+        var rowStack: UIStackView?
+
+        for (index, ingredient) in ingredients.enumerated() {
+
+            if index % 2 == 0 {
+                rowStack = UIStackView()
+                rowStack?.axis = .horizontal
+                rowStack?.spacing = 10
+                rowStack?.distribution = .fillEqually
+                ingredientsStackView.addArrangedSubview(rowStack!)
+            }
+
+            let pill = createPill(title: ingredient)
+            rowStack?.addArrangedSubview(pill)
+        }
+
+        // fill empty space if odd count
+        if ingredients.count % 2 != 0 {
+            rowStack?.addArrangedSubview(UIView())
+        }
+    }
+
+    // MARK: - PILL (🔥 EXACT INSPO)
+
+    private func createPill(title: String) -> PaddingLabel {
+
+        let pill = PaddingLabel()
+        pill.text = title
+        pill.textAlignment = .center
+        pill.font = .systemFont(ofSize: 14, weight: .medium)
+
+        // 🎯 EXACT LIGHT GREY
+        pill.backgroundColor = UIColor.systemGray.withAlphaComponent(0.2)
+
+        pill.textColor = UIColor.ainaTextPrimary
+
+        // 💊 SHAPE
+        pill.layer.cornerRadius = 16
+        pill.layer.cornerCurve = .continuous
+        pill.layer.masksToBounds = true
+        pill.layer.borderColor = UIColor.white.cgColor
+
+        pill.padding = UIEdgeInsets(top: 10, left: 12, bottom: 10, right: 12)
+
+        return pill
+    }
+}
+
+///////////////////////////////////////////////////////////////
+
+extension StepCollectionViewCell {
+
+    // MARK: - ACTION
+
+    @IBAction func arrowPressed(_ sender: UIButton) {
+        arrowTapped?()
+    }
+}

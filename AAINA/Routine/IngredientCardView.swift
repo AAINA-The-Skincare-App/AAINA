@@ -69,7 +69,7 @@ class IngredientCardView: UIView {
 
         // MARK: - Add Views
         stack.addArrangedSubview(titleLabel)
-        stack.setCustomSpacing(8, after: titleLabel) 
+        stack.setCustomSpacing(8, after: titleLabel)
         stack.addArrangedSubview(textLabel)
     }
 

@@ -8,21 +8,30 @@ class IngredientDetailUI {
 
     func build(in view: UIView, ingredient: Ingredient) {
 
-        // MARK: - Stack config
-        stack.axis = .vertical
-        stack.spacing = 24
-        stack.translatesAutoresizingMaskIntoConstraints = false
+            // 🌸 Background
+            view.backgroundColor = .clear
+            view.applyAINABackground()
 
-        // MARK: - ScrollView config
-        scrollView.translatesAutoresizingMaskIntoConstraints = false
-        scrollView.alwaysBounceVertical = true
-        scrollView.showsVerticalScrollIndicator = false
+            // MARK: Stack
+            stack.axis = .vertical
+            stack.spacing = 24
+            stack.translatesAutoresizingMaskIntoConstraints = false
+            stack.backgroundColor = .clear
 
-        // MARK: - Hierarchy
-        view.addSubview(scrollView)
-        scrollView.addSubview(stack)
-        scrollView.contentInsetAdjustmentBehavior = .automatic
+            // MARK: ScrollView
+            scrollView.translatesAutoresizingMaskIntoConstraints = false
+            scrollView.alwaysBounceVertical = true
+            scrollView.showsVerticalScrollIndicator = false
+            scrollView.backgroundColor = .clear
 
+            // MARK: Hierarchy
+            view.addSubview(scrollView)
+            scrollView.addSubview(stack)
+
+            // 🌸 ADD BLOBS (correct layering)
+            addBlobs(to: view)
+
+            scrollView.contentInsetAdjustmentBehavior = .automatic
         // MARK: - Constraints (FIXED )
         NSLayoutConstraint.activate([
 
@@ -50,6 +59,9 @@ class IngredientDetailUI {
         buildInfoCards(ingredient)
         buildCombinesWith(ingredient)
         buildAvoidWith(ingredient)
+        
+        let infoCard = IngredientInfoCardView()
+        stack.addArrangedSubview(infoCard)
 
         // Bottom spacing
         let spacer = UIView()
@@ -60,24 +72,98 @@ class IngredientDetailUI {
 
 
 
+       
+//////////////////////////////////////////////////////////////
+// MARK: - BLOBS
+//////////////////////////////////////////////////////////////
+
+extension IngredientDetailUI {
+    
+    private func addBlobs(to view: UIView) {
+        
+        // 🌸 Top Right Blob (smaller, sharper)
+        let topBlob = makeBlob(
+            size: 180,
+            color: .ainaCoralPink,
+            alpha: 0.28
+        )
+        
+        // 🌸 Bottom Left Blob (bigger, softer)
+        let bottomBlob = makeBlob(
+            size: 260,
+            color: .ainaRoseLight,
+            alpha: 0.22
+        )
+        
+        // ✅ Correct layering (MOST IMPORTANT)
+        view.insertSubview(topBlob, belowSubview: scrollView)
+        view.insertSubview(bottomBlob, belowSubview: scrollView)
+        
+        NSLayoutConstraint.activate([
+            
+            // 🔝 Top Right (partially outside screen)
+            topBlob.topAnchor.constraint(equalTo: view.topAnchor, constant: 40),
+            topBlob.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 80),
+            topBlob.widthAnchor.constraint(equalToConstant: 180),
+            topBlob.heightAnchor.constraint(equalToConstant: 180),
+            
+            // 🔻 Bottom Left (more spread)
+            bottomBlob.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 120),
+            bottomBlob.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: -100),
+            bottomBlob.widthAnchor.constraint(equalToConstant: 260),
+            bottomBlob.heightAnchor.constraint(equalToConstant: 260)
+        ])
+    }
+}
+// MARK: - BLOB VIEW
+
+private func makeBlob(size: CGFloat, color: UIColor, alpha: CGFloat) -> UIView {
+    
+    let blob = UIView()
+    blob.backgroundColor = color.withAlphaComponent(alpha)
+    blob.layer.cornerRadius = size / 2
+    blob.translatesAutoresizingMaskIntoConstraints = false
+
+    let blur = UIVisualEffectView(effect: UIBlurEffect(style: .systemUltraThinMaterial))
+    blur.translatesAutoresizingMaskIntoConstraints = false
+    blur.layer.cornerRadius = size / 2
+    blur.clipsToBounds = true
+
+    blob.addSubview(blur)
+
+    NSLayoutConstraint.activate([
+        blur.topAnchor.constraint(equalTo: blob.topAnchor),
+        blur.bottomAnchor.constraint(equalTo: blob.bottomAnchor),
+        blur.leadingAnchor.constraint(equalTo: blob.leadingAnchor),
+        blur.trailingAnchor.constraint(equalTo: blob.trailingAnchor)
+    ])
+
+    return blob
+}
+
 extension IngredientDetailUI {
 
     private func buildHeader(_ ingredient: Ingredient) {
 
         let title = UILabel()
         title.text = ingredient.name
-        title.font = .systemFont(ofSize: 34, weight: .bold)
-
+        title.textColor = .ainaTextPrimary
+        
+        
         let scientific = UILabel()
+        scientific.textColor = .ainaTextSecondary
         scientific.text = ingredient.scientificName
         scientific.font = .italicSystemFont(ofSize: 16)
         scientific.textColor = .tertiaryLabel
 
         closeButton.setImage(UIImage(systemName: "xmark"), for: .normal)
-        closeButton.backgroundColor = .systemGray6
-        closeButton.layer.cornerRadius = 18
-        closeButton.tintColor = .label
+        closeButton.backgroundColor = .ainaGlassElevated
+        closeButton.tintColor = .ainaTextPrimary
 
+        closeButton.layer.shadowColor = UIColor.ainaCardShadowColor.cgColor
+        closeButton.layer.shadowOpacity = 0.12
+        closeButton.layer.shadowRadius = 8
+        
         let container = UIView()
 
         container.addSubview(title)
@@ -145,7 +231,8 @@ extension IngredientDetailUI {
             pill.font = .systemFont(ofSize: 13, weight: .medium)
             pill.textAlignment = .center   // IMPROVED
             
-            pill.backgroundColor = .systemGray6
+            pill.backgroundColor = .ainaTintedGlassLight
+            pill.textColor = .ainaCoralPink
             pill.layer.cornerRadius = 16
             pill.layer.masksToBounds = true
             
@@ -170,8 +257,7 @@ extension IngredientDetailUI {
         label.text = ingredient.shortDescription
         label.numberOfLines = 0
         label.font = .systemFont(ofSize: 16)
-        label.textColor = .secondaryLabel
-
+        label.textColor = .ainaTextSecondary
         stack.addArrangedSubview(label)
     }
 }
