@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="24506" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24504"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="lss-root" customClass="LifestyleSectionView" customModule="AAINA" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <stackView contentMode="scaleToFill" axis="vertical" spacing="12" translatesAutoresizingMaskIntoConstraints="NO" id="lss-outer">
+                    <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                    <subviews>
+                        <label opaque="NO" contentMode="scaleToFill" text="LIFESTYLE FACTORS" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lss-hdr">
+                            <rect key="frame" x="0.0" y="0.0" width="393" height="0.0"/>
+                            <fontDescription key="fontDescription" type="boldSystem" pointSize="12"/>
+                            <color key="textColor" red="0.78000000000000003" green="0.47999999999999998" blue="0.60999999999999999" alpha="1" colorSpace="calibratedRGB"/>
+                        </label>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lss-sleepcard">
+                            <rect key="frame" x="0.0" y="12" width="393" height="595.66666666666663"/>
+                            <subviews>
+                                <label opaque="NO" contentMode="scaleToFill" text="Sleep quality" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lss-sleeptitle">
+                                    <rect key="frame" x="16" y="16" width="361" height="18"/>
+                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                    <color key="textColor" red="0.16500000000000001" green="0.16500000000000001" blue="0.16500000000000001" alpha="1" colorSpace="calibratedRGB"/>
+                                </label>
+                                <stackView contentMode="scaleToFill" alignment="center" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="lss-sleeprow">
+                                    <rect key="frame" x="16" y="46" width="361" height="533.66666666666663"/>
+                                    <subviews>
+                                        <label opaque="NO" contentMode="scaleToFill" text="Poor" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lss-poorlbl">
+                                            <rect key="frame" x="0.0" y="259.66666666666669" width="26.333333333333332" height="14.333333333333314"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                            <color key="textColor" red="0.54100000000000004" green="0.54100000000000004" blue="0.54100000000000004" alpha="1" colorSpace="calibratedRGB"/>
+                                        </label>
+                                        <stackView contentMode="scaleToFill" distribution="fillEqually" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="lss-emojistk">
+                                            <rect key="frame" x="34.333333333333343" y="0.0" width="287.33333333333326" height="533.66666666666663"/>
+                                        </stackView>
+                                        <label opaque="NO" contentMode="scaleToFill" text="Great" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lss-greatlbl">
+                                            <rect key="frame" x="329.66666666666669" y="259.66666666666669" width="31.333333333333314" height="14.333333333333314"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                            <color key="textColor" red="0.54100000000000004" green="0.54100000000000004" blue="0.54100000000000004" alpha="1" colorSpace="calibratedRGB"/>
+                                        </label>
+                                    </subviews>
+                                </stackView>
+                            </subviews>
+                            <constraints>
+                                <constraint firstItem="lss-sleeptitle" firstAttribute="top" secondItem="lss-sleepcard" secondAttribute="top" constant="16" id="lss-s1"/>
+                                <constraint firstItem="lss-sleeptitle" firstAttribute="leading" secondItem="lss-sleepcard" secondAttribute="leading" constant="16" id="lss-s2"/>
+                                <constraint firstItem="lss-sleeptitle" firstAttribute="trailing" secondItem="lss-sleepcard" secondAttribute="trailing" constant="-16" id="lss-s3"/>
+                                <constraint firstItem="lss-sleeprow" firstAttribute="top" secondItem="lss-sleeptitle" secondAttribute="bottom" constant="12" id="lss-s4"/>
+                                <constraint firstItem="lss-sleeprow" firstAttribute="leading" secondItem="lss-sleepcard" secondAttribute="leading" constant="16" id="lss-s5"/>
+                                <constraint firstItem="lss-sleeprow" firstAttribute="trailing" secondItem="lss-sleepcard" secondAttribute="trailing" constant="-16" id="lss-s6"/>
+                                <constraint firstItem="lss-sleeprow" firstAttribute="bottom" secondItem="lss-sleepcard" secondAttribute="bottom" constant="-16" id="lss-s7"/>
+                            </constraints>
+                        </view>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lss-stresscard">
+                            <rect key="frame" x="0.0" y="619.66666666666663" width="393" height="96"/>
+                            <subviews>
+                                <label opaque="NO" contentMode="scaleToFill" text="Stress level" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lss-stresstitle">
+                                    <rect key="frame" x="16" y="16" width="84.666666666666671" height="18"/>
+                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                    <color key="textColor" red="0.16500000000000001" green="0.16500000000000001" blue="0.16500000000000001" alpha="1" colorSpace="calibratedRGB"/>
+                                </label>
+                                <stackView contentMode="scaleToFill" alignment="center" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="lss-stressrow">
+                                    <rect key="frame" x="16" y="46" width="361" height="34"/>
+                                    <subviews>
+                                        <label opaque="NO" contentMode="scaleToFill" text="Low" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lss-lowlbl">
+                                            <rect key="frame" x="0.0" y="10" width="23" height="14.333333333333336"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                            <color key="textColor" red="0.54100000000000004" green="0.54100000000000004" blue="0.54100000000000004" alpha="1" colorSpace="calibratedRGB"/>
+                                        </label>
+                                        <slider contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="lss-slider">
+                                            <rect key="frame" x="31" y="0.0" width="295.66666666666669" height="34"/>
+                                        </slider>
+                                        <label opaque="NO" contentMode="scaleToFill" text="High" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lss-highlbl">
+                                            <rect key="frame" x="334.66666666666669" y="10" width="26.333333333333314" height="14.333333333333336"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                            <color key="textColor" red="0.54100000000000004" green="0.54100000000000004" blue="0.54100000000000004" alpha="1" colorSpace="calibratedRGB"/>
+                                        </label>
+                                    </subviews>
+                                </stackView>
+                            </subviews>
+                            <constraints>
+                                <constraint firstItem="lss-stresstitle" firstAttribute="top" secondItem="lss-stresscard" secondAttribute="top" constant="16" id="lss-st1"/>
+                                <constraint firstItem="lss-stresstitle" firstAttribute="leading" secondItem="lss-stresscard" secondAttribute="leading" constant="16" id="lss-st2"/>
+                                <constraint firstItem="lss-stressrow" firstAttribute="top" secondItem="lss-stresstitle" secondAttribute="bottom" constant="12" id="lss-st3"/>
+                                <constraint firstItem="lss-stressrow" firstAttribute="leading" secondItem="lss-stresscard" secondAttribute="leading" constant="16" id="lss-st4"/>
+                                <constraint firstItem="lss-stressrow" firstAttribute="trailing" secondItem="lss-stresscard" secondAttribute="trailing" constant="-16" id="lss-st5"/>
+                                <constraint firstItem="lss-stressrow" firstAttribute="bottom" secondItem="lss-stresscard" secondAttribute="bottom" constant="-16" id="lss-st6"/>
+                            </constraints>
+                        </view>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lss-watercard">
+                            <rect key="frame" x="0.0" y="727.66666666666663" width="393" height="124.33333333333337"/>
+                            <subviews>
+                                <label opaque="NO" contentMode="scaleToFill" text="Water intake" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lss-watertitle">
+                                    <rect key="frame" x="16" y="16" width="92.333333333333329" height="18"/>
+                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                    <color key="textColor" red="0.16500000000000001" green="0.16500000000000001" blue="0.16500000000000001" alpha="1" colorSpace="calibratedRGB"/>
+                                </label>
+                                <label opaque="NO" contentMode="scaleToFill" text="0 glasses/day avg" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lss-wcnt">
+                                    <rect key="frame" x="254" y="16.666666666666742" width="123" height="17"/>
+                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="14"/>
+                                    <color key="textColor" red="0.78000000000000003" green="0.47999999999999998" blue="0.60999999999999999" alpha="1" colorSpace="calibratedRGB"/>
+                                </label>
+                                <stackView contentMode="scaleToFill" distribution="fillEqually" spacing="4" translatesAutoresizingMaskIntoConstraints="NO" id="lss-wsegs">
+                                    <rect key="frame" x="16" y="44" width="361" height="0.0"/>
+                                </stackView>
+                                <label opaque="NO" contentMode="scaleToFill" text="Goal: 8 glasses" textAlignment="right" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lss-wgoal">
+                                    <rect key="frame" x="290.66666666666669" y="48" width="86.333333333333314" height="14.333333333333336"/>
+                                    <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                    <color key="textColor" red="0.54100000000000004" green="0.54100000000000004" blue="0.54100000000000004" alpha="1" colorSpace="calibratedRGB"/>
+                                </label>
+                                <stackView contentMode="scaleToFill" spacing="12" translatesAutoresizingMaskIntoConstraints="NO" id="lss-wstep">
+                                    <rect key="frame" x="154.66666666666666" y="72.333333333333371" width="84" height="36"/>
+                                    <subviews>
+                                        <button contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lss-wminus">
+                                            <rect key="frame" x="0.0" y="0.0" width="36" height="36"/>
+                                            <constraints>
+                                                <constraint firstAttribute="height" constant="36" id="lss-wm-h"/>
+                                                <constraint firstAttribute="width" constant="36" id="lss-wm-w"/>
+                                            </constraints>
+                                            <fontDescription key="fontDescription" type="system" pointSize="22"/>
+                                            <state key="normal" title="-">
+                                                <color key="titleColor" red="0.54100000000000004" green="0.54100000000000004" blue="0.54100000000000004" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                                            </state>
+                                        </button>
+                                        <button contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lss-wplus">
+                                            <rect key="frame" x="48" y="0.0" width="36" height="36"/>
+                                            <constraints>
+                                                <constraint firstAttribute="height" constant="36" id="lss-wp-h"/>
+                                                <constraint firstAttribute="width" constant="36" id="lss-wp-w"/>
+                                            </constraints>
+                                            <state key="normal" title="+">
+                                                <color key="titleColor" red="0.54100000000000004" green="0.54100000000000004" blue="0.54100000000000004" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                                            </state>
+                                        </button>
+                                    </subviews>
+                                </stackView>
+                            </subviews>
+                            <constraints>
+                                <constraint firstItem="lss-watertitle" firstAttribute="top" secondItem="lss-watercard" secondAttribute="top" constant="16" id="lss-w1"/>
+                                <constraint firstItem="lss-wstep" firstAttribute="top" secondItem="lss-wgoal" secondAttribute="bottom" constant="10" id="lss-w10"/>
+                                <constraint firstItem="lss-wstep" firstAttribute="centerX" secondItem="lss-watercard" secondAttribute="centerX" id="lss-w11"/>
+                                <constraint firstItem="lss-wstep" firstAttribute="bottom" secondItem="lss-watercard" secondAttribute="bottom" constant="-16" id="lss-w12"/>
+                                <constraint firstItem="lss-watertitle" firstAttribute="leading" secondItem="lss-watercard" secondAttribute="leading" constant="16" id="lss-w2"/>
+                                <constraint firstItem="lss-wcnt" firstAttribute="trailing" secondItem="lss-watercard" secondAttribute="trailing" constant="-16" id="lss-w3"/>
+                                <constraint firstItem="lss-wcnt" firstAttribute="centerY" secondItem="lss-watertitle" secondAttribute="centerY" id="lss-w4"/>
+                                <constraint firstItem="lss-wsegs" firstAttribute="top" secondItem="lss-watertitle" secondAttribute="bottom" constant="10" id="lss-w5"/>
+                                <constraint firstItem="lss-wsegs" firstAttribute="leading" secondItem="lss-watercard" secondAttribute="leading" constant="16" id="lss-w6"/>
+                                <constraint firstItem="lss-wsegs" firstAttribute="trailing" secondItem="lss-watercard" secondAttribute="trailing" constant="-16" id="lss-w7"/>
+                                <constraint firstItem="lss-wgoal" firstAttribute="top" secondItem="lss-wsegs" secondAttribute="bottom" constant="4" id="lss-w8"/>
+                                <constraint firstItem="lss-wgoal" firstAttribute="trailing" secondItem="lss-watercard" secondAttribute="trailing" constant="-16" id="lss-w9"/>
+                            </constraints>
+                        </view>
+                    </subviews>
+                </stackView>
+            </subviews>
+            <constraints>
+                <constraint firstItem="lss-outer" firstAttribute="top" secondItem="lss-root" secondAttribute="top" id="lss-r1"/>
+                <constraint firstItem="lss-outer" firstAttribute="leading" secondItem="lss-root" secondAttribute="leading" id="lss-r2"/>
+                <constraint firstItem="lss-outer" firstAttribute="trailing" secondItem="lss-root" secondAttribute="trailing" id="lss-r3"/>
+                <constraint firstItem="lss-outer" firstAttribute="bottom" secondItem="lss-root" secondAttribute="bottom" id="lss-r4"/>
+            </constraints>
+            <connections>
+                <outlet property="sleepCard" destination="lss-sleepcard" id="lss-o7"/>
+                <outlet property="sleepEmojiStack" destination="lss-emojistk" id="lss-o1"/>
+                <outlet property="stressCard" destination="lss-stresscard" id="lss-o8"/>
+                <outlet property="stressSlider" destination="lss-slider" id="lss-o2"/>
+                <outlet property="waterCard" destination="lss-watercard" id="lss-o9"/>
+                <outlet property="waterCountLabel" destination="lss-wcnt" id="lss-o3"/>
+                <outlet property="waterMinusButton" destination="lss-wminus" id="lss-o5"/>
+                <outlet property="waterPlusButton" destination="lss-wplus" id="lss-o6"/>
+                <outlet property="waterSegmentStack" destination="lss-wsegs" id="lss-o4"/>
+            </connections>
+            <point key="canvasLocation" x="138" y="129"/>
+        </view>
+    </objects>
+</document>
