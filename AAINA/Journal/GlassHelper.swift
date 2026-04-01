@@ -29,9 +29,9 @@ extension UIView {
     }
 }
 
-/// Creates a pill-shaped glass button. The UIButton lives inside the
-/// UIVisualEffectView's contentView so content is always above the glass layer.
-/// - Returns: The outer UIVisualEffectView (add this to your hierarchy) and the inner UIButton.
+//Creates a pill-shaped glass button. The UIButton lives inside the
+//UIVisualEffectView's contentView so content is always above the glass layer.
+//- Returns: The outer UIVisualEffectView (add this to your hierarchy) and the inner UIButton.
 func makeGlassButton(
     icon: String? = nil,
     title: String,

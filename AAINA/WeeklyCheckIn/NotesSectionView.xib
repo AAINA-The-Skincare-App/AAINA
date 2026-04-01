@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="24506" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24504"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="nss-root" customClass="NotesSectionView" customModule="AAINA" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="160"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <stackView axis="vertical" spacing="12" translatesAutoresizingMaskIntoConstraints="NO" id="nss-outer">
+                    <subviews>
+                        <label opaque="NO" text="ADDITIONAL NOTES" translatesAutoresizingMaskIntoConstraints="NO" id="nss-hdr">
+                            <fontDescription key="fontDescription" type="boldSystem" pointSize="12"/>
+                            <color key="textColor" red="0.78" green="0.48" blue="0.61" alpha="1" colorSpace="calibratedRGB"/>
+                        </label>
+                        <view translatesAutoresizingMaskIntoConstraints="NO" id="nss-card">
+                            <subviews>
+                                <textView opaque="NO" scrollEnabled="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nss-tv">
+                                    <constraints>
+                                        <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="100" id="nss-tvh"/>
+                                    </constraints>
+                                </textView>
+                                <label opaque="NO" numberOfLines="0" translatesAutoresizingMaskIntoConstraints="NO" id="nss-ph">
+                                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                    <color key="textColor" red="0.729" green="0.729" blue="0.729" alpha="1" colorSpace="calibratedRGB"/>
+                                </label>
+                            </subviews>
+                            <constraints>
+                                <constraint firstItem="nss-tv" firstAttribute="top" secondItem="nss-card" secondAttribute="top" constant="12" id="nss-c1"/>
+                                <constraint firstItem="nss-tv" firstAttribute="leading" secondItem="nss-card" secondAttribute="leading" constant="12" id="nss-c2"/>
+                                <constraint firstItem="nss-tv" firstAttribute="trailing" secondItem="nss-card" secondAttribute="trailing" constant="-12" id="nss-c3"/>
+                                <constraint firstItem="nss-tv" firstAttribute="bottom" secondItem="nss-card" secondAttribute="bottom" constant="-12" id="nss-c4"/>
+                                <constraint firstItem="nss-ph" firstAttribute="top" secondItem="nss-tv" secondAttribute="top" constant="7" id="nss-c5"/>
+                                <constraint firstItem="nss-ph" firstAttribute="leading" secondItem="nss-tv" secondAttribute="leading" constant="5" id="nss-c6"/>
+                                <constraint firstItem="nss-ph" firstAttribute="trailing" secondItem="nss-tv" secondAttribute="trailing" constant="-5" id="nss-c7"/>
+                            </constraints>
+                        </view>
+                    </subviews>
+                </stackView>
+            </subviews>
+            <constraints>
+                <constraint firstItem="nss-outer" firstAttribute="top" secondItem="nss-root" secondAttribute="top" id="nss-r1"/>
+                <constraint firstItem="nss-outer" firstAttribute="leading" secondItem="nss-root" secondAttribute="leading" id="nss-r2"/>
+                <constraint firstItem="nss-outer" firstAttribute="trailing" secondItem="nss-root" secondAttribute="trailing" id="nss-r3"/>
+                <constraint firstItem="nss-outer" firstAttribute="bottom" secondItem="nss-root" secondAttribute="bottom" id="nss-r4"/>
+            </constraints>
+            <connections>
+                <outlet property="notesCard" destination="nss-card" id="nss-o3"/>
+                <outlet property="textView" destination="nss-tv" id="nss-o1"/>
+                <outlet property="placeholderLabel" destination="nss-ph" id="nss-o2"/>
+            </connections>
+        </view>
+    </objects>
+</document>
