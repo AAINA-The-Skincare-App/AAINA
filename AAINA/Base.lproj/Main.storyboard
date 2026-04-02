@@ -171,6 +171,38 @@
             <point key="canvasLocation" x="1978" y="3637"/>
         </scene>
         <!--Navigation Controller-->
+        <scene sceneID="JjI-lp-xBI">
+            <objects>
+                <navigationController id="TMB-eZ-nvb" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="rpW-E3-jVy">
+                        <rect key="frame" x="0.0" y="118" width="393" height="54"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="LBH-ec-t2f" kind="relationship" relationship="rootViewController" id="eKt-Qd-Oks"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="DUQ-31-eWO" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1019" y="4446"/>
+        </scene>
+        <!--Face Scan Output-->
+        <scene sceneID="Pjl-Od-sP3">
+            <objects>
+                <viewController id="LBH-ec-t2f" customClass="FaceScanOutput" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="IB6-1g-b8W">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <viewLayoutGuide key="safeArea" id="atV-hD-27P"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="YFG-q9-tcF"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="LKS-I7-Izb" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2051" y="4447"/>
+        </scene>
+        <!--Navigation Controller-->
         <scene sceneID="Y9K-22-K76">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="8B2-eK-J8z" sceneMemberID="viewController">
@@ -1207,7 +1239,7 @@ with your skincare?
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="NEV-fr-001" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="6208.3969465648852" y="130.98591549295776"/>
+            <point key="canvasLocation" x="3679" y="2649"/>
         </scene>
         <!--OnboardingDOB View Controller-->
         <scene sceneID="JNo-Vk-uc2">
@@ -1839,6 +1871,137 @@ Cg
                 <placeholder placeholderIdentifier="IBFirstResponder" id="kaZ-qB-hh5" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2697" y="131"/>
+        </scene>
+        <!--Weekly Check In View Controller-->
+        <scene sceneID="wci-sc-001">
+            <objects>
+                <viewController storyboardIdentifier="WeeklyCheckInViewController" id="wci-vc-001" customClass="WeeklyCheckInViewController" customModule="AAINA" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="wci-vw-001">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wci-sv-001">
+                                <rect key="frame" x="0.0" y="47" width="393" height="805"/>
+                                <subviews>
+                                    <stackView contentMode="scaleToFill" ambiguous="YES" axis="vertical" spacing="24" translatesAutoresizingMaskIntoConstraints="NO" id="wci-cs-001">
+                                        <rect key="frame" x="20" y="16" width="353" height="1978"/>
+                                        <subviews>
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="wci-nh-001">
+                                                <rect key="frame" x="0.0" y="0.0" width="353" height="50"/>
+                                                <subviews>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wci-bb-001">
+                                                        <rect key="frame" x="0.0" y="5" width="40" height="40"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" constant="40" id="wci-c-bbh"/>
+                                                            <constraint firstAttribute="width" constant="40" id="wci-c-bbw"/>
+                                                        </constraints>
+                                                        <connections>
+                                                            <action selector="backTapped:" destination="wci-vc-001" eventType="touchUpInside" id="wci-a-bt1"/>
+                                                        </connections>
+                                                    </button>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="Weekly check-in" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wci-tl-001">
+                                                        <rect key="frame" x="50" y="0.0" width="155.33333333333334" height="48"/>
+                                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
+                                                        <nil key="textColor"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wci-dl-001">
+                                                        <rect key="frame" x="50" y="50" width="0.0" height="0.0"/>
+                                                        <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                                        <nil key="textColor"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
+                                                </subviews>
+                                                <constraints>
+                                                    <constraint firstItem="wci-bb-001" firstAttribute="leading" secondItem="wci-nh-001" secondAttribute="leading" id="wci-c-nh1"/>
+                                                    <constraint firstItem="wci-bb-001" firstAttribute="centerY" secondItem="wci-nh-001" secondAttribute="centerY" id="wci-c-nh2"/>
+                                                    <constraint firstItem="wci-tl-001" firstAttribute="leading" secondItem="wci-bb-001" secondAttribute="trailing" constant="10" id="wci-c-nh3"/>
+                                                    <constraint firstItem="wci-tl-001" firstAttribute="top" secondItem="wci-nh-001" secondAttribute="top" id="wci-c-nh4"/>
+                                                    <constraint firstItem="wci-dl-001" firstAttribute="leading" secondItem="wci-tl-001" secondAttribute="leading" id="wci-c-nh5"/>
+                                                    <constraint firstItem="wci-dl-001" firstAttribute="top" secondItem="wci-tl-001" secondAttribute="bottom" constant="2" id="wci-c-nh6"/>
+                                                    <constraint firstItem="wci-dl-001" firstAttribute="bottom" secondItem="wci-nh-001" secondAttribute="bottom" id="wci-c-nh7"/>
+                                                </constraints>
+                                            </view>
+                                            <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="wci-sk-001">
+                                                <rect key="frame" x="0.0" y="74" width="353" height="220"/>
+                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            </view>
+                                            <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="wci-rc-001">
+                                                <rect key="frame" x="0.0" y="318" width="353" height="260"/>
+                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            </view>
+                                            <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="wci-lc-001">
+                                                <rect key="frame" x="0.0" y="602" width="353" height="380"/>
+                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            </view>
+                                            <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="wci-pd-001">
+                                                <rect key="frame" x="0.0" y="1006" width="353" height="200"/>
+                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            </view>
+                                            <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="wci-ph-001">
+                                                <rect key="frame" x="0.0" y="1230" width="353" height="220"/>
+                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            </view>
+                                            <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="wci-nc-001">
+                                                <rect key="frame" x="0.0" y="1474" width="353" height="160"/>
+                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            </view>
+                                            <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="wci-cc-001">
+                                                <rect key="frame" x="0.0" y="1658" width="353" height="240"/>
+                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            </view>
+                                            <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wci-sb-001">
+                                                <rect key="frame" x="0.0" y="1922" width="353" height="56"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="56" id="wci-c-sbh"/>
+                                                </constraints>
+                                                <state key="normal" title="Save weekly check-in"/>
+                                                <connections>
+                                                    <action selector="saveTapped:" destination="wci-vc-001" eventType="touchUpInside" id="wci-a-st1"/>
+                                                </connections>
+                                            </button>
+                                        </subviews>
+                                    </stackView>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstItem="wci-cs-001" firstAttribute="top" secondItem="wci-clg-001" secondAttribute="top" constant="16" id="wci-c-sv1"/>
+                                    <constraint firstItem="wci-cs-001" firstAttribute="leading" secondItem="wci-clg-001" secondAttribute="leading" constant="20" id="wci-c-sv2"/>
+                                    <constraint firstItem="wci-clg-001" firstAttribute="trailing" secondItem="wci-cs-001" secondAttribute="trailing" constant="20" id="wci-c-sv3"/>
+                                    <constraint firstItem="wci-clg-001" firstAttribute="bottom" secondItem="wci-cs-001" secondAttribute="bottom" constant="40" id="wci-c-sv4"/>
+                                    <constraint firstItem="wci-cs-001" firstAttribute="width" secondItem="wci-flg-001" secondAttribute="width" constant="-40" id="wci-c-sv5"/>
+                                </constraints>
+                                <viewLayoutGuide key="contentLayoutGuide" id="wci-clg-001"/>
+                                <viewLayoutGuide key="frameLayoutGuide" id="wci-flg-001"/>
+                            </scrollView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="wci-sa-001"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="wci-sv-001" firstAttribute="top" secondItem="wci-sa-001" secondAttribute="top" id="wci-c-vw1"/>
+                            <constraint firstItem="wci-sv-001" firstAttribute="leading" secondItem="wci-vw-001" secondAttribute="leading" id="wci-c-vw2"/>
+                            <constraint firstAttribute="trailing" secondItem="wci-sv-001" secondAttribute="trailing" id="wci-c-vw3"/>
+                            <constraint firstAttribute="bottom" secondItem="wci-sv-001" secondAttribute="bottom" id="wci-c-vw4"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="backButton" destination="wci-bb-001" id="wci-o-bb1"/>
+                        <outlet property="changeSectionContainer" destination="wci-cc-001" id="wci-o-cc1"/>
+                        <outlet property="contentStack" destination="wci-cs-001" id="wci-o-cs1"/>
+                        <outlet property="dateRangeLabel" destination="wci-dl-001" id="wci-o-dl1"/>
+                        <outlet property="lifestyleSectionContainer" destination="wci-lc-001" id="wci-o-lc1"/>
+                        <outlet property="notesSectionContainer" destination="wci-nc-001" id="wci-o-nc1"/>
+                        <outlet property="photoSectionContainer" destination="wci-ph-001" id="wci-o-ph1"/>
+                        <outlet property="productSectionContainer" destination="wci-pd-001" id="wci-o-pd1"/>
+                        <outlet property="routineSectionContainer" destination="wci-rc-001" id="wci-o-rc1"/>
+                        <outlet property="saveButton" destination="wci-sb-001" id="wci-o-sb1"/>
+                        <outlet property="scrollView" destination="wci-sv-001" id="wci-o-sv1"/>
+                        <outlet property="skinSectionContainer" destination="wci-sk-001" id="wci-o-sk1"/>
+                        <outlet property="titleLabel" destination="wci-tl-001" id="wci-o-tl1"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="wci-fr-001" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="5000" y="964"/>
         </scene>
     </scenes>
     <resources>

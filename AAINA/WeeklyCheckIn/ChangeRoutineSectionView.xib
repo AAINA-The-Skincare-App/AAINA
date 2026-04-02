@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="24506" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24504"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="crs-root" customClass="ChangeRoutineSectionView" customModule="AAINA" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <stackView contentMode="scaleToFill" axis="vertical" spacing="12" translatesAutoresizingMaskIntoConstraints="NO" id="crs-outer">
+                    <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                    <subviews>
+                        <label opaque="NO" contentMode="scaleToFill" ambiguous="YES" text="CHANGE ROUTINE" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="crs-hdr">
+                            <rect key="frame" x="0.0" y="0.0" width="393" height="14.333333333333334"/>
+                            <fontDescription key="fontDescription" type="boldSystem" pointSize="12"/>
+                            <color key="textColor" red="0.78000000000000003" green="0.47999999999999998" blue="0.60999999999999999" alpha="1" colorSpace="calibratedRGB"/>
+                        </label>
+                        <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="crs-card">
+                            <rect key="frame" x="0.0" y="26.333333333333314" width="393" height="825.66666666666674"/>
+                            <subviews>
+                                <label opaque="NO" contentMode="scaleToFill" ambiguous="YES" text="Would you like to change your routine?" lineBreakMode="tailTruncation" numberOfLines="0" translatesAutoresizingMaskIntoConstraints="NO" id="crs-qlbl">
+                                    <rect key="frame" x="16" y="16.000000000000004" width="361" height="17.999999999999996"/>
+                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                    <color key="textColor" red="0.16500000000000001" green="0.16500000000000001" blue="0.16500000000000001" alpha="1" colorSpace="calibratedRGB"/>
+                                </label>
+                                <stackView contentMode="scaleToFill" ambiguous="YES" distribution="fillEqually" spacing="12" translatesAutoresizingMaskIntoConstraints="NO" id="crs-btnrow">
+                                    <rect key="frame" x="16" y="0.0" width="361" height="44"/>
+                                    <subviews>
+                                        <button contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="crs-nobtn">
+                                            <rect key="frame" x="0.0" y="0.0" width="174.66666666666666" height="44"/>
+                                            <constraints>
+                                                <constraint firstAttribute="height" constant="44" id="crs-no-h"/>
+                                            </constraints>
+                                            <state key="normal" title="No"/>
+                                        </button>
+                                        <button contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="crs-yesbtn">
+                                            <rect key="frame" x="186.66666666666663" y="0.0" width="174.33333333333337" height="44"/>
+                                            <constraints>
+                                                <constraint firstAttribute="height" constant="44" id="crs-yes-h"/>
+                                            </constraints>
+                                            <state key="normal" title="Yes"/>
+                                        </button>
+                                    </subviews>
+                                </stackView>
+                                <view hidden="YES" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="crs-reason">
+                                    <rect key="frame" x="16" y="106" width="361" height="703.66666666666663"/>
+                                    <subviews>
+                                        <label opaque="NO" contentMode="scaleToFill" ambiguous="YES" text="Why would you like to change?" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="crs-rtitle">
+                                            <rect key="frame" x="0.0" y="0.0" width="361" height="16.333333333333332"/>
+                                            <fontDescription key="fontDescription" pointSize="14"/>
+                                            <color key="textColor" red="0.54100000000000004" green="0.54100000000000004" blue="0.54100000000000004" alpha="1" colorSpace="calibratedRGB"/>
+                                        </label>
+                                        <label opaque="NO" hidden="YES" contentMode="scaleToFill" ambiguous="YES" lineBreakMode="tailTruncation" numberOfLines="0" translatesAutoresizingMaskIntoConstraints="NO" id="crs-warn">
+                                            <rect key="frame" x="0.0" y="24.333333333333314" width="361" height="0.0"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                            <color key="textColor" red="0.91000000000000003" green="0.44" blue="0.44" alpha="1" colorSpace="calibratedRGB"/>
+                                        </label>
+                                        <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="crs-rcard">
+                                            <rect key="frame" x="0.0" y="32.333333333333314" width="361" height="671.33333333333348"/>
+                                            <subviews>
+                                                <textView opaque="NO" contentMode="scaleToFill" ambiguous="YES" scrollEnabled="NO" translatesAutoresizingMaskIntoConstraints="NO" id="crs-rtv">
+                                                    <rect key="frame" x="12" y="10" width="337" height="651.33333333333337"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="80" id="crs-rtvh"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <textInputTraits key="textInputTraits"/>
+                                                </textView>
+                                                <label opaque="NO" contentMode="scaleToFill" lineBreakMode="tailTruncation" numberOfLines="0" translatesAutoresizingMaskIntoConstraints="NO" id="crs-rph">
+                                                    <rect key="frame" x="17" y="17" width="327" height="0.0"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                    <color key="textColor" red="0.72899999999999998" green="0.72899999999999998" blue="0.72899999999999998" alpha="1" colorSpace="calibratedRGB"/>
+                                                </label>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="crs-rtv" firstAttribute="top" secondItem="crs-rcard" secondAttribute="top" constant="10" id="crs-rc1"/>
+                                                <constraint firstItem="crs-rtv" firstAttribute="leading" secondItem="crs-rcard" secondAttribute="leading" constant="12" id="crs-rc2"/>
+                                                <constraint firstItem="crs-rtv" firstAttribute="trailing" secondItem="crs-rcard" secondAttribute="trailing" constant="-12" id="crs-rc3"/>
+                                                <constraint firstItem="crs-rtv" firstAttribute="bottom" secondItem="crs-rcard" secondAttribute="bottom" constant="-10" id="crs-rc4"/>
+                                                <constraint firstItem="crs-rph" firstAttribute="top" secondItem="crs-rtv" secondAttribute="top" constant="7" id="crs-rc5"/>
+                                                <constraint firstItem="crs-rph" firstAttribute="leading" secondItem="crs-rtv" secondAttribute="leading" constant="5" id="crs-rc6"/>
+                                                <constraint firstItem="crs-rph" firstAttribute="trailing" secondItem="crs-rtv" secondAttribute="trailing" constant="-5" id="crs-rc7"/>
+                                            </constraints>
+                                        </view>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstItem="crs-rtitle" firstAttribute="top" secondItem="crs-reason" secondAttribute="top" id="crs-re1"/>
+                                        <constraint firstItem="crs-rcard" firstAttribute="bottom" secondItem="crs-reason" secondAttribute="bottom" id="crs-re10"/>
+                                        <constraint firstItem="crs-rtitle" firstAttribute="leading" secondItem="crs-reason" secondAttribute="leading" id="crs-re2"/>
+                                        <constraint firstItem="crs-rtitle" firstAttribute="trailing" secondItem="crs-reason" secondAttribute="trailing" id="crs-re3"/>
+                                        <constraint firstItem="crs-warn" firstAttribute="top" secondItem="crs-rtitle" secondAttribute="bottom" constant="8" id="crs-re4"/>
+                                        <constraint firstItem="crs-warn" firstAttribute="leading" secondItem="crs-reason" secondAttribute="leading" id="crs-re5"/>
+                                        <constraint firstItem="crs-warn" firstAttribute="trailing" secondItem="crs-reason" secondAttribute="trailing" id="crs-re6"/>
+                                        <constraint firstItem="crs-rcard" firstAttribute="top" secondItem="crs-warn" secondAttribute="bottom" constant="8" id="crs-re7"/>
+                                        <constraint firstItem="crs-rcard" firstAttribute="leading" secondItem="crs-reason" secondAttribute="leading" id="crs-re8"/>
+                                        <constraint firstItem="crs-rcard" firstAttribute="trailing" secondItem="crs-reason" secondAttribute="trailing" id="crs-re9"/>
+                                    </constraints>
+                                </view>
+                            </subviews>
+                            <constraints>
+                                <constraint firstItem="crs-qlbl" firstAttribute="top" secondItem="crs-card" secondAttribute="top" constant="16" id="crs-cc1"/>
+                                <constraint firstItem="crs-reason" firstAttribute="bottom" secondItem="crs-card" secondAttribute="bottom" constant="-16" id="crs-cc10"/>
+                                <constraint firstItem="crs-qlbl" firstAttribute="leading" secondItem="crs-card" secondAttribute="leading" constant="16" id="crs-cc2"/>
+                                <constraint firstItem="crs-qlbl" firstAttribute="trailing" secondItem="crs-card" secondAttribute="trailing" constant="-16" id="crs-cc3"/>
+                                <constraint firstItem="crs-btnrow" firstAttribute="top" secondItem="crs-qlbl" secondAttribute="bottom" constant="14" id="crs-cc4"/>
+                                <constraint firstItem="crs-btnrow" firstAttribute="leading" secondItem="crs-card" secondAttribute="leading" constant="16" id="crs-cc5"/>
+                                <constraint firstItem="crs-btnrow" firstAttribute="trailing" secondItem="crs-card" secondAttribute="trailing" constant="-16" id="crs-cc6"/>
+                                <constraint firstItem="crs-reason" firstAttribute="top" secondItem="crs-btnrow" secondAttribute="bottom" constant="14" id="crs-cc7"/>
+                                <constraint firstItem="crs-reason" firstAttribute="leading" secondItem="crs-card" secondAttribute="leading" constant="16" id="crs-cc8"/>
+                                <constraint firstItem="crs-reason" firstAttribute="trailing" secondItem="crs-card" secondAttribute="trailing" constant="-16" id="crs-cc9"/>
+                            </constraints>
+                        </view>
+                    </subviews>
+                </stackView>
+            </subviews>
+            <constraints>
+                <constraint firstItem="crs-outer" firstAttribute="top" secondItem="crs-root" secondAttribute="top" id="crs-r1"/>
+                <constraint firstItem="crs-outer" firstAttribute="leading" secondItem="crs-root" secondAttribute="leading" id="crs-r2"/>
+                <constraint firstItem="crs-outer" firstAttribute="trailing" secondItem="crs-root" secondAttribute="trailing" id="crs-r3"/>
+                <constraint firstItem="crs-outer" firstAttribute="bottom" secondItem="crs-root" secondAttribute="bottom" id="crs-r4"/>
+            </constraints>
+            <connections>
+                <outlet property="noButton" destination="crs-nobtn" id="crs-o2"/>
+                <outlet property="reasonContainer" destination="crs-reason" id="crs-o3"/>
+                <outlet property="reasonPlaceholder" destination="crs-rph" id="crs-o5"/>
+                <outlet property="reasonTextView" destination="crs-rtv" id="crs-o4"/>
+                <outlet property="warningLabel" destination="crs-warn" id="crs-o6"/>
+                <outlet property="cardView" destination="crs-card" id="crs-o7"/>
+                <outlet property="yesButton" destination="crs-yesbtn" id="crs-o1"/>
+            </connections>
+            <point key="canvasLocation" x="-244" y="11"/>
+        </view>
+    </objects>
+</document>
