@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="24506" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24504"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="rcs-root" customClass="RoutineConsistencySectionView" customModule="AAINA" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="260"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <stackView axis="vertical" spacing="12" translatesAutoresizingMaskIntoConstraints="NO" id="rcs-outer">
+                    <subviews>
+                        <label opaque="NO" text="ROUTINE CONSISTENCY" translatesAutoresizingMaskIntoConstraints="NO" id="rcs-hdr">
+                            <fontDescription key="fontDescription" type="boldSystem" pointSize="12"/>
+                            <color key="textColor" red="0.78" green="0.48" blue="0.61" alpha="1" colorSpace="calibratedRGB"/>
+                        </label>
+                        <view translatesAutoresizingMaskIntoConstraints="NO" id="rcs-mcard">
+                            <subviews>
+                                <label opaque="NO" text="☀️" translatesAutoresizingMaskIntoConstraints="NO" id="rcs-micon">
+                                    <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                </label>
+                                <label opaque="NO" text="Morning routine" translatesAutoresizingMaskIntoConstraints="NO" id="rcs-mlbl">
+                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                    <color key="textColor" red="0.165" green="0.165" blue="0.165" alpha="1" colorSpace="calibratedRGB"/>
+                                </label>
+                                <label opaque="NO" text="0/7 days" translatesAutoresizingMaskIntoConstraints="NO" id="rcs-mcnt">
+                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="14"/>
+                                    <color key="textColor" red="0.78" green="0.48" blue="0.61" alpha="1" colorSpace="calibratedRGB"/>
+                                </label>
+                                <stackView axis="horizontal" spacing="6" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="rcs-mdaystk"/>
+                            </subviews>
+                            <constraints>
+                                <constraint firstItem="rcs-micon" firstAttribute="leading" secondItem="rcs-mcard" secondAttribute="leading" constant="16" id="rcs-mc1"/>
+                                <constraint firstItem="rcs-micon" firstAttribute="top" secondItem="rcs-mcard" secondAttribute="top" constant="16" id="rcs-mc2"/>
+                                <constraint firstItem="rcs-mlbl" firstAttribute="leading" secondItem="rcs-micon" secondAttribute="trailing" constant="10" id="rcs-mc3"/>
+                                <constraint firstItem="rcs-mlbl" firstAttribute="centerY" secondItem="rcs-micon" secondAttribute="centerY" id="rcs-mc4"/>
+                                <constraint firstItem="rcs-mcnt" firstAttribute="trailing" secondItem="rcs-mcard" secondAttribute="trailing" constant="-16" id="rcs-mc5"/>
+                                <constraint firstItem="rcs-mcnt" firstAttribute="centerY" secondItem="rcs-micon" secondAttribute="centerY" id="rcs-mc6"/>
+                                <constraint firstItem="rcs-mdaystk" firstAttribute="top" secondItem="rcs-micon" secondAttribute="bottom" constant="12" id="rcs-mc7"/>
+                                <constraint firstItem="rcs-mdaystk" firstAttribute="leading" secondItem="rcs-mcard" secondAttribute="leading" constant="16" id="rcs-mc8"/>
+                                <constraint firstItem="rcs-mdaystk" firstAttribute="trailing" secondItem="rcs-mcard" secondAttribute="trailing" constant="-16" id="rcs-mc9"/>
+                                <constraint firstItem="rcs-mdaystk" firstAttribute="bottom" secondItem="rcs-mcard" secondAttribute="bottom" constant="-16" id="rcs-mc10"/>
+                            </constraints>
+                        </view>
+                        <view translatesAutoresizingMaskIntoConstraints="NO" id="rcs-ecard">
+                            <subviews>
+                                <label opaque="NO" text="🌙" translatesAutoresizingMaskIntoConstraints="NO" id="rcs-eicon">
+                                    <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                </label>
+                                <label opaque="NO" text="Evening routine" translatesAutoresizingMaskIntoConstraints="NO" id="rcs-elbl">
+                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                    <color key="textColor" red="0.165" green="0.165" blue="0.165" alpha="1" colorSpace="calibratedRGB"/>
+                                </label>
+                                <label opaque="NO" text="0/7 days" translatesAutoresizingMaskIntoConstraints="NO" id="rcs-ecnt">
+                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="14"/>
+                                    <color key="textColor" red="0.78" green="0.48" blue="0.61" alpha="1" colorSpace="calibratedRGB"/>
+                                </label>
+                                <stackView axis="horizontal" spacing="6" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="rcs-edaystk"/>
+                            </subviews>
+                            <constraints>
+                                <constraint firstItem="rcs-eicon" firstAttribute="leading" secondItem="rcs-ecard" secondAttribute="leading" constant="16" id="rcs-ec1"/>
+                                <constraint firstItem="rcs-eicon" firstAttribute="top" secondItem="rcs-ecard" secondAttribute="top" constant="16" id="rcs-ec2"/>
+                                <constraint firstItem="rcs-elbl" firstAttribute="leading" secondItem="rcs-eicon" secondAttribute="trailing" constant="10" id="rcs-ec3"/>
+                                <constraint firstItem="rcs-elbl" firstAttribute="centerY" secondItem="rcs-eicon" secondAttribute="centerY" id="rcs-ec4"/>
+                                <constraint firstItem="rcs-ecnt" firstAttribute="trailing" secondItem="rcs-ecard" secondAttribute="trailing" constant="-16" id="rcs-ec5"/>
+                                <constraint firstItem="rcs-ecnt" firstAttribute="centerY" secondItem="rcs-eicon" secondAttribute="centerY" id="rcs-ec6"/>
+                                <constraint firstItem="rcs-edaystk" firstAttribute="top" secondItem="rcs-eicon" secondAttribute="bottom" constant="12" id="rcs-ec7"/>
+                                <constraint firstItem="rcs-edaystk" firstAttribute="leading" secondItem="rcs-ecard" secondAttribute="leading" constant="16" id="rcs-ec8"/>
+                                <constraint firstItem="rcs-edaystk" firstAttribute="trailing" secondItem="rcs-ecard" secondAttribute="trailing" constant="-16" id="rcs-ec9"/>
+                                <constraint firstItem="rcs-edaystk" firstAttribute="bottom" secondItem="rcs-ecard" secondAttribute="bottom" constant="-16" id="rcs-ec10"/>
+                            </constraints>
+                        </view>
+                    </subviews>
+                </stackView>
+            </subviews>
+            <constraints>
+                <constraint firstItem="rcs-outer" firstAttribute="top" secondItem="rcs-root" secondAttribute="top" id="rcs-r1"/>
+                <constraint firstItem="rcs-outer" firstAttribute="leading" secondItem="rcs-root" secondAttribute="leading" id="rcs-r2"/>
+                <constraint firstItem="rcs-outer" firstAttribute="trailing" secondItem="rcs-root" secondAttribute="trailing" id="rcs-r3"/>
+                <constraint firstItem="rcs-outer" firstAttribute="bottom" secondItem="rcs-root" secondAttribute="bottom" id="rcs-r4"/>
+            </constraints>
+            <connections>
+                <outlet property="morningCard" destination="rcs-mcard" id="rcs-o5"/>
+                <outlet property="eveningCard" destination="rcs-ecard" id="rcs-o6"/>
+                <outlet property="morningDayStack" destination="rcs-mdaystk" id="rcs-o1"/>
+                <outlet property="eveningDayStack" destination="rcs-edaystk" id="rcs-o2"/>
+                <outlet property="morningCountLabel" destination="rcs-mcnt" id="rcs-o3"/>
+                <outlet property="eveningCountLabel" destination="rcs-ecnt" id="rcs-o4"/>
+            </connections>
+        </view>
+    </objects>
+</document>

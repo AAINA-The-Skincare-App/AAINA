@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="24506" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24504"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="ski-root" customClass="SkinConditionSectionView" customModule="AAINA" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="220"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <stackView axis="vertical" spacing="14" translatesAutoresizingMaskIntoConstraints="NO" id="ski-outer">
+                    <subviews>
+                        <label opaque="NO" text="OVERALL SKIN CONDITION" translatesAutoresizingMaskIntoConstraints="NO" id="ski-hdr">
+                            <fontDescription key="fontDescription" type="boldSystem" pointSize="12"/>
+                            <color key="textColor" red="0.78" green="0.48" blue="0.61" alpha="1" colorSpace="calibratedRGB"/>
+                        </label>
+                        <label opaque="NO" text="How did your skin feel this week?" translatesAutoresizingMaskIntoConstraints="NO" id="ski-q1">
+                            <fontDescription key="fontDescription" type="boldSystem" pointSize="16"/>
+                            <color key="textColor" red="0.165" green="0.165" blue="0.165" alpha="1" colorSpace="calibratedRGB"/>
+                        </label>
+                        <stackView axis="vertical" spacing="10" alignment="leading" translatesAutoresizingMaskIntoConstraints="NO" id="ski-cond"/>
+                        <label opaque="NO" text="Any concerns this week? (select all)" translatesAutoresizingMaskIntoConstraints="NO" id="ski-q2">
+                            <fontDescription key="fontDescription" type="boldSystem" pointSize="16"/>
+                            <color key="textColor" red="0.165" green="0.165" blue="0.165" alpha="1" colorSpace="calibratedRGB"/>
+                        </label>
+                        <stackView axis="vertical" spacing="10" alignment="leading" translatesAutoresizingMaskIntoConstraints="NO" id="ski-conc"/>
+                    </subviews>
+                </stackView>
+            </subviews>
+            <constraints>
+                <constraint firstItem="ski-outer" firstAttribute="top" secondItem="ski-root" secondAttribute="top" id="ski-c1"/>
+                <constraint firstItem="ski-outer" firstAttribute="leading" secondItem="ski-root" secondAttribute="leading" id="ski-c2"/>
+                <constraint firstItem="ski-outer" firstAttribute="trailing" secondItem="ski-root" secondAttribute="trailing" id="ski-c3"/>
+                <constraint firstItem="ski-outer" firstAttribute="bottom" secondItem="ski-root" secondAttribute="bottom" id="ski-c4"/>
+            </constraints>
+            <connections>
+                <outlet property="pillsContainerStack" destination="ski-cond" id="ski-o1"/>
+                <outlet property="concernsContainerStack" destination="ski-conc" id="ski-o2"/>
+            </connections>
+        </view>
+    </objects>
+</document>

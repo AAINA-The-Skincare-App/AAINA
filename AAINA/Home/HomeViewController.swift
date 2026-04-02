@@ -42,23 +42,40 @@ class HomeViewController: UIViewController, SkinMatrixToggleDelegate {
         super.viewDidLoad()
 
         title = "Home"
-        
+
         guard dataModel != nil else {
                     fatalError(" dataModel is NOT set before HomeViewController loads")
                 }
-        
+
         view.backgroundColor = .systemGroupedBackground
         homeCollectionView.backgroundColor = .systemGroupedBackground
 
         dailyTip = dataModel.getDailyTip()
 
         registerCells()
-        
+
         print(dataModel!)
 
         homeCollectionView.collectionViewLayout = generateLayout()
         homeCollectionView.dataSource = self
         homeCollectionView.delegate = self
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        presentWeeklyCheckIn()
+    }
+
+    private func presentWeeklyCheckIn() {
+        UserDefaults.standard.removeObject(forKey: "lastWeeklyCheckInDate") // TODO: remove before release
+        let routineStart = AppDataModel.shared.savedRoutines.first?.createdAt
+            ?? Calendar.current.date(byAdding: .weekOfYear, value: -2, to: Date())
+            ?? Date()
+        WeeklyCheckInViewController.presentIfDue(
+            from: self,
+            routineStartDate: routineStart,
+            onSave: { data in print("Weekly check-in saved:", data) }
+        )
     }
 
     func registerCells() {

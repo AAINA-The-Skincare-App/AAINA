@@ -93,10 +93,10 @@
                                         <rect key="frame" x="0.0" y="207" width="836" height="50"/>
                                     </stackView>
                                 </subviews>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <color key="backgroundColor" red="0.99328920799999998" green="0.97718032249999998" blue="0.99999994039999995" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                             </stackView>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="backgroundColor" red="0.99328920799999998" green="0.97718032249999998" blue="0.99999994039999995" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                         <constraints>
                             <constraint firstItem="3As-Rq-K5x" firstAttribute="leading" secondItem="vcN-Lj-mHh" secondAttribute="leading" constant="12" id="QZ0-FI-Muq"/>
                             <constraint firstItem="3As-Rq-K5x" firstAttribute="top" secondItem="vcN-Lj-mHh" secondAttribute="top" constant="16" id="YOe-E3-XBK"/>
@@ -13533,7 +13533,7 @@ AAxBtA
         </image>
         <image name="chevron.right" catalog="system" width="97" height="128"/>
         <systemColor name="systemGray2Color">
-            <color red="0.68235294117647061" green="0.68235294117647061" blue="0.69803921568627447" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.68235294120000001" green="0.68235294120000001" blue="0.69803921570000005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>
