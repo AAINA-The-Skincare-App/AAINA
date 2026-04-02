@@ -5,15 +5,26 @@ class OnboardingGoalsViewController: UIViewController {
     var onboardingData: OnboardingData!
     var dataModel: DataModel!
 
+    @IBOutlet weak var progressView: UIProgressView!
     @IBOutlet var goalButtons: [UIButton]!
     @IBOutlet weak var nextButton: UIButton!
-
     @IBOutlet var goalsCard: UIView!
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        print("GoalsViewController loaded")
+
+        view.applyAINABackground()
+
+        setupCard()
+
+        progressView.progressTintColor = .ainaCoralPink
+        progressView.trackTintColor = UIColor.ainaRoseLight.withAlphaComponent(0.3)
+
         setupButtons()
+        setupNextButton()
     }
+
+    // MARK: - Actions
 
     @IBAction func goalTapped(_ sender: UIButton) {
 
@@ -22,7 +33,6 @@ class OnboardingGoalsViewController: UIViewController {
         if goal == .routineOnly {
             onboardingData.goals.removeAll()
             onboardingData.goals.append(.routineOnly)
-
         } else {
             onboardingData.goals.removeAll { $0 == .routineOnly }
 
@@ -42,6 +52,8 @@ class OnboardingGoalsViewController: UIViewController {
         performSegue(withIdentifier: "GoalToWork", sender: self)
     }
 
+    // MARK: - Navigation
+
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "GoalToWork",
            let vc = segue.destination as? OnboardingExposureViewController {
@@ -50,50 +62,61 @@ class OnboardingGoalsViewController: UIViewController {
         }
     }
 
+    // MARK: - UI SETUP
+
+    private func setupCard() {
+        goalsCard.backgroundColor = .clear
+
+        // ✅ SAME AS DOB & SENSITIVITY
+        goalsCard.applyGlass(cornerRadius: 24)
+
+        goalsCard.layer.shadowColor = UIColor.ainaCardShadowColor.cgColor
+        goalsCard.layer.shadowOpacity = 0.10
+        goalsCard.layer.shadowOffset = CGSize(width: 0, height: 8)
+        goalsCard.layer.shadowRadius = 20
+        goalsCard.layer.masksToBounds = false
+
+        goalsCard.layer.borderWidth = 1
+        goalsCard.layer.borderColor = UIColor.white.withAlphaComponent(0.2).cgColor
+    }
+
     private func setupButtons() {
         goalButtons.forEach {
-            $0.layer.cornerRadius = 20
+
+            $0.layer.cornerRadius = 22
+
+            // ✅ MATCH OTHER SCREENS
+            $0.backgroundColor = UIColor.white.withAlphaComponent(0.25)
+
             $0.layer.borderWidth = 1
-            $0.layer.borderColor = UIColor.systemGray4.cgColor
-            $0.backgroundColor = .systemBackground
-            $0.setTitleColor(.label, for: .normal)
+            $0.layer.borderColor = UIColor.ainaTextTertiary.withAlphaComponent(0.25).cgColor
+
+            $0.setTitleColor(.ainaTextPrimary, for: .normal)
         }
     }
 
     private func updateButtonState(_ button: UIButton, isSelected: Bool) {
+
         if isSelected {
-            button.backgroundColor = UIColor.systemBlue.withAlphaComponent(0.15)
-            button.setTitleColor(.systemBlue, for: .normal)
-            button.layer.borderColor = UIColor.systemBlue.cgColor
+
+            // ✅ MATCH SKIN TYPE / SENSITIVITY
+            button.backgroundColor = UIColor.ainaCoralPink.withAlphaComponent(0.15)
+            button.layer.borderColor = UIColor.ainaCoralPink.cgColor
+            button.setTitleColor(.ainaCoralPink, for: .normal)
+
         } else {
-            button.backgroundColor = .systemBackground
-            button.setTitleColor(.label, for: .normal)
-            button.layer.borderColor = UIColor.systemGray4.cgColor
+
+            // ✅ MATCH UNSELECTED STYLE
+            button.backgroundColor = UIColor.white.withAlphaComponent(0.25)
+            button.layer.borderColor = UIColor.ainaTextTertiary.withAlphaComponent(0.25).cgColor
+            button.setTitleColor(.ainaTextPrimary, for: .normal)
         }
     }
-//        private func setupCards() {
-//            goalsCard.forEach { card in
-//                card.layer.cornerRadius = 20
-//                card.layer.cornerCurve = .continuous
-//                card.backgroundColor = .white
-//    
-//                card.layer.shadowColor = UIColor.black.cgColor
-//                card.layer.shadowOpacity = 0.06
-//                card.layer.shadowOffset = CGSize(width: 0, height: 6)
-//                card.layer.shadowRadius = 12
-//                card.layer.masksToBounds = false
-//            }
-//        }
 
-
-    private func toggleGoal(_ goal: SkinGoal) {
-        if onboardingData.goals.contains(goal) {
-            onboardingData.goals.removeAll { $0 == goal }
-        } else {
-            onboardingData.goals.append(goal)
-        }
-    }
     private func setupNextButton() {
+        nextButton.layer.cornerRadius = 20
+        nextButton.backgroundColor = .ainaCoralPink
+        nextButton.setTitleColor(.white, for: .normal)
         nextButton.isEnabled = false
         nextButton.alpha = 0.5
     }
@@ -103,36 +126,16 @@ class OnboardingGoalsViewController: UIViewController {
         nextButton.isEnabled = hasSelection
         nextButton.alpha = hasSelection ? 1.0 : 0.5
     }
+
     private func updateAllButtons() {
         for button in goalButtons {
-
             let goal = goalFrom(tag: button.tag)
             let isSelected = onboardingData.goals.contains(goal)
-
             updateButtonState(button, isSelected: isSelected)
         }
     }
-    
-//    private func updateButtonState(_ button: UIButton, isSelected: Bool) {
-//
-//        var config = button.configuration
-//
-//        if isSelected {
-//            config?.baseForegroundColor = .systemBlue
-//            button.backgroundColor = UIColor.systemBlue.withAlphaComponent(0.08)
-//            button.layer.borderWidth = 2
-//            button.layer.borderColor = UIColor.systemBlue.cgColor
-//
-//        } else {
-//            config?.baseForegroundColor = .label
-//            button.backgroundColor = .clear
-//            button.layer.borderWidth = 1
-//            button.layer.borderColor = UIColor.systemGray5.cgColor
-//        }
-//
-//        button.configuration = config
-//    }
 
+    // MARK: - Mapping
 
     private func goalFrom(tag: Int) -> SkinGoal {
         switch tag {

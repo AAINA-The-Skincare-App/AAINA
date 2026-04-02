@@ -30,9 +30,16 @@ class SpreadCollectionViewCell: UICollectionViewCell {
         setupTapGestures()
     }
     private func setupUI() {
-        containerView.layer.cornerRadius = 16
-        containerView.clipsToBounds = true
-        containerView.backgroundColor = .systemBackground
+        containerView.backgroundColor = .ainaGlassSurface
+
+        containerView.layer.cornerRadius = 20
+        containerView.layer.borderWidth = 1
+        containerView.layer.borderColor = UIColor.white.withAlphaComponent(0.25).cgColor
+
+        containerView.layer.shadowColor = UIColor.ainaCardShadowColor.cgColor
+        containerView.layer.shadowOpacity = 0.08
+        containerView.layer.shadowOffset = CGSize(width: 0, height: 8)
+        containerView.layer.shadowRadius = 16
     }
     
     // MARK: - Configure Icons
@@ -47,10 +54,9 @@ class SpreadCollectionViewCell: UICollectionViewCell {
         let icons = [icon1, icon2, icon3, icon4]
         
         icons.forEach {
-            $0?.tintColor = .systemGray
             $0?.contentMode = .scaleAspectFit
         }
-    }   // ✅ YOU WERE MISSING THIS BRACKET
+    }   // YOU WERE MISSING THIS BRACKET
     
     // MARK: - Tap Setup
     
