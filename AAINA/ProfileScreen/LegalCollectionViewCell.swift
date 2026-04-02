@@ -34,15 +34,16 @@ class LegalCollectionViewCell: UICollectionViewCell {
     // UI Styling
     
     private func setupUI() {
-        
+        containerView.backgroundColor = .ainaGlassSurface
+
         containerView.layer.cornerRadius = 20
-        containerView.backgroundColor = .systemBackground
-        
-        // Optional light shadow
-        containerView.layer.shadowColor = UIColor.black.cgColor
-        containerView.layer.shadowOpacity = 0.05
-        containerView.layer.shadowOffset = CGSize(width: 0, height: 5)
-        containerView.layer.shadowRadius = 10
+        containerView.layer.borderWidth = 1
+        containerView.layer.borderColor = UIColor.white.withAlphaComponent(0.25).cgColor
+
+        containerView.layer.shadowColor = UIColor.ainaCardShadowColor.cgColor
+        containerView.layer.shadowOpacity = 0.08
+        containerView.layer.shadowOffset = CGSize(width: 0, height: 8)
+        containerView.layer.shadowRadius = 16
     }
     
     
@@ -52,7 +53,7 @@ class LegalCollectionViewCell: UICollectionViewCell {
         
         // Row 1
         icon1.image = UIImage(systemName: "hand.raised")
-        icon1.tintColor = .systemGray
+       
         icon1.contentMode = .scaleAspectFit
         
         title1Label.text = "Privacy Policy"
@@ -61,7 +62,7 @@ class LegalCollectionViewCell: UICollectionViewCell {
         
         // Row 2
         icon2.image = UIImage(systemName: "doc.text")
-        icon2.tintColor = .systemGray
+       
         icon2.contentMode = .scaleAspectFit
         
         title2Label.text = "Terms of Use"

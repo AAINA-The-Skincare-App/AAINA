@@ -1,258 +1,213 @@
 import UIKit
 
 class ProfileViewController: UIViewController,
-                             UICollectionViewDelegate,
-                             UICollectionViewDataSource {
+UICollectionViewDelegate,
+UICollectionViewDataSource {
 
-    @IBOutlet weak var ProfileCollectionView: UICollectionView!
+@IBOutlet weak var ProfileCollectionView: UICollectionView!
 
-    private var userProfile: UserProfile? { AppDataModel.shared.userProfile }
+private var userProfile: UserProfile? { AppDataModel.shared.userProfile }
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
+override func viewDidLoad() {
+super.viewDidLoad()
 
-        title = "Profile"
-        view.backgroundColor = .systemGray6
+title = "Profile"
 
-        ProfileCollectionView.backgroundColor = .clear
-        ProfileCollectionView.delegate = self
-        ProfileCollectionView.dataSource = self
+// Background Theme
+view.applyAINABackground()
+view.backgroundColor = .clear
 
-        registerCells()
-        ProfileCollectionView.collectionViewLayout = createLayout()
-    }
+// Settings Button
+navigationItem.rightBarButtonItem = UIBarButtonItem(
+    image: UIImage(systemName: "gearshape.fill"),
+    style: .plain,
+    target: self,
+    action: #selector(openSettings)
+)
+navigationItem.rightBarButtonItem?.tintColor = .primarypink
 
-    // Register Cells
+ProfileCollectionView.delegate = self
+ProfileCollectionView.dataSource = self
+ProfileCollectionView.backgroundColor = .clear
 
-    private func registerCells() {
+registerCells()
+ProfileCollectionView.collectionViewLayout = createLayout()
 
-        ProfileCollectionView.register(
-            UINib(nibName: "ProfileCollectionViewCell", bundle: nil),
-            forCellWithReuseIdentifier: "ProfileCell"
-        )
 
-        ProfileCollectionView.register(
-            UINib(nibName: "SkinProfileCollectionViewCell", bundle: nil),
-            forCellWithReuseIdentifier: "SkinProfileCell"
-        )
+}
 
-        ProfileCollectionView.register(
-            UINib(nibName: "SpreadCollectionViewCell", bundle: nil),
-            forCellWithReuseIdentifier: "SpreadCell"
-        )
+// MARK: - Navigation
 
-        ProfileCollectionView.register(
-            UINib(nibName: "ReachCollectionViewCell", bundle: nil),
-            forCellWithReuseIdentifier: "ReachCell"
-        )
+@objc private func openSettings() {
+let vc = SettingsViewController()
+vc.hidesBottomBarWhenPushed = true
+navigationController?.pushViewController(vc, animated: true)
+}
 
-        ProfileCollectionView.register(
-            UINib(nibName: "LegalCollectionViewCell", bundle: nil),
-            forCellWithReuseIdentifier: "LegalCell"
-        )
+// MARK: - Register Cells
 
-        ProfileCollectionView.register(
-            UINib(nibName: "SettingsCollectionViewCell", bundle: nil),
-            forCellWithReuseIdentifier: "SettingsCell"
-        )
+private func registerCells() {
+ProfileCollectionView.register(
+UINib(nibName: "ProfileCollectionViewCell", bundle: nil),
+forCellWithReuseIdentifier: "ProfileCell"
+)
 
-        ProfileCollectionView.register(
-            UINib(nibName: "SectionHeaderReusableView", bundle: nil),
-            forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
-            withReuseIdentifier: SectionHeaderReusableView.identifier
-        )
-    }
+ProfileCollectionView.register(
+    UINib(nibName: "SkinProfileCollectionViewCell", bundle: nil),
+    forCellWithReuseIdentifier: "SkinProfileCell"
+)
 
-    // Sections
+ProfileCollectionView.register(
+    UINib(nibName: "SectionHeaderReusableView", bundle: nil),
+    forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
+    withReuseIdentifier: SectionHeaderReusableView.identifier
+)
 
-    func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 6
-    }
 
-    func collectionView(_ collectionView: UICollectionView,
-                        numberOfItemsInSection section: Int) -> Int {
-        return 1
-    }
+}
 
-    // Cells
+// MARK: - Sections
 
-    func collectionView(_ collectionView: UICollectionView,
-                        cellForItemAt indexPath: IndexPath)
-    -> UICollectionViewCell {
+func numberOfSections(in collectionView: UICollectionView) -> Int {
+return 2
+}
 
-        switch indexPath.section {
+func collectionView(_ collectionView: UICollectionView,
+numberOfItemsInSection section: Int) -> Int {
+return 1
+}
 
-        // SECTION 0  Profile
-        case 0:
-            let cell = collectionView.dequeueReusableCell(
-                withReuseIdentifier: "ProfileCell",
-                for: indexPath
-            ) as! ProfileCollectionViewCell
+// MARK: - Cells
 
-            cell.nameLabel.text = userProfile?.name ?? "User"
-            cell.ageLabel.text = userProfile?.age.map { "\($0) years" } ?? ""
-            cell.profileImageView.image = UIImage(systemName: "person.circle.fill")
-            cell.profileImageView.tintColor = .systemGray3
+func collectionView(_ collectionView: UICollectionView,
+cellForItemAt indexPath: IndexPath)
+-> UICollectionViewCell {
 
-            return cell
+switch indexPath.section {
 
-        // SECTION 1  Skin Profile Card
-        case 1:
-            let cell = collectionView.dequeueReusableCell(
-                withReuseIdentifier: "SkinProfileCell",
-                for: indexPath
-            ) as! SkinProfileCollectionViewCell
+case 0:
+    let cell = collectionView.dequeueReusableCell(
+        withReuseIdentifier: "ProfileCell",
+        for: indexPath
+    ) as! ProfileCollectionViewCell
 
-            cell.onItemSelected = { [weak self] index in
-                guard let self = self else { return }
+    cell.nameLabel.text = userProfile?.name ?? "Shreya"
+    cell.ageLabel.text = " 17 years  "
+//    cell.daysLabel.text = "23"
+//    cell.JournalLabel.text = "17"
 
-                switch index {
-                case 0:
-                    self.navigateTo(ProfileSkinTypeViewController())
-                case 1:
-                    self.navigateTo(ProfileConcernsViewController())
-                case 2:
-                    self.navigateTo(ProfileSensitivityViewController())
-                case 3:
-                    self.navigateTo(ProfileGoalsViewController())
-                case 4:
-                    self.navigateTo(SavedRoutinesViewController())
-                default:
-                    break
-                }
-            }
+    return cell
 
-            return cell
+case 1:
+    let cell = collectionView.dequeueReusableCell(
+        withReuseIdentifier: "SkinProfileCell",
+        for: indexPath
+    ) as! SkinProfileCollectionViewCell
 
-        // SECTION 2  Spread
-        case 2:
-            return collectionView.dequeueReusableCell(
-                withReuseIdentifier: "SpreadCell",
-                for: indexPath
-            )
+    cell.onItemSelected = { [weak self] index in
+        guard let self = self else { return }
 
-        // SECTION 3  Reach
-        case 3:
-            return collectionView.dequeueReusableCell(
-                withReuseIdentifier: "ReachCell",
-                for: indexPath
-            )
-
-        // SECTION 4  Legal
-        case 4:
-            return collectionView.dequeueReusableCell(
-                withReuseIdentifier: "LegalCell",
-                for: indexPath
-            )
-
-        // SECTION 5 Settings
-        case 5:
-            return collectionView.dequeueReusableCell(
-                withReuseIdentifier: "SettingsCell",
-                for: indexPath
-            )
-
-        default:
-            return UICollectionViewCell()
+        switch index {
+        case 0: self.navigateTo(ProfileSkinTypeViewController())
+        case 1: self.navigateTo(ProfileConcernsViewController())
+        case 2: self.navigateTo(ProfileSensitivityViewController())
+        case 3: self.navigateTo(ProfileGoalsViewController())
+        case 4: self.navigateTo(SavedRoutinesViewController())
+        default: break
         }
     }
 
-    // Header Titles
+    return cell
 
-    func collectionView(_ collectionView: UICollectionView,
-                        viewForSupplementaryElementOfKind kind: String,
-                        at indexPath: IndexPath)
-    -> UICollectionReusableView {
+default:
+    return UICollectionViewCell()
+}
 
-        guard kind == UICollectionView.elementKindSectionHeader else {
-            return UICollectionReusableView()
-        }
 
-        let header = collectionView.dequeueReusableSupplementaryView(
-            ofKind: kind,
-            withReuseIdentifier: SectionHeaderReusableView.identifier,
-            for: indexPath
-        ) as! SectionHeaderReusableView
+}
 
-        switch indexPath.section {
-        case 1:
-            header.titleLabel.text = "SKIN PROFILE"
-        case 2:
-            header.titleLabel.text = "SPREAD THE LOVE"
-        case 3:
-            header.titleLabel.text = "REACH US"
-        case 4:
-            header.titleLabel.text = "LEGAL"
-        case 5:
-            header.titleLabel.text = "SETTINGS"
-        default:
-            header.titleLabel.text = ""
-        }
+// MARK: - Header
 
-        return header
+func collectionView(_ collectionView: UICollectionView,
+viewForSupplementaryElementOfKind kind: String,
+at indexPath: IndexPath)
+-> UICollectionReusableView {
+
+
+let header = collectionView.dequeueReusableSupplementaryView(
+    ofKind: kind,
+    withReuseIdentifier: SectionHeaderReusableView.identifier,
+    for: indexPath
+) as! SectionHeaderReusableView
+
+header.titleLabel.textColor = .systemGray
+header.titleLabel.font = UIFont.systemFont(ofSize: 14, weight: .semibold)
+header.titleLabel.text = indexPath.section == 1 ? "SKIN PROFILE" : ""
+
+return header
+
+}
+
+// MARK: - Layout
+
+private func createLayout() -> UICollectionViewLayout {
+
+return UICollectionViewCompositionalLayout { sectionIndex, _ in
+
+    let sectionHeights: [Int: CGFloat] = [
+        0: 140,   // Profile Card
+        1: 300    // Skin Profile
+    ]
+
+    let height = sectionHeights[sectionIndex] ?? 250
+
+    let itemSize = NSCollectionLayoutSize(
+        widthDimension: .fractionalWidth(1),
+        heightDimension: .absolute(height)
+    )
+
+    let item = NSCollectionLayoutItem(layoutSize: itemSize)
+
+    let group = NSCollectionLayoutGroup.vertical(
+        layoutSize: itemSize,
+        subitems: [item]
+    )
+
+    let section = NSCollectionLayoutSection(group: group)
+
+    section.contentInsets = NSDirectionalEdgeInsets(
+        top: sectionIndex == 0 ? 12 : 16,
+        leading: 16,
+        bottom: 8,
+        trailing: 16
+    )
+
+    if sectionIndex != 0 {
+        let headerSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(1),
+            heightDimension: .absolute(40)
+        )
+
+        let header = NSCollectionLayoutBoundarySupplementaryItem(
+            layoutSize: headerSize,
+            elementKind: UICollectionView.elementKindSectionHeader,
+            alignment: .top
+        )
+
+        section.boundarySupplementaryItems = [header]
     }
 
-    // Navigation
+    return section
+}
 
-    private func navigateTo(_ viewController: UIViewController) {
-        viewController.hidesBottomBarWhenPushed = true
-        navigationController?.pushViewController(viewController, animated: true)
-    }
 
-    // Layout
+}
 
-    private func createLayout() -> UICollectionViewLayout {
+// MARK: - Navigation Helper
 
-        return UICollectionViewCompositionalLayout { sectionIndex, _ in
+private func navigateTo(_ vc: UIViewController) {
+vc.hidesBottomBarWhenPushed = true
+navigationController?.pushViewController(vc, animated: true)
+}
 
-            let height: CGFloat
-
-            switch sectionIndex {
-            case 0: height = 100
-            case 1: height = 300
-            case 2: height = 240
-            case 3, 4, 5: height = 140
-            default: height = 100
-            }
-
-            let itemSize = NSCollectionLayoutSize(
-                widthDimension: .fractionalWidth(1.0),
-                heightDimension: .absolute(height)
-            )
-
-            let item = NSCollectionLayoutItem(layoutSize: itemSize)
-
-            let group = NSCollectionLayoutGroup.vertical(
-                layoutSize: itemSize,
-                subitems: [item]
-            )
-
-            let section = NSCollectionLayoutSection(group: group)
-
-            section.contentInsets = NSDirectionalEdgeInsets(
-                top: sectionIndex == 0 ? 20 : 16,
-                leading: 16,
-                bottom: 16,
-                trailing: 16
-            )
-
-            if sectionIndex != 0 {
-
-                let headerSize = NSCollectionLayoutSize(
-                    widthDimension: .fractionalWidth(1.0),
-                    heightDimension: .absolute(40)
-                )
-
-                let header = NSCollectionLayoutBoundarySupplementaryItem(
-                    layoutSize: headerSize,
-                    elementKind: UICollectionView.elementKindSectionHeader,
-                    alignment: .top
-                )
-
-                section.boundarySupplementaryItems = [header]
-            }
-
-            return section
-        }
-    }
 }
