@@ -27,13 +27,22 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
                 let storyboard = UIStoryboard(name: "Main", bundle: nil)
 
-                guard let nav = storyboard.instantiateInitialViewController() as? UINavigationController else { return }
-
-                if let dobVC = nav.viewControllers.first as? OnboardingDOBViewController {
-                    dobVC.dataModel = dataModel
+                if UserProfile.load() != nil {
+                    // User already completed onboarding — go straight to the main app
+                    guard let tabBar = storyboard.instantiateViewController(
+                        withIdentifier: "MainTabBarViewController"
+                    ) as? MainTabBarViewController else { return }
+                    tabBar.dataModel = dataModel
+                    window.rootViewController = tabBar
+                } else {
+                    // First launch — start onboarding
+                    guard let nav = storyboard.instantiateInitialViewController() as? UINavigationController else { return }
+                    if let dobVC = nav.viewControllers.first as? OnboardingDOBViewController {
+                        dobVC.dataModel = dataModel
+                    }
+                    window.rootViewController = nav
                 }
 
-                window.rootViewController = nav
                 window.makeKeyAndVisible()
     }
 
