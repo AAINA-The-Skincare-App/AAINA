@@ -50,15 +50,16 @@ class SkinProfileCollectionViewCell: UICollectionViewCell {
     
     // MARK: - UI Setup
     private func setupUI() {
-        containerView.layer.cornerRadius = 16
-        containerView.layer.shadowColor = UIColor.black.cgColor
-        containerView.layer.shadowOpacity = 0.05
+        containerView.backgroundColor = .ainaGlassSurface
+
+        containerView.layer.cornerRadius = 20
+        containerView.layer.borderWidth = 1
+        containerView.layer.borderColor = UIColor.white.withAlphaComponent(0.25).cgColor
+
+        containerView.layer.shadowColor = UIColor.ainaCardShadowColor.cgColor
+        containerView.layer.shadowOpacity = 0.08
         containerView.layer.shadowOffset = CGSize(width: 0, height: 8)
-        containerView.layer.shadowRadius = 10
-        containerView.layer.masksToBounds = false
-        
-        contentView.backgroundColor = .clear
-        backgroundColor = .clear
+        containerView.layer.shadowRadius = 16
     }
     
     // MARK: - Data Setup
