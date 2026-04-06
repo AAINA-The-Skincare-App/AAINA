@@ -179,10 +179,10 @@ final class ChangeRoutineSectionView: UIView {
         reasonContainer.isHidden = !wantsChange
 
         yesButton.backgroundColor = wantsChange
-            ? .ainaDustyRose : UIColor.ainaTextTertiary.withAlphaComponent(0.2)
+            ? UIColor.ainaCoralPink.withAlphaComponent(0.75) : UIColor.ainaTextTertiary.withAlphaComponent(0.2)
         yesButton.setTitleColor(wantsChange ? .white : .ainaTextSecondary, for: .normal)
         noButton.backgroundColor = wantsChange
-            ? UIColor.ainaTextTertiary.withAlphaComponent(0.2) : .ainaDustyRose
+            ? UIColor.ainaTextTertiary.withAlphaComponent(0.2) : UIColor.ainaCoralPink.withAlphaComponent(0.75)
         noButton.setTitleColor(wantsChange ? .ainaTextSecondary : .white, for: .normal)
 
         // Walk up to the scroll content view so the whole layout reflows smoothly
