@@ -202,9 +202,9 @@ final class SkinConditionSectionView: UIView {
     }
 
     private func applyPillStyle(_ btn: UIButton, selected: Bool) {
-        btn.backgroundColor = selected ? .ainaDustyRose : UIColor.ainaGlassElevated
+        btn.backgroundColor = selected ? UIColor.ainaCoralPink.withAlphaComponent(0.75) : UIColor.ainaGlassElevated
         btn.layer.borderColor = selected
-            ? UIColor.ainaDustyRose.cgColor
+            ? UIColor.ainaCoralPink.withAlphaComponent(0.75).cgColor
             : UIColor.ainaTextTertiary.withAlphaComponent(0.4).cgColor
         btn.configuration?.baseForegroundColor = selected ? .white : .ainaTextPrimary
     }

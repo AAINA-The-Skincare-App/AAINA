@@ -116,7 +116,7 @@ final class RoutineConsistencySectionView: UIView {
     private func refreshDayButtons(_ buttons: [UIButton], selected: Set<Int>, countLabel: UILabel) {
         for (i, btn) in buttons.enumerated() {
             let isOn = selected.contains(i)
-            btn.backgroundColor = isOn ? .ainaDustyRose : UIColor.ainaTextTertiary.withAlphaComponent(0.25)
+            btn.backgroundColor = isOn ? UIColor.ainaCoralPink.withAlphaComponent(0.75) : UIColor.ainaTextTertiary.withAlphaComponent(0.25)
             btn.setTitleColor(isOn ? .white : .ainaTextSecondary, for: .normal)
         }
         countLabel.text = "\(selected.count)/7 days"
