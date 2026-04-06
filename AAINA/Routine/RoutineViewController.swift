@@ -33,7 +33,7 @@ final class RoutineViewController: UIViewController {
         
         setupCalendarButton()   // 🔥 ADDED
         setupCollectionView()
-        setupHeaderDivider()
+       //setupHeaderDivider()
         loadData()
         setupPeachOverlay()
         
@@ -157,7 +157,7 @@ final class RoutineViewController: UIViewController {
 
         flow.scrollDirection = .vertical
         flow.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-        flow.minimumLineSpacing = 30
+        flow.minimumLineSpacing = 20
         flow.minimumInteritemSpacing = 0
        
         flow.sectionHeadersPinToVisibleBounds = false
@@ -203,7 +203,7 @@ final class RoutineViewController: UIViewController {
                 return UIEdgeInsets(top: 8, left: 16, bottom: 8, right: 16)// segmented
             case 2:
           
-                return UIEdgeInsets(top: 4, left: 16, bottom: 24, right: 16) // cards
+                return UIEdgeInsets(top: 2, left: 16, bottom: 20, right: 16) // cards
             default:
                 return .zero
             }
@@ -402,7 +402,7 @@ final class RoutineViewController: UIViewController {
             if indexPath.item == 0 {
                 return CGSize(width: width, height: 80) // 🔥 progress card smaller
             }
-            return CGSize(width: width, height: 120) // 🔥 step cards tighter
+            return CGSize(width: width, height: 170) // 🔥 step cards tighter
         default:
             return .zero
         }
