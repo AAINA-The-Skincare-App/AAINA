@@ -3,7 +3,7 @@ import UIKit
 
 final class GeminiFreeService {
 
-    func generateRoutine(prompt: String, image: UIImage?) async throws -> AIRoutineOutput {
+    func generateRoutine(prompt: String, image: UIImage?) async throws -> FullAnalysisOutput {
 
         var parts: [[String: Any]] = []
 
@@ -67,15 +67,15 @@ final class GeminiFreeService {
         if let success = try? JSONDecoder().decode(GeminiRawResponse.self, from: data),
            let text = success.candidates.first?.content?.parts.first(where: { $0.thought != true })?.text {
 
-            print("✅ Gemini text extracted, decoding AIRoutineOutput…")
+            print("✅ Gemini text extracted, decoding FullAnalysisOutput…")
             let cleaned = cleanJSON(text)
             guard let jsonData = cleaned.data(using: .utf8) else {
                 throw NSError(domain: "Gemini", code: -2)
             }
             do {
-                return try JSONDecoder().decode(AIRoutineOutput.self, from: jsonData)
+                return try JSONDecoder().decode(FullAnalysisOutput.self, from: jsonData)
             } catch {
-                print("❌ AIRoutineOutput decode failed: \(error)")
+                print("❌ FullAnalysisOutput decode failed: \(error)")
                 print("📄 Text from Gemini: \(cleaned.prefix(500))")
                 throw error
             }
@@ -88,6 +88,7 @@ final class GeminiFreeService {
             print("🔄 Retrying without image…")
             return try await generateRoutine(prompt: prompt, image: nil)
         }
+
 
         throw NSError(domain: "Gemini", code: -3,
                       userInfo: [NSLocalizedDescriptionKey: "No valid content in response"])
