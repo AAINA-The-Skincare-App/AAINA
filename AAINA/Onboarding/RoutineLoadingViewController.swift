@@ -74,9 +74,9 @@ class RoutineLoadingViewController: UIViewController {
                     image: capturedImage
                 )
 
-                dataModel.saveAIRoutine(output)
+                dataModel.saveAIRoutine(output.routine)
 
-                await MainActor.run { transitionToMainApp() }
+                await MainActor.run { transitionToFaceScanOutput(output.scanResult) }
 
             } catch {
                 await MainActor.run { showFailureAlert() }
@@ -85,6 +85,13 @@ class RoutineLoadingViewController: UIViewController {
     }
 
     // MARK: - Navigation
+
+    private func transitionToFaceScanOutput(_ scanResult: FaceScanResult) {
+        let vc = FaceScanOutputViewController()
+        vc.scanResult = scanResult
+        vc.dataModel  = dataModel
+        navigationController?.pushViewController(vc, animated: true)
+    }
 
     private func transitionToMainApp() {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
