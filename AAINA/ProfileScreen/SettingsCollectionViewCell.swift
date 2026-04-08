@@ -42,14 +42,16 @@ class SettingsCollectionViewCell: UICollectionViewCell {
     
     private func setupUI() {
         
-        containerView.layer.cornerRadius = 16
-        containerView.backgroundColor = .systemBackground
-        
-        // Optional light shadow
-        containerView.layer.shadowColor = UIColor.black.cgColor
-        containerView.layer.shadowOpacity = 0.05
-        containerView.layer.shadowOffset = CGSize(width: 0, height: 5)
-        containerView.layer.shadowRadius = 10
+        containerView.backgroundColor = .ainaGlassSurface
+
+        containerView.layer.cornerRadius = 20
+        containerView.layer.borderWidth = 1
+        containerView.layer.borderColor = UIColor.white.withAlphaComponent(0.25).cgColor
+
+        containerView.layer.shadowColor = UIColor.ainaCardShadowColor.cgColor
+        containerView.layer.shadowOpacity = 0.08
+        containerView.layer.shadowOffset = CGSize(width: 0, height: 8)
+        containerView.layer.shadowRadius = 16
     }
     
     
@@ -59,7 +61,7 @@ class SettingsCollectionViewCell: UICollectionViewCell {
         
         // Row 1 - Language
         icon1.image = UIImage(systemName: "globe")
-        icon1.tintColor = .systemGray
+     
         
         title1Label.text = "Language"
         title1Label.font = UIFont.systemFont(ofSize: 16, weight: .medium)
@@ -70,7 +72,7 @@ class SettingsCollectionViewCell: UICollectionViewCell {
         
         // Row 2 - Logout
         icon2.image = UIImage(systemName: "arrow.backward.square")
-        icon2.tintColor = .systemRed
+   
         
         title2Label.text = "Log out"
         title2Label.font = UIFont.systemFont(ofSize: 16, weight: .medium)

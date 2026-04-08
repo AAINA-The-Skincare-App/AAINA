@@ -229,7 +229,7 @@ extension AppDataModel {
 }
 
 // MARK: - Affirmations
-
+// remove 
 extension AppDataModel {
 
     func nextAffirmation() -> Affirmation? {

@@ -5,16 +5,21 @@ class OnboardingSensitivityViewController: UIViewController {
     var onboardingData: OnboardingData!
     var dataModel: AppDataModel!
     
-
+    @IBOutlet weak var sensitivityCardView: UIView!
     @IBOutlet var sensitivityButtons: [UIButton]!
     @IBOutlet weak var nextButton: UIButton!
-
+    @IBOutlet weak var progressview: UIProgressView!
+    
     // MARK: - Lifecycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        print("SensitivityViewController loaded")
+        view.applyAINABackground()
+        setupCard()
+
+        progressview.progressTintColor = .ainaCoralPink
+        progressview.trackTintColor = UIColor.ainaRoseLight.withAlphaComponent(0.3)
 
         if onboardingData == nil {
             onboardingData = OnboardingData()
@@ -33,43 +38,52 @@ class OnboardingSensitivityViewController: UIViewController {
         updateSelection(selected: sender)
         enableNextButton()
         provideHaptic()
-
-        print("✅ Sensitivity selected:", level)
     }
 
     @IBAction func nextTapped(_ sender: UIButton) {
-        guard onboardingData.sensitivity != nil else {
-            print("❌ No selection")
-            return
-        }
-
-        //performSegue(withIdentifier: "SensitivityToGoal", sender: self)
-    }
-
-    // MARK: - Navigation
-
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "SensitivityToGoal",
-           let vc = segue.destination as? OnboardingGoalsViewController {
-
-            vc.onboardingData = onboardingData
-            vc.dataModel = dataModel
-        }
+        guard onboardingData.sensitivity != nil else { return }
+//        performSegue(withIdentifier: "SensitivityToGoal", sender: self)
     }
 
     // MARK: - UI Setup
 
+    private func setupCard() {
+        sensitivityCardView.backgroundColor = .clear
+
+        sensitivityCardView.applyGlass(cornerRadius: 24)
+
+        sensitivityCardView.layer.shadowColor = UIColor.ainaCardShadowColor.cgColor
+        sensitivityCardView.layer.shadowOpacity = 0.10
+        sensitivityCardView.layer.shadowOffset = CGSize(width: 0, height: 8)
+        sensitivityCardView.layer.shadowRadius = 20
+        sensitivityCardView.layer.masksToBounds = false
+
+        sensitivityCardView.layer.borderWidth = 1
+        sensitivityCardView.layer.borderColor = UIColor.white.withAlphaComponent(0.2).cgColor
+    }
+
     private func setupButtons() {
         sensitivityButtons.forEach {
+
+            var config = UIButton.Configuration.plain()
+            config.contentInsets = NSDirectionalEdgeInsets(top: 14, leading: 16, bottom: 14, trailing: 16)
+
+            $0.configuration = config
             $0.layer.cornerRadius = 22
+            $0.backgroundColor = UIColor.white.withAlphaComponent(0.25)
+
             $0.layer.borderWidth = 1
-            $0.layer.borderColor = UIColor.systemGray4.cgColor
-            $0.backgroundColor = .systemBackground
-            $0.setTitleColor(.label, for: .normal)
+            $0.layer.borderColor = UIColor.ainaTextTertiary.withAlphaComponent(0.25).cgColor
+
+            $0.setTitleColor(.ainaTextPrimary, for: .normal)
         }
     }
 
     private func setupNextButton() {
+        nextButton.layer.cornerRadius = 20
+        nextButton.backgroundColor = .ainaCoralPink
+        nextButton.setTitleColor(.white, for: .normal)
+
         nextButton.isEnabled = false
         nextButton.alpha = 0.5
     }
@@ -86,12 +100,12 @@ class OnboardingSensitivityViewController: UIViewController {
 
             if button == selected {
 
-                button.backgroundColor = UIColor.systemBlue.withAlphaComponent(0.15)
-                button.setTitleColor(.systemBlue, for: .normal)
-                button.layer.borderColor = UIColor.systemBlue.cgColor
-                button.layer.borderWidth = 1.5
+                button.backgroundColor = UIColor.ainaCoralPink.withAlphaComponent(0.15)
+                button.setTitleColor(.ainaCoralPink, for: .normal)
 
-                // 🔥 Tap animation (makes it feel responsive)
+                button.layer.borderWidth = 1
+                button.layer.borderColor = UIColor.ainaCoralPink.cgColor
+
                 UIView.animate(withDuration: 0.15,
                                animations: {
                     button.transform = CGAffineTransform(scaleX: 0.96, y: 0.96)
@@ -103,10 +117,12 @@ class OnboardingSensitivityViewController: UIViewController {
 
             } else {
 
-                button.backgroundColor = .systemBackground
-                button.setTitleColor(.label, for: .normal)
-                button.layer.borderColor = UIColor.systemGray4.cgColor
+
+                button.backgroundColor = UIColor.white.withAlphaComponent(0.25)
+                button.setTitleColor(.ainaTextPrimary, for: .normal)
+
                 button.layer.borderWidth = 1
+                button.layer.borderColor = UIColor.ainaTextTertiary.withAlphaComponent(0.25).cgColor
             }
         }
     }
@@ -126,6 +142,14 @@ class OnboardingSensitivityViewController: UIViewController {
         case 2: return .often
         case 3: return .veryEasily
         default: return .sometimes
+        }
+    }
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "SensitivityToGoal",
+           let vc = segue.destination as? OnboardingGoalsViewController {
+
+            vc.onboardingData = onboardingData
+            vc.dataModel = dataModel
         }
     }
 }

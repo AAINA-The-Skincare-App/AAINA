@@ -74,7 +74,7 @@ class RoutineLoadingViewController: UIViewController {
                     image: capturedImage
                 )
 
-                dataModel.saveAIRoutine(output)
+                dataModel.saveAIRoutine(output.routine)
 
                 await MainActor.run { transitionToResultScreen() }
 

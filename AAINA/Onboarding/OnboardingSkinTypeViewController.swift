@@ -15,6 +15,10 @@ class OnboardingSkinTypeViewController: UIViewController {
 
     @IBOutlet weak var nextButton: UIButton!
     @IBOutlet weak var infoView: UIView!
+    
+    @IBOutlet weak var progressView: UIProgressView!
+    
+    
 
     @IBOutlet weak var backgroundView: UIView!
 
@@ -28,11 +32,15 @@ class OnboardingSkinTypeViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.applyAINABackground()
+        progressView.progressTintColor = .ainaCoralPink
+        progressView.trackTintColor = UIColor.ainaRoseLight.withAlphaComponent(0.3)
 
         setupCards()
-        setupButtons(tZoneButtons)
-        setupButtons(uZoneButtons)
-        setupButtons(cZoneButtons)
+       
+        styleButtons(tZoneButtons)
+        styleButtons(uZoneButtons)
+        styleButtons(cZoneButtons)
         setupNextButton()
         setupPopupUI()
         setupNotSureUI()
@@ -43,7 +51,7 @@ class OnboardingSkinTypeViewController: UIViewController {
 
         backgroundView.isHidden = true
         backgroundView.alpha = 0
-        backgroundView.backgroundColor = UIColor.white.withAlphaComponent(0.8)
+        backgroundView.backgroundColor = UIColor.black.withAlphaComponent(0.2)
         backgroundView.isUserInteractionEnabled = false
 
         let tap = UITapGestureRecognizer(target: self, action: #selector(backgroundTapped))
@@ -166,8 +174,10 @@ class OnboardingSkinTypeViewController: UIViewController {
     private func setupCards() {
         [tZoneCardView, uZoneCardView, cZoneCardView].forEach {
 
-            $0?.backgroundColor = .white
+            $0?.backgroundColor = UIColor.white.withAlphaComponent(0.35)
+            $0?.layer.borderWidth = 1
             $0?.layer.cornerRadius = 20
+            $0?.layer.borderColor = UIColor.white.withAlphaComponent(0.3).cgColor
             $0?.layer.cornerCurve = .continuous
 
             $0?.layer.shadowColor = UIColor.black.cgColor
@@ -178,33 +188,68 @@ class OnboardingSkinTypeViewController: UIViewController {
             $0?.layer.masksToBounds = false
         }
     }
+    private func styleButtons(_ buttons: [UIButton]) {
+        buttons.forEach {
+            $0.configuration = nil
+            $0.layer.cornerRadius = 18
+            $0.layer.borderWidth = 1
+            $0.setTitle($0.currentTitle, for: .normal)
+
+            // Default state
+            $0.backgroundColor = UIColor.white.withAlphaComponent(0.15)
+            $0.setTitleColor(.ainaTextPrimary, for: .normal)
+            $0.setTitleColor(.ainaTextPrimary, for: .selected)
+            $0.setTitleColor(.ainaTextPrimary, for: .highlighted)
+            $0.tintColor = .clear
+            $0.adjustsImageWhenHighlighted = false
+            $0.layer.borderColor = UIColor.white.withAlphaComponent(0.3).cgColor
+
+           
+        }
+    }
     private func setupNotSureUI() {
-        notSureView.backgroundColor = UIColor.systemBlue.withAlphaComponent(0.1)
-        notSureView.layer.cornerRadius = 14
+
+        notSureView.backgroundColor = .clear
+        notSureView.applyGlass(cornerRadius: 14)
+
         notSureView.layer.borderWidth = 1
-        notSureView.layer.borderColor = UIColor.systemBlue.withAlphaComponent(0.2).cgColor
+        notSureView.layer.borderColor = UIColor.white.withAlphaComponent(0.2).cgColor
+
+        notSureIcon.tintColor = .ainaCoralPink
+        notSureIcon.image = UIImage(systemName: "sparkles")
+
+        notSureLabel.textColor = UIColor.ainaTextPrimary.withAlphaComponent(0.7)
     }
 
     private func setupButtons(_ buttons: [UIButton]) {
         buttons.forEach {
             $0.layer.cornerRadius = 20
-            $0.backgroundColor = .systemBackground
-            $0.setTitleColor(.label, for: .normal)
+            $0.backgroundColor = .clear
+            $0.setTitleColor(.ainaTextPrimary, for: .normal)
             $0.layer.borderWidth = 1
-            $0.layer.borderColor = UIColor.systemGray4.cgColor
+            $0.layer.borderColor = UIColor.ainaTextTertiary.withAlphaComponent(0.4).cgColor
         }
     }
 
     private func setupNextButton() {
+        nextButton.layer.cornerRadius = 20
+        nextButton.backgroundColor = .ainaCoralPink
+        nextButton.setTitle("Next", for: .normal) 
+
+        nextButton.setTitleColor(.white, for: .normal)
+        nextButton.setTitleColor(.white, for: .disabled)
+
+        
+
         nextButton.isEnabled = false
         nextButton.alpha = 0.5
     }
 
-    // ⭐ POPUP UI DESIGN
+    //  POPUP UI DESIGN
 
     private func setupPopupUI() {
 
-        infoView.backgroundColor = .systemBackground
+        infoView.backgroundColor = UIColor.white.withAlphaComponent(0.35)
         infoView.layer.cornerRadius = 20
 
         // Shadow
@@ -229,7 +274,7 @@ class OnboardingSkinTypeViewController: UIViewController {
         infoDescriptionLabel.numberOfLines = 0
 
         // Icon
-        infoImageView.tintColor = .systemBlue
+        infoImageView.tintColor = .ainaCoralPink
         infoImageView.contentMode = .scaleAspectFit
     }
 
@@ -239,9 +284,11 @@ class OnboardingSkinTypeViewController: UIViewController {
         for button in buttons {
             if button == selected {
 
-                button.backgroundColor = UIColor.systemBlue.withAlphaComponent(0.15)
-                button.setTitleColor(.systemBlue, for: .normal)
-                button.layer.borderColor = UIColor.systemBlue.cgColor
+                button.backgroundColor = UIColor.ainaCoralPink.withAlphaComponent(0.20)
+                button.setTitleColor(.ainaCoralPink, for: .normal)
+                button.setTitleColor(.ainaCoralPink, for: .selected)
+                button.setTitleColor(.ainaCoralPink, for: .highlighted)
+                button.layer.borderColor = UIColor.ainaCoralPink.cgColor
                 button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .semibold)
 
                 UIView.animate(withDuration: 0.15,
@@ -254,9 +301,11 @@ class OnboardingSkinTypeViewController: UIViewController {
                 }
 
             } else {
-                button.backgroundColor = .systemBackground
-                button.setTitleColor(.label, for: .normal)
-                button.layer.borderColor = UIColor.systemGray4.cgColor
+                button.backgroundColor = .clear
+                button.setTitleColor(.ainaTextPrimary, for: .normal)
+                button.setTitleColor(.ainaTextPrimary, for: .selected)
+                button.setTitleColor(.ainaTextPrimary, for: .highlighted)
+                button.layer.borderColor = UIColor.ainaTextTertiary.withAlphaComponent(0.4).cgColor
                 button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .regular)
             }
         }
@@ -292,3 +341,4 @@ class OnboardingSkinTypeViewController: UIViewController {
         }
     }
 }
+

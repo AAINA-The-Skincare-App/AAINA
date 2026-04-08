@@ -13,11 +13,9 @@ class OnboardingDOBViewController: UIViewController,
     // Injected from SceneDelegate
     var dataModel: AppDataModel!
 
-    // Onboarding state
     var onboardingData = OnboardingData()
     var selectedYear: Int? = nil
 
-    // Year range (MAX = 2012, going backwards)
     let maxYear = 2012
     let minYear = 1900
 
@@ -29,17 +27,18 @@ class OnboardingDOBViewController: UIViewController,
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupPrivacyView()
 
-        print("Running DOBViewController:", ObjectIdentifier(self))
+        view.applyAINABackground()
+       
+        setupDOBCard()            
+        setupPrivacyView()
+        setupNextButton()
 
         yearPicker.delegate = self
         yearPicker.dataSource = self
+        yearPicker.setValue(UIColor.ainaTextPrimary, forKey: "textColor")
 
-        // ❌ No default selection
         selectedYear = nil
-
-        // Disable Next button initially
         nextButton.isEnabled = false
         nextButton.alpha = 0.5
     }
@@ -47,22 +46,102 @@ class OnboardingDOBViewController: UIViewController,
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
 
-        dobCardView.layer.cornerRadius = 20
-        dobCardView.clipsToBounds = true
+        
+
+        progressView.progressTintColor = .ainaCoralPink
+        progressView.trackTintColor = UIColor.ainaRoseLight.withAlphaComponent(0.3)
+        progressView.layer.cornerRadius = 2
+
+        privacyLabel.textColor = .ainaTextSecondary
+
+        if yearPicker.subviews.count > 1 {
+            yearPicker.subviews[1].backgroundColor = UIColor.ainaTintedGlassMedium
+        }
     }
 
-    // MARK: - PickerView DataSource
 
-    func numberOfComponents(in pickerView: UIPickerView) -> Int {
-        return 1
+    private func setupBlobs() {
+
+        let blob1 = UIView()
+        blob1.backgroundColor = UIColor.ainaCoralPink.withAlphaComponent(0.25)
+        blob1.layer.cornerRadius = 160
+        blob1.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(blob1)
+
+        let blob2 = UIView()
+        blob2.backgroundColor = UIColor.ainaDustyRose.withAlphaComponent(0.15)
+        blob2.layer.cornerRadius = 130
+        blob2.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(blob2)
+
+        NSLayoutConstraint.activate([
+            blob1.widthAnchor.constraint(equalToConstant: 300),
+            blob1.heightAnchor.constraint(equalToConstant: 300),
+            blob1.topAnchor.constraint(equalTo: view.topAnchor, constant: -80),
+            blob1.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 80),
+
+            blob2.widthAnchor.constraint(equalToConstant: 250),
+            blob2.heightAnchor.constraint(equalToConstant: 250),
+            blob2.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 60),
+            blob2.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: -60)
+        ])
     }
+
+    // GLASS CARD
+
+    private func setupDOBCard() {
+
+        dobCardView.backgroundColor = .clear
+
+        // Apply same glass effect as journal
+        dobCardView.applyGlass(cornerRadius: 24)
+
+        // Shadow for floating look
+        dobCardView.layer.shadowColor = UIColor.ainaCardShadowColor.cgColor
+        dobCardView.layer.shadowOpacity = 0.10
+        dobCardView.layer.shadowOffset = CGSize(width: 0, height: 8)
+        dobCardView.layer.shadowRadius = 20
+        dobCardView.layer.masksToBounds = false
+
+        // Optional: premium border
+        dobCardView.layer.borderWidth = 1
+        dobCardView.layer.borderColor = UIColor.white.withAlphaComponent(0.2).cgColor
+    }
+
+    // PRIVACY VIEW 
+
+    private func setupPrivacyView() {
+
+        privacyContainerView.backgroundColor = .clear
+        privacyContainerView.applyGlass(cornerRadius: 14)
+
+        privacyContainerView.layer.borderWidth = 1
+        privacyContainerView.layer.borderColor = UIColor.white.withAlphaComponent(0.2).cgColor
+
+        privacyIcon.tintColor = .ainaCoralPink
+        privacyIcon.image = UIImage(systemName: "lock.shield")
+
+        privacyLabel.textColor = UIColor.ainaTextPrimary.withAlphaComponent(0.7)
+    }
+
+    // MARK: - BUTTON
+
+    private func setupNextButton() {
+        nextButton.backgroundColor = .ainaCoralPink
+        nextButton.setTitleColor(.white, for: .normal)
+        nextButton.layer.cornerRadius = 20
+        nextButton.isEnabled = false
+        nextButton.alpha = 0.5
+    }
+
+    // MARK: - Picker
+
+    func numberOfComponents(in pickerView: UIPickerView) -> Int { return 1 }
 
     func pickerView(_ pickerView: UIPickerView,
                     numberOfRowsInComponent component: Int) -> Int {
         return years.count
     }
-
-    // MARK: - PickerView Delegate
 
     func pickerView(_ pickerView: UIPickerView,
                     titleForRow row: Int,
@@ -75,8 +154,6 @@ class OnboardingDOBViewController: UIViewController,
                     inComponent component: Int) {
 
         selectedYear = years[row]
-
-        // Enable Next button after selection
         nextButton.isEnabled = true
         nextButton.alpha = 1.0
 
@@ -93,40 +170,10 @@ class OnboardingDOBViewController: UIViewController,
         }
 
         onboardingData.birthYear = year
-
         print("Onboarding data updated:", onboardingData)
-
-        // performSegue(withIdentifier: "DobToSkinType", sender: self)
-    }
-    private func setupPrivacyView() {
-
-        // Background color (light blue like your design)
-        privacyContainerView.backgroundColor = UIColor.systemBlue.withAlphaComponent(0.06)
-
-        // Rounded corners
-        privacyContainerView.layer.cornerRadius = 14
-
-        // Shadow
-        privacyContainerView.layer.shadowColor = UIColor.black.cgColor
-        privacyContainerView.layer.shadowOpacity = 0.05
-        privacyContainerView.layer.shadowOffset = CGSize(width: 0, height: 2)
-        privacyContainerView.layer.shadowRadius = 6
-
-        // Important: allow shadow
-        privacyContainerView.layer.masksToBounds = false
-
-        // Icon styling
-        privacyIcon.tintColor = .systemBlue
-        privacyIcon.image = UIImage(systemName: "shield.fill")
-
-        // Label styling
-        privacyLabel.textColor = .secondaryLabel
-        privacyLabel.font = UIFont.systemFont(ofSize: 13)
-        privacyLabel.numberOfLines = 0
     }
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-
         if segue.identifier == "DobToSkinType",
            let vc = segue.destination as? OnboardingSkinTypeViewController {
 
