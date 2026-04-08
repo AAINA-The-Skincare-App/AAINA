@@ -3,7 +3,7 @@ import UIKit
 class OnboardingSkinTypeViewController: UIViewController {
 
     var onboardingData: OnboardingData!
-    var dataModel: DataModel!
+    var dataModel: AppDataModel!
 
     @IBOutlet var tZoneButtons: [UIButton]!
     @IBOutlet var uZoneButtons: [UIButton]!

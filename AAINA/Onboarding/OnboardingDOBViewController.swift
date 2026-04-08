@@ -11,7 +11,7 @@ class OnboardingDOBViewController: UIViewController,
     @IBOutlet weak var privacyIcon: UIImageView!
     @IBOutlet weak var privacyLabel: UILabel!
     // Injected from SceneDelegate
-    var dataModel: DataModel!
+    var dataModel: AppDataModel!
 
     // Onboarding state
     var onboardingData = OnboardingData()

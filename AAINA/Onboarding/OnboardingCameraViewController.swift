@@ -4,7 +4,7 @@ import AVFoundation
 class OnboardingCameraViewController: UIViewController {
 
     var onboardingData: OnboardingData!
-    var dataModel: DataModel!
+    var dataModel: AppDataModel!
 
     private let session = AVCaptureSession()
     private let photoOutput = AVCapturePhotoOutput()
