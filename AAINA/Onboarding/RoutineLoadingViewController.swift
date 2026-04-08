@@ -4,7 +4,7 @@ class RoutineLoadingViewController: UIViewController {
 
     var onboardingData: OnboardingData!
     var capturedImage: UIImage?
-    var dataModel: DataModel!
+    var dataModel: AppDataModel!
 
     private let spinner = UIActivityIndicatorView(style: .large)
     private let headlineLabel = UILabel()
@@ -76,7 +76,7 @@ class RoutineLoadingViewController: UIViewController {
 
                 dataModel.saveAIRoutine(output.routine)
 
-                await MainActor.run { transitionToFaceScanOutput(output.scanResult) }
+                await MainActor.run { transitionToResultScreen() }
 
             } catch {
                 await MainActor.run { showFailureAlert() }
@@ -86,24 +86,17 @@ class RoutineLoadingViewController: UIViewController {
 
     // MARK: - Navigation
 
-    private func transitionToFaceScanOutput(_ scanResult: FaceScanResult) {
-        let vc = FaceScanOutputViewController()
-        vc.scanResult = scanResult
-        vc.dataModel  = dataModel
-        navigationController?.pushViewController(vc, animated: true)
-    }
-
-    private func transitionToMainApp() {
+    private func transitionToResultScreen() {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        guard let tabBar = storyboard.instantiateViewController(
-            withIdentifier: "MainTabBarViewController"
-        ) as? MainTabBarViewController else { return }
 
-        tabBar.dataModel = dataModel
+        guard let resultVC = storyboard.instantiateViewController(
+            withIdentifier: "OnboardingResultViewController"
+        ) as? OnboardingResultViewController else { return }
 
-        if let sceneDelegate = UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate {
-            sceneDelegate.window?.rootViewController = tabBar
-        }
+        resultVC.onboardingData = onboardingData   // ✅ PASS DATA
+        resultVC.dataModel = dataModel             // (optional but recommended)
+
+        navigationController?.pushViewController(resultVC, animated: true)
     }
 
     private func showFailureAlert() {
@@ -116,7 +109,9 @@ class RoutineLoadingViewController: UIViewController {
             self?.startAnalysis()
         })
         alert.addAction(UIAlertAction(title: "Use Default Routine", style: .cancel) { [weak self] _ in
-            self?.transitionToMainApp()
+            DispatchQueue.main.async {
+                self?.transitionToResultScreen()
+            }
         })
         present(alert, animated: true)
     }
