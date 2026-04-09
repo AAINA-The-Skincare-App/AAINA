@@ -11,9 +11,8 @@ class OnboardingDOBViewController: UIViewController,
     @IBOutlet weak var privacyContainerView: UIView!
     @IBOutlet weak var privacyIcon: UIImageView!
     @IBOutlet weak var privacyLabel: UILabel!
-    @IBOutlet weak var progressView: UIProgressView!
-
-    var dataModel: DataModel!
+    // Injected from SceneDelegate
+    var dataModel: AppDataModel!
 
     var onboardingData = OnboardingData()
     var selectedYear: Int? = nil

@@ -4,7 +4,7 @@ class RoutineLoadingViewController: UIViewController {
 
     var onboardingData: OnboardingData!
     var capturedImage: UIImage?
-    var dataModel: DataModel!
+    var dataModel: AppDataModel!
 
     private let spinner = UIActivityIndicatorView(style: .large)
     private let headlineLabel = UILabel()
@@ -76,11 +76,7 @@ class RoutineLoadingViewController: UIViewController {
 
                 dataModel.saveAIRoutine(output.routine)
 
-<<<<<<< Updated upstream
                 await MainActor.run { transitionToFaceScanOutput(output.scanResult) }
-=======
-                await MainActor.run { transitionToFaceScanOutput(scanResult: output.scanResult) }
->>>>>>> Stashed changes
 
             } catch {
                 await MainActor.run { showFailureAlert() }
@@ -90,7 +86,6 @@ class RoutineLoadingViewController: UIViewController {
 
     // MARK: - Navigation
 
-<<<<<<< Updated upstream
     private func transitionToFaceScanOutput(_ scanResult: FaceScanResult) {
         let vc = FaceScanOutputViewController()
         vc.scanResult = scanResult
@@ -100,23 +95,15 @@ class RoutineLoadingViewController: UIViewController {
 
     private func transitionToMainApp() {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        guard let tabBar = storyboard.instantiateViewController(
-            withIdentifier: "MainTabBarViewController"
-        ) as? MainTabBarViewController else { return }
 
-        tabBar.dataModel = dataModel
+        guard let resultVC = storyboard.instantiateViewController(
+            withIdentifier: "OnboardingResultViewController"
+        ) as? OnboardingResultViewController else { return }
 
         if let sceneDelegate = UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate {
             sceneDelegate.window?.rootViewController = tabBar
         }
-=======
-    private func transitionToFaceScanOutput(scanResult: FaceScanResult) {
-        let vc = FaceScanOutputViewController()
-        vc.scanResult = scanResult
-        vc.dataModel = dataModel
-        vc.onboardingData = onboardingData
-        navigationController?.pushViewController(vc, animated: true)
->>>>>>> Stashed changes
+
     }
 
     private func showFailureAlert() {
@@ -129,18 +116,8 @@ class RoutineLoadingViewController: UIViewController {
             self?.startAnalysis()
         })
         alert.addAction(UIAlertAction(title: "Use Default Routine", style: .cancel) { [weak self] _ in
-<<<<<<< Updated upstream
             self?.transitionToMainApp()
-=======
-            guard let self else { return }
-            let fallback = FaceScanResult(
-                skinType: "Normal",
-                skinTone: "Medium",
-                concerns: [],
-                summary: "No scan available — using default routine."
-            )
-            self.transitionToFaceScanOutput(scanResult: fallback)
->>>>>>> Stashed changes
+
         })
         present(alert, animated: true)
     }
