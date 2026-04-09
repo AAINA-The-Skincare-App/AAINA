@@ -12,7 +12,6 @@ class IngredientScannerCollectionViewCell: UICollectionViewCell {
     static let identifier = "IngredientScannerCollectionViewCell"
     @IBOutlet weak var containerView: UIView!
     
-    @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var descriptionLabel: UILabel!
     
     @IBOutlet weak var scannerImageView: UIImageView!
@@ -44,8 +43,6 @@ class IngredientScannerCollectionViewCell: UICollectionViewCell {
         containerView.layer.borderWidth = 1
         containerView.layer.borderColor = UIColor.white.withAlphaComponent(0.2).cgColor
         
-        titleLabel.textColor = .label
-        
         descriptionLabel.font = UIFont.systemFont(ofSize: 14)
         descriptionLabel.textColor = .darkGray
         descriptionLabel.numberOfLines = 3
@@ -71,11 +68,9 @@ class IngredientScannerCollectionViewCell: UICollectionViewCell {
     
     
     func configure(
-        title: String = "Ingredient Scan",
         description: String = "Scan labels for instant ingredient analysis for routine match and conflict check",
         image: UIImage? = UIImage(systemName: "barcode.viewfinder")
     ) {
-        titleLabel.text = title
         descriptionLabel.text = description
         scannerImageView.image = image
     }

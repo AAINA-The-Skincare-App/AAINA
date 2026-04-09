@@ -148,21 +148,22 @@ class OnboardingCameraViewController: UIViewController {
     }
 
     @objc private func skipTapped() {
-        proceedToLoading(image: nil)
-    }
-
-    private func proceedToLoading(image: UIImage?) {
         let loadingVC = RoutineLoadingViewController()
         loadingVC.onboardingData = onboardingData
-        loadingVC.capturedImage = image
         loadingVC.dataModel = dataModel
         navigationController?.pushViewController(loadingVC, animated: true)
     }
 
+    private func proceedToFaceScan(image: UIImage) {
+        let faceScanVC = FaceScanOutputViewController()
+        faceScanVC.capturedImage = image
+        faceScanVC.onboardingData = onboardingData
+        faceScanVC.dataModel = dataModel
+        navigationController?.pushViewController(faceScanVC, animated: true)
+    }
+
     private func showCameraUnavailable() {
-        // Camera not available — proceed silently with inputs only.
-        // The Skip button on screen covers the user-initiated case.
-        proceedToLoading(image: nil)
+        skipTapped()
     }
 }
 
@@ -178,10 +179,10 @@ extension OnboardingCameraViewController: AVCapturePhotoCaptureDelegate {
         guard error == nil,
               let data = photo.fileDataRepresentation(),
               let image = UIImage(data: data) else {
-            proceedToLoading(image: nil)
+            skipTapped()
             return
         }
 
-        proceedToLoading(image: image)
+        proceedToFaceScan(image: image)
     }
 }

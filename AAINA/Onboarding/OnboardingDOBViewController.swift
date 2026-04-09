@@ -4,6 +4,7 @@ class OnboardingDOBViewController: UIViewController,
                                    UIPickerViewDelegate,
                                    UIPickerViewDataSource {
 
+    @IBOutlet weak var progressView: UIProgressView!
     @IBOutlet weak var dobCardView: UIView!
     @IBOutlet weak var yearPicker: UIPickerView!
     @IBOutlet weak var nextButton: UIButton!
