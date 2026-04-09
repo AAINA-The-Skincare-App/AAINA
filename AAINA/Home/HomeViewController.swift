@@ -53,6 +53,43 @@ class HomeViewController: UIViewController, SkinMatrixToggleDelegate {
         dailyTip = dataModel.getDailyTip()
 
         registerCells()
+<<<<<<< Updated upstream
+=======
+        reloadRoutineData()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+
+        // Re-read from singleton in case it was updated (e.g. user just completed onboarding)
+        aiOutput = dataModel.aiRoutine
+        reloadRoutineData()
+        HomeCollectionView.reloadData()
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        presentWeeklyCheckInIfNeeded()
+    }
+
+    private func presentWeeklyCheckInIfNeeded() {
+        guard WeeklyCheckInManager.shouldShow() else { return }
+        WeeklyCheckInManager.markShownThisWeek()
+
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) { [weak self] in
+            guard let self, self.presentedViewController == nil else { return }
+            let vc = WeeklyCheckInViewController()
+            vc.modalPresentationStyle = .pageSheet
+            if let sheet = vc.sheetPresentationController {
+                sheet.detents = [.medium()]
+                sheet.prefersGrabberVisible = true
+                sheet.preferredCornerRadius = 28
+            }
+            self.present(vc, animated: true)
+        }
+    }
+}
+>>>>>>> Stashed changes
 
         print(dataModel!)
 

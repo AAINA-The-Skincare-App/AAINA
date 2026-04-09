@@ -2,298 +2,299 @@
 //  WeeklyCheckInViewController.swift
 //  AAINA
 //
-//  Slim coordinator: creates section views, wires callbacks, handles save/validate.
-//
 
 import UIKit
 
-final class WeeklyCheckInViewController: UIViewController {
+class WeeklyCheckInViewController: UIViewController {
 
-    // MARK: - Public configuration
-    var routineStartDate: Date = Calendar.current.date(byAdding: .weekOfYear, value: -2, to: Date()) ?? Date()
-    var weekStart: Date = Calendar.current.date(byAdding: .weekOfYear, value: -1, to: Date()) ?? Date()
-    var onSave: ((WeeklyCheckInData) -> Void)?
+    // MARK: - Callback
+    var onDismiss: (() -> Void)?
 
-    private let minimumWeeksBeforeChange = 4
+    // MARK: - State
+    private var selectedRating: Int = 0
 
-    // MARK: - Decorative blobs
-    private let blob1 = UIView()
-    private let blob2 = UIView()
-
-    // MARK: - Section views (loaded from XIBs)
-    private var skinSection      = SkinConditionSectionView.create()
-    private var routineSection   = RoutineConsistencySectionView.create()
-    private var lifestyleSection = LifestyleSectionView.create()
-    private var productSection   = ProductChangesSectionView.create()
-    private var photoSection     = ProgressPhotoSectionView.create()
-    private var notesSection     = NotesSectionView.create()
-    private var changeSection    = ChangeRoutineSectionView.create()
-
-    // MARK: - IBOutlets – Layout
-    @IBOutlet weak var scrollView: UIScrollView!
-    @IBOutlet weak var contentStack: UIStackView!
-
-    // MARK: - IBOutlets – Nav header
-    @IBOutlet weak var backButton: UIButton!
-    @IBOutlet weak var titleLabel: UILabel!
-    @IBOutlet weak var dateRangeLabel: UILabel!
-
-    // MARK: - IBOutlets – Section containers
-    @IBOutlet weak var skinSectionContainer: UIView!
-    @IBOutlet weak var routineSectionContainer: UIView!
-    @IBOutlet weak var lifestyleSectionContainer: UIView!
-    @IBOutlet weak var productSectionContainer: UIView!
-    @IBOutlet weak var photoSectionContainer: UIView!
-    @IBOutlet weak var notesSectionContainer: UIView!
-    @IBOutlet weak var changeSectionContainer: UIView!
-
-    // MARK: - IBOutlets – Save
-    @IBOutlet weak var saveButton: UIButton!
+    // MARK: - Views
+    private let handleBar      = UIView()
+    private let titleLabel     = UILabel()
+    private let subtitleLabel  = UILabel()
+    private let ratingStack    = UIStackView()
+    private var ratingButtons  = [UIButton]()
+    private let notesCard      = UIView()
+    private let notesTextView  = UITextView()
+    private let notesPlaceholder = UILabel()
+    private let saveButton     = UIButton(type: .custom)
 
     // MARK: - Lifecycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
         view.applyAINABackground()
-        setupBlobs()
-        configureScrollView()
-        configureNavHeader()
-        configureSaveButton()
-        embedSections()
-        wireSectionCallbacks()
-        setupKeyboardDismiss()
+        setupHandleBar()
+        setupHeader()
+        setupRating()
+        setupNotesCard()
+        setupSaveButton()
+        setupKeyboard()
     }
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        view.applyAINABackground()
+        applyButtonGradient()
     }
 
-    // MARK: - Configuration
+    deinit { NotificationCenter.default.removeObserver(self) }
 
-    // MARK: - Decorative Blobs
+    // MARK: - Handle bar
 
-    private func setupBlobs() {
-        blob1.backgroundColor = UIColor.ainaCoralPink.withAlphaComponent(0.25)
-        blob1.layer.cornerRadius = 160
-        blob1.translatesAutoresizingMaskIntoConstraints = false
-        view.insertSubview(blob1, belowSubview: scrollView)
+    private func setupHandleBar() {
+        handleBar.backgroundColor    = UIColor.systemGray4
+        handleBar.layer.cornerRadius = 2.5
+        handleBar.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(handleBar)
+        NSLayoutConstraint.activate([
+            handleBar.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            handleBar.topAnchor.constraint(equalTo: view.topAnchor, constant: 12),
+            handleBar.widthAnchor.constraint(equalToConstant: 36),
+            handleBar.heightAnchor.constraint(equalToConstant: 5)
+        ])
+    }
 
-        blob2.backgroundColor = UIColor.ainaDustyRose.withAlphaComponent(0.15)
-        blob2.layer.cornerRadius = 130
-        blob2.translatesAutoresizingMaskIntoConstraints = false
-        view.insertSubview(blob2, belowSubview: scrollView)
+    // MARK: - Header
+
+    private func setupHeader() {
+        titleLabel.text          = "Weekly Check-In"
+        titleLabel.font          = .systemFont(ofSize: 22, weight: .bold)
+        titleLabel.textColor     = .ainaTextPrimary
+        titleLabel.translatesAutoresizingMaskIntoConstraints = false
+
+        subtitleLabel.text          = "How has your skin been this week?"
+        subtitleLabel.font          = .systemFont(ofSize: 15)
+        subtitleLabel.textColor     = .ainaTextSecondary
+        subtitleLabel.numberOfLines = 0
+        subtitleLabel.translatesAutoresizingMaskIntoConstraints = false
+
+        view.addSubview(titleLabel)
+        view.addSubview(subtitleLabel)
 
         NSLayoutConstraint.activate([
-            blob1.widthAnchor.constraint(equalToConstant: 320),
-            blob1.heightAnchor.constraint(equalToConstant: 320),
-            blob1.topAnchor.constraint(equalTo: view.topAnchor, constant: -80),
-            blob1.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 80),
+            titleLabel.topAnchor.constraint(equalTo: handleBar.bottomAnchor, constant: 20),
+            titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 24),
+            titleLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -24),
 
-            blob2.widthAnchor.constraint(equalToConstant: 260),
-            blob2.heightAnchor.constraint(equalToConstant: 260),
-            blob2.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 60),
-            blob2.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: -60)
+            subtitleLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 6),
+            subtitleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 24),
+            subtitleLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -24)
         ])
-
-        UIView.animate(
-            withDuration: 8, delay: 0,
-            options: [.autoreverse, .repeat, .allowUserInteraction]
-        ) { self.blob1.transform = CGAffineTransform(translationX: -20, y: 20).scaledBy(x: 1.05, y: 1.05) }
-
-        UIView.animate(
-            withDuration: 10, delay: 1,
-            options: [.autoreverse, .repeat, .allowUserInteraction]
-        ) { self.blob2.transform = CGAffineTransform(translationX: 15, y: -25).scaledBy(x: 1.08, y: 1.08) }
     }
 
-    private func configureScrollView() {
-        scrollView.showsVerticalScrollIndicator = false
-        scrollView.keyboardDismissMode = .onDrag
-        scrollView.backgroundColor = .clear
-    }
+    // MARK: - Rating
 
-    private func configureNavHeader() {
-        titleLabel.text = "Weekly check-in"
-        titleLabel.font = .systemFont(ofSize: 20, weight: .bold)
-        titleLabel.textColor = .ainaTextPrimary
+    private func setupRating() {
+        ratingStack.axis         = .horizontal
+        ratingStack.distribution = .fillEqually
+        ratingStack.spacing      = 8
+        ratingStack.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(ratingStack)
 
-        dateRangeLabel.text = formattedWeekRange()
-        dateRangeLabel.font = .systemFont(ofSize: 13)
-        dateRangeLabel.textColor = .ainaTextSecondary
+        let emojis = ["😞", "😕", "😐", "🙂", "🤩"]
+        let labels = ["Poor", "Fair", "Okay", "Good", "Great"]
 
-        var cfg = UIButton.Configuration.plain()
-        cfg.image = UIImage(systemName: "chevron.left")
-        cfg.baseForegroundColor = .ainaTextPrimary
-        backButton.configuration = cfg
-        backButton.backgroundColor = UIColor.white.withAlphaComponent(0.6)
-        backButton.layer.cornerRadius = 20
-    }
+        for i in 0..<5 {
+            let container = UIStackView()
+            container.axis      = .vertical
+            container.alignment = .center
+            container.spacing   = 4
 
-    private func configureSaveButton() {
-        saveButton.setTitle("Save weekly check-in", for: .normal)
-        saveButton.setTitleColor(.white, for: .normal)
-        saveButton.titleLabel?.font = .systemFont(ofSize: 17, weight: .semibold)
-        saveButton.backgroundColor = .ainaDustyRose
-        saveButton.layer.cornerRadius = 16
-    }
-
-    // MARK: - Embed XIB section views into storyboard containers
-
-    private func embedSections() {
-        productSection.presentingViewController = self
-        photoSection.presentingViewController   = self
-        changeSection.routineStartDate          = routineStartDate
-
-        let pairs: [(UIView, UIView)] = [
-            (skinSection,      skinSectionContainer),
-            (routineSection,   routineSectionContainer),
-            (lifestyleSection, lifestyleSectionContainer),
-            (productSection,   productSectionContainer),
-            (photoSection,     photoSectionContainer),
-            (notesSection,     notesSectionContainer),
-            (changeSection,    changeSectionContainer)
-        ]
-        for (section, container) in pairs {
-            section.translatesAutoresizingMaskIntoConstraints = false
-            container.addSubview(section)
+            let btn = UIButton(type: .custom)
+            btn.setTitle(emojis[i], for: .normal)
+            btn.titleLabel?.font = .systemFont(ofSize: 28)
+            btn.backgroundColor  = .ainaTintedGlassMedium
+            btn.layer.cornerRadius = 16
+            btn.tag = i + 1
+            btn.addTarget(self, action: #selector(ratingTapped(_:)), for: .touchUpInside)
+            btn.translatesAutoresizingMaskIntoConstraints = false
             NSLayoutConstraint.activate([
-                section.topAnchor.constraint(equalTo: container.topAnchor),
-                section.leadingAnchor.constraint(equalTo: container.leadingAnchor),
-                section.trailingAnchor.constraint(equalTo: container.trailingAnchor),
-                section.bottomAnchor.constraint(equalTo: container.bottomAnchor)
+                btn.heightAnchor.constraint(equalToConstant: 56),
             ])
+
+            let lbl = UILabel()
+            lbl.text      = labels[i]
+            lbl.font      = .systemFont(ofSize: 11)
+            lbl.textColor = .ainaTextTertiary
+            lbl.textAlignment = .center
+
+            container.addArrangedSubview(btn)
+            container.addArrangedSubview(lbl)
+            ratingStack.addArrangedSubview(container)
+            ratingButtons.append(btn)
+        }
+
+        NSLayoutConstraint.activate([
+            ratingStack.topAnchor.constraint(equalTo: subtitleLabel.bottomAnchor, constant: 24),
+            ratingStack.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            ratingStack.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20)
+        ])
+    }
+
+    // MARK: - Notes card
+
+    private func setupNotesCard() {
+        notesCard.layer.cornerRadius = 20
+        notesCard.clipsToBounds      = true
+        notesCard.translatesAutoresizingMaskIntoConstraints = false
+        notesCard.applyGlass(cornerRadius: 20)
+        view.addSubview(notesCard)
+
+        notesTextView.backgroundColor    = .clear
+        notesTextView.font               = .systemFont(ofSize: 15)
+        notesTextView.textColor          = .ainaTextPrimary
+        notesTextView.tintColor          = .ainaCoralPink
+        notesTextView.textContainerInset = UIEdgeInsets(top: 0, left: 4, bottom: 0, right: 4)
+        notesTextView.isScrollEnabled    = false
+        notesTextView.delegate           = self
+        notesTextView.translatesAutoresizingMaskIntoConstraints = false
+
+        notesPlaceholder.text          = "Any notable changes, reactions or observations this week…"
+        notesPlaceholder.font          = .systemFont(ofSize: 15)
+        notesPlaceholder.textColor     = .ainaTextTertiary
+        notesPlaceholder.numberOfLines = 0
+        notesPlaceholder.translatesAutoresizingMaskIntoConstraints = false
+
+        notesCard.addSubview(notesTextView)
+        notesCard.addSubview(notesPlaceholder)
+
+        NSLayoutConstraint.activate([
+            notesCard.topAnchor.constraint(equalTo: ratingStack.bottomAnchor, constant: 20),
+            notesCard.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            notesCard.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+
+            notesTextView.topAnchor.constraint(equalTo: notesCard.topAnchor, constant: 16),
+            notesTextView.leadingAnchor.constraint(equalTo: notesCard.leadingAnchor, constant: 16),
+            notesTextView.trailingAnchor.constraint(equalTo: notesCard.trailingAnchor, constant: -16),
+            notesTextView.heightAnchor.constraint(greaterThanOrEqualToConstant: 80),
+            notesTextView.bottomAnchor.constraint(equalTo: notesCard.bottomAnchor, constant: -16),
+
+            notesPlaceholder.topAnchor.constraint(equalTo: notesTextView.topAnchor),
+            notesPlaceholder.leadingAnchor.constraint(equalTo: notesTextView.leadingAnchor, constant: 4),
+            notesPlaceholder.trailingAnchor.constraint(equalTo: notesTextView.trailingAnchor, constant: -4)
+        ])
+    }
+
+    // MARK: - Save button
+
+    private func setupSaveButton() {
+        saveButton.setTitle("Save Check-In", for: .normal)
+        saveButton.setTitleColor(.white, for: .normal)
+        saveButton.titleLabel?.font    = .systemFont(ofSize: 17, weight: .semibold)
+        saveButton.layer.cornerRadius  = 16
+        saveButton.layer.masksToBounds = false
+        saveButton.addTarget(self, action: #selector(saveTapped), for: .touchUpInside)
+        saveButton.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(saveButton)
+
+        NSLayoutConstraint.activate([
+            saveButton.topAnchor.constraint(equalTo: notesCard.bottomAnchor, constant: 20),
+            saveButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            saveButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            saveButton.heightAnchor.constraint(equalToConstant: 56)
+        ])
+    }
+
+    private func applyButtonGradient() {
+        guard saveButton.bounds.width > 0 else { return }
+        let name = "saveGradient"
+        if let existing = saveButton.layer.sublayers?.first(where: { $0.name == name }) as? CAGradientLayer {
+            existing.frame = saveButton.bounds; return
+        }
+        let grad          = CAGradientLayer()
+        grad.name         = name
+        grad.colors       = [UIColor.ainaCoralPink.cgColor, UIColor.ainaDustyRose.cgColor]
+        grad.startPoint   = CGPoint(x: 0, y: 0.5)
+        grad.endPoint     = CGPoint(x: 1, y: 0.5)
+        grad.cornerRadius = 16
+        grad.frame        = saveButton.bounds
+        saveButton.layer.insertSublayer(grad, at: 0)
+        saveButton.layer.shadowColor   = UIColor.ainaDustyRose.cgColor
+        saveButton.layer.shadowOpacity = 0.35
+        saveButton.layer.shadowOffset  = CGSize(width: 0, height: 8)
+        saveButton.layer.shadowRadius  = 12
+    }
+
+    // MARK: - Keyboard
+
+    private func setupKeyboard() {
+        NotificationCenter.default.addObserver(
+            self, selector: #selector(keyboardChanged(_:)),
+            name: UIResponder.keyboardWillChangeFrameNotification, object: nil)
+    }
+
+    @objc private func keyboardChanged(_ note: Notification) {
+        guard let info     = note.userInfo,
+              let frame    = (info[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue,
+              let duration = info[UIResponder.keyboardAnimationDurationUserInfoKey] as? Double
+        else { return }
+        let overlap = max(0, view.bounds.maxY - frame.minY)
+        UIView.animate(withDuration: duration) {
+            self.saveButton.transform = overlap > 0
+                ? CGAffineTransform(translationX: 0, y: -(overlap + 8))
+                : .identity
         }
     }
 
-    // MARK: - Wire callbacks
+    // MARK: - Actions
 
-    private func wireSectionCallbacks() {
-    }
-
-    // MARK: - IBActions
-
-    @IBAction func backTapped(_ sender: UIButton) { dismiss(animated: true) }
-
-    @IBAction func saveTapped(_ sender: UIButton) {
-        guard validateInputs() else { return }
-
-        var data = WeeklyCheckInData()
-        data.weekStart             = weekStart
-        data.skinCondition         = skinSection.selectedCondition
-        data.concerns              = Array(skinSection.selectedConcerns)
-        data.morningDaysCompleted  = Array(routineSection.morningDays)
-        data.eveningDaysCompleted  = Array(routineSection.eveningDays)
-        data.sleepQuality          = lifestyleSection.selectedSleep + 1
-        data.stressLevel           = lifestyleSection.stressLevel
-        data.waterIntake           = lifestyleSection.waterGlasses
-        data.productChanges        = productSection.productChanges
-        data.progressPhoto         = photoSection.selectedImage
-        data.additionalNotes       = notesSection.notes
-        data.wantsRoutineChange    = changeSection.wantsChange
-        data.routineChangeReason   = changeSection.wantsChange ? changeSection.reason : ""
-
-        let weeksActive = weeksSince(routineStartDate)
-        if changeSection.wantsChange && weeksActive < minimumWeeksBeforeChange {
-            let alert = UIAlertController(
-                title: "Are you sure?",
-                message: "Your routine has been active for only \(weeksActive) week(s). Experts recommend giving it at least \(minimumWeeksBeforeChange) weeks. Are you sure you want to change it?",
-                preferredStyle: .alert
-            )
-            alert.addAction(UIAlertAction(title: "Wait and Keep Routine", style: .default))
-            alert.addAction(UIAlertAction(title: "Change Anyway", style: .destructive) { [weak self] _ in
-                self?.onSave?(data)
-                self?.dismiss(animated: true)
-            })
-            present(alert, animated: true)
-        } else {
-            onSave?(data)
-            dismiss(animated: true)
+    @objc private func ratingTapped(_ sender: UIButton) {
+        selectedRating = sender.tag
+        for (i, btn) in ratingButtons.enumerated() {
+            UIView.animate(withDuration: 0.2) {
+                btn.backgroundColor = (i + 1 <= self.selectedRating)
+                    ? UIColor.ainaCoralPink.withAlphaComponent(0.25)
+                    : .ainaTintedGlassMedium
+                btn.transform = (i + 1 == self.selectedRating)
+                    ? CGAffineTransform(scaleX: 1.15, y: 1.15)
+                    : .identity
+            }
         }
     }
 
-    // MARK: - Validate
-
-    private func validateInputs() -> Bool {
-        if skinSection.selectedCondition.isEmpty {
-            showAlert(title: "Skin Condition Required",
-                      message: "Please select how your skin felt this week.")
-            return false
-        }
-        if changeSection.wantsChange && changeSection.reason.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
-            showAlert(title: "Reason Required",
-                      message: "Please tell us why you'd like to change your routine.")
-            return false
-        }
-        return true
+    @objc private func saveTapped() {
+        WeeklyCheckInManager.markCompletedThisWeek()
+        onDismiss?()
+        dismiss(animated: true)
     }
-
-    // MARK: - Helpers
-
-    private func showAlert(title: String, message: String) {
-        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "OK", style: .default))
-        present(alert, animated: true)
-    }
-
-    private func weeksSince(_ date: Date) -> Int {
-        Calendar.current.dateComponents([.weekOfYear], from: date, to: Date()).weekOfYear ?? 0
-    }
-
-    private func formattedWeekRange() -> String {
-        let fmt = DateFormatter()
-        fmt.dateFormat = "MMM d"
-        let end = Calendar.current.date(byAdding: .day, value: 6, to: weekStart) ?? weekStart
-        let fmtEnd = DateFormatter()
-        fmtEnd.dateFormat = "d, yyyy"
-        return "\(fmt.string(from: weekStart)) – \(fmtEnd.string(from: end))"
-    }
-
-    private func setupKeyboardDismiss() {
-        let tap = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
-        tap.cancelsTouchesInView = false
-        view.addGestureRecognizer(tap)
-    }
-
-    @objc private func dismissKeyboard() { view.endEditing(true) }
 }
 
-// MARK: - Scheduling helper
+// MARK: - UITextViewDelegate
 
-extension WeeklyCheckInViewController {
-    static func presentIfDue(from presenter: UIViewController,
-                             routineStartDate: Date,
-                             onSave: @escaping (WeeklyCheckInData) -> Void) {
-        let key = "lastWeeklyCheckInDate"
-        if let last = UserDefaults.standard.object(forKey: key) as? Date {
-            let days = Calendar.current.dateComponents([.day], from: last, to: Date()).day ?? 0
-            guard days >= 7 else { return }
-        }
-
-        let vc = UIStoryboard(name: "Main", bundle: nil)
-            .instantiateViewController(withIdentifier: "WeeklyCheckInViewController") as! WeeklyCheckInViewController
-        vc.routineStartDate = routineStartDate
-        vc.weekStart = Calendar.current.date(byAdding: .weekOfYear, value: -1, to: Date()) ?? Date()
-        vc.onSave = { data in
-            UserDefaults.standard.set(Date(), forKey: key)
-            onSave(data)
-        }
-        vc.modalPresentationStyle = .pageSheet
-        if let sheet = vc.sheetPresentationController {
-            sheet.detents = [.large()]
-            sheet.prefersGrabberVisible = true
-        }
-        presenter.present(vc, animated: true)
+extension WeeklyCheckInViewController: UITextViewDelegate {
+    func textViewDidChange(_ textView: UITextView) {
+        notesPlaceholder.isHidden = !textView.text.isEmpty
     }
 }
 
-// MARK: - UILabel letter spacing helper
+// MARK: - WeeklyCheckInManager
 
-private extension UILabel {
-    func letterSpacing(_ spacing: CGFloat) {
-        guard let text = text else { return }
-        let attrs = NSMutableAttributedString(string: text)
-        attrs.addAttribute(.kern, value: spacing, range: NSRange(location: 0, length: attrs.length))
-        attributedText = attrs
+enum WeeklyCheckInManager {
+    private static let key = "weeklyCheckIn_lastShownWeek"
+
+    static func shouldShow() -> Bool {
+        let stored = UserDefaults.standard.string(forKey: key) ?? ""
+        return stored != currentWeekKey()
+    }
+
+    static func markCompletedThisWeek() {
+        UserDefaults.standard.set(currentWeekKey(), forKey: key)
+    }
+
+    static func markShownThisWeek() {
+        UserDefaults.standard.set(currentWeekKey(), forKey: key)
+    }
+
+    private static func currentWeekKey() -> String {
+        let cal  = Calendar.current
+        let now  = Date()
+        let week = cal.component(.weekOfYear, from: now)
+        let year = cal.component(.year, from: now)
+        return "\(year)-W\(week)"
     }
 }

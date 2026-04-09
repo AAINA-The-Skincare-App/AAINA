@@ -806,29 +806,44 @@
                                 <collectionViewLayout key="collectionViewLayout" id="qF7-a0-dLF"/>
                                 <cells/>
                             </collectionView>
-                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="12" translatesAutoresizingMaskIntoConstraints="NO" id="y2u-RB-RKe">
-                                <rect key="frame" x="16" y="324" width="361" height="50"/>
+                            <stackView axis="vertical" opaque="NO" contentMode="scaleToFill" distribution="fill" spacing="12" translatesAutoresizingMaskIntoConstraints="NO" id="y2u-RB-RKe">
+                                <rect key="frame" x="16" y="324" width="361" height="112"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DWP-jI-RHe">
-                                        <rect key="frame" x="0.0" y="0.0" width="174.66666666666666" height="50"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="361" height="50"/>
                                         <state key="normal" title="Button"/>
-                                        <buttonConfiguration key="configuration" style="gray" image="plus" catalog="system" title=" Journal Entry" imagePadding="8" cornerStyle="capsule"/>
+                                        <buttonConfiguration key="configuration" style="gray" image="plus" catalog="system" title=" Skin Log" imagePadding="8" cornerStyle="capsule"/>
                                         <connections>
-                                            <action selector="addJournalEntryTapped:" destination="OjL-d4-msT" eventType="touchUpInside" id="WoS-Kf-NaU"/>
-                                            <segue destination="a6C-7x-A19" kind="show" identifier="JournalEntryViewController" id="Onr-rc-QZ6"/>
+                                            <action selector="addSkinLogTapped:" destination="OjL-d4-msT" eventType="touchUpInside" id="WoS-Kf-NaU"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="XWZ-FH-hZs">
-                                        <rect key="frame" x="186.66666666666663" y="0.0" width="174.33333333333337" height="50"/>
-                                        <state key="normal" title="Button"/>
-                                        <buttonConfiguration key="configuration" style="gray" image="plus" catalog="system" title=" Reminder" imagePadding="8" cornerStyle="capsule"/>
-                                        <connections>
-                                            <action selector="addReminderTapped:" destination="OjL-d4-msT" eventType="touchUpInside" id="yWj-gd-Pqn"/>
-                                        </connections>
-                                    </button>
+                                    <stackView axis="horizontal" opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="12" translatesAutoresizingMaskIntoConstraints="NO" id="row2-hstack-id">
+                                        <rect key="frame" x="0.0" y="62" width="361" height="50"/>
+                                        <subviews>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="XWZ-FH-hZs">
+                                                <rect key="frame" x="0.0" y="0.0" width="174.5" height="50"/>
+                                                <state key="normal" title="Button"/>
+                                                <buttonConfiguration key="configuration" style="gray" image="plus" catalog="system" title=" Reminder" imagePadding="8" cornerStyle="capsule"/>
+                                                <connections>
+                                                    <action selector="addReminderTapped:" destination="OjL-d4-msT" eventType="touchUpInside" id="yWj-gd-Pqn"/>
+                                                </connections>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MNB-my-nts">
+                                                <rect key="frame" x="186.5" y="0.0" width="174.5" height="50"/>
+                                                <state key="normal" title="Button"/>
+                                                <buttonConfiguration key="configuration" style="gray" image="note.text" catalog="system" title=" My Notes" imagePadding="8" cornerStyle="capsule"/>
+                                                <connections>
+                                                    <action selector="addMyNotesTapped:" destination="OjL-d4-msT" eventType="touchUpInside" id="MNT-act-01"/>
+                                                </connections>
+                                            </button>
+                                        </subviews>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="50" id="row2-height-id"/>
+                                        </constraints>
+                                    </stackView>
                                 </subviews>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="50" id="tNT-m5-agv"/>
+                                    <constraint firstAttribute="height" constant="112" id="tNT-m5-agv"/>
                                 </constraints>
                             </stackView>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="BAy-e1-Z9P">
@@ -857,8 +872,9 @@
                     <connections>
                         <outlet property="buttonStack" destination="y2u-RB-RKe" id="axA-Mo-s67"/>
                         <outlet property="collectionView" destination="sAt-Vz-UnT" id="W5x-eg-3nP"/>
-                        <outlet property="journalEntryButton" destination="DWP-jI-RHe" id="jeb-out-01"/>
+                        <outlet property="skinLogButton" destination="DWP-jI-RHe" id="jeb-out-01"/>
                         <outlet property="reminderButton" destination="XWZ-FH-hZs" id="rb-out-01"/>
+                        <outlet property="myNotesButton" destination="MNB-my-nts" id="MNB-out-01"/>
                         <outlet property="tableView" destination="BAy-e1-Z9P" id="N7k-jC-XVz"/>
                     </connections>
                 </viewController>
@@ -1809,7 +1825,11 @@ Cg
                                         </constraints>
                                     </stackView>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="i5V-kX-PED">
+<<<<<<< Updated upstream
                                         <rect key="frame" x="16" y="587.33333333333337" width="361" height="62.333333333333371"/>
+=======
+                                        <rect key="frame" x="16" y="568.33333333333337" width="361" height="62.333333333333371"/>
+>>>>>>> Stashed changes
                                         <subviews>
                                             <stackView opaque="NO" contentMode="scaleToFill" alignment="top" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="pqP-aU-jlw">
                                                 <rect key="frame" x="12" y="12.000000000000004" width="337" height="50.333333333333343"/>
@@ -2058,7 +2078,125 @@ Cg
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="wci-fr-001" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
+<<<<<<< Updated upstream
             <point key="canvasLocation" x="5000" y="964"/>
+=======
+            <point key="canvasLocation" x="2978" y="965"/>
+        </scene>
+        <!--Result View Controller-->
+        <scene sceneID="aax-Rl-6Ek">
+            <objects>
+                <viewController id="mCr-Jk-dh2" customClass="ResultViewController" customModule="AAINA" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="L1y-Jo-b5S">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="51C-KI-bfm">
+                                <rect key="frame" x="16" y="142" width="361" height="29"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="24"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nVc-s0-Xe0">
+                                <rect key="frame" x="16" y="183" width="361" height="19.333333333333343"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="l4A-ss-XFq">
+                                <rect key="frame" x="0.0" y="210.33333333333331" width="393" height="573.66666666666674"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                            </tableView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="V2S-v0-zHW">
+                                <rect key="frame" x="16" y="753" width="361" height="35"/>
+                                <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="filled" title="Button"/>
+                                <connections>
+                                    <action selector="scanNewTapped:" destination="mCr-Jk-dh2" eventType="touchUpInside" id="LQz-7M-oh9"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="afX-MY-dx3"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="nVc-s0-Xe0" firstAttribute="top" secondItem="51C-KI-bfm" secondAttribute="bottom" constant="12" id="08R-jD-Usa"/>
+                            <constraint firstItem="afX-MY-dx3" firstAttribute="trailing" secondItem="l4A-ss-XFq" secondAttribute="trailing" id="AkE-vE-VON"/>
+                            <constraint firstItem="afX-MY-dx3" firstAttribute="trailing" secondItem="51C-KI-bfm" secondAttribute="trailing" constant="16" id="SHm-KI-JY1"/>
+                            <constraint firstItem="V2S-v0-zHW" firstAttribute="leading" secondItem="afX-MY-dx3" secondAttribute="leading" constant="16" id="XGf-br-gg3"/>
+                            <constraint firstItem="V2S-v0-zHW" firstAttribute="bottom" secondItem="l4A-ss-XFq" secondAttribute="bottom" constant="4" id="YF3-Fz-wfH"/>
+                            <constraint firstItem="51C-KI-bfm" firstAttribute="leading" secondItem="afX-MY-dx3" secondAttribute="leading" constant="16" id="YWR-iU-0Le"/>
+                            <constraint firstItem="l4A-ss-XFq" firstAttribute="leading" secondItem="afX-MY-dx3" secondAttribute="leading" id="agJ-GD-9xE"/>
+                            <constraint firstItem="51C-KI-bfm" firstAttribute="top" secondItem="afX-MY-dx3" secondAttribute="top" constant="24" id="bWI-pG-zM1"/>
+                            <constraint firstItem="afX-MY-dx3" firstAttribute="trailing" secondItem="nVc-s0-Xe0" secondAttribute="trailing" constant="16" id="dAh-MK-dGO"/>
+                            <constraint firstItem="nVc-s0-Xe0" firstAttribute="leading" secondItem="afX-MY-dx3" secondAttribute="leading" constant="16" id="ePY-yL-iQC"/>
+                            <constraint firstItem="afX-MY-dx3" firstAttribute="trailing" secondItem="V2S-v0-zHW" secondAttribute="trailing" constant="16" id="g6l-3V-A0j"/>
+                            <constraint firstItem="l4A-ss-XFq" firstAttribute="top" secondItem="nVc-s0-Xe0" secondAttribute="bottom" constant="8" id="h9G-bi-eF2"/>
+                            <constraint firstItem="afX-MY-dx3" firstAttribute="bottom" secondItem="l4A-ss-XFq" secondAttribute="bottom" id="tfE-u2-UDL"/>
+                        </constraints>
+                    </view>
+                    <toolbarItems/>
+                    <navigationItem key="navigationItem" id="tUq-zm-wRF"/>
+                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
+                    <connections>
+                        <outlet property="detailLabel" destination="nVc-s0-Xe0" id="Vd7-M0-1VY"/>
+                        <outlet property="resultLabel" destination="51C-KI-bfm" id="nGJ-lg-WNv"/>
+                        <outlet property="scanButton" destination="V2S-v0-zHW" id="JzX-5b-qBt"/>
+                        <outlet property="tableView" destination="l4A-ss-XFq" id="8nq-Wj-6dy"/>
+                        <segue destination="bG9-fN-JYZ" kind="show" identifier="result_to_scan" id="eXQ-bg-phW"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Prp-Ia-gDz" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="4123" y="965"/>
+        </scene>
+        <!--Scanner View Controller-->
+        <scene sceneID="sSt-rg-UIy">
+            <objects>
+                <viewController id="lCy-D1-gnY" customClass="ScannerViewController" customModule="AAINA" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="0kg-Bt-6iw">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="C3H-DE-xZu">
+                                <rect key="frame" x="16" y="142" width="361" height="28.666666666666657"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="24"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GPX-dA-LLK">
+                                <rect key="frame" x="16" y="745" width="361" height="35"/>
+                                <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <color key="tintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="filled" title="Button"/>
+                                <connections>
+                                    <action selector="startScanningTapped:" destination="lCy-D1-gnY" eventType="touchUpInside" id="OCB-Dg-9Xc"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="Jlv-ia-0Bk"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="C3H-DE-xZu" firstAttribute="top" secondItem="Jlv-ia-0Bk" secondAttribute="top" constant="24" id="45X-VH-Xii"/>
+                            <constraint firstItem="Jlv-ia-0Bk" firstAttribute="bottom" secondItem="GPX-dA-LLK" secondAttribute="bottom" constant="4" id="6jr-FD-EmP"/>
+                            <constraint firstItem="GPX-dA-LLK" firstAttribute="leading" secondItem="Jlv-ia-0Bk" secondAttribute="leading" constant="16" id="BR7-N1-YJ9"/>
+                            <constraint firstItem="Jlv-ia-0Bk" firstAttribute="trailing" secondItem="C3H-DE-xZu" secondAttribute="trailing" constant="16" id="THd-9v-2vp"/>
+                            <constraint firstItem="C3H-DE-xZu" firstAttribute="leading" secondItem="Jlv-ia-0Bk" secondAttribute="leading" constant="16" id="TJk-by-Ua3"/>
+                            <constraint firstItem="Jlv-ia-0Bk" firstAttribute="trailing" secondItem="GPX-dA-LLK" secondAttribute="trailing" constant="16" id="WFp-mM-EZK"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="n0c-Ht-G1o"/>
+                    <connections>
+                        <outlet property="infoLabel" destination="C3H-DE-xZu" id="8gJ-ko-cDc"/>
+                        <outlet property="scanButton" destination="GPX-dA-LLK" id="ig1-H5-BOZ"/>
+                        <segue destination="mCr-Jk-dh2" kind="show" identifier="scanner_to_result" id="gAv-eK-y7B"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Wyf-xO-Jxt" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="5175" y="965"/>
+>>>>>>> Stashed changes
         </scene>
     </scenes>
     <resources>
@@ -2081,7 +2219,11 @@ Cg
             <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
         <systemColor name="secondaryLabelColor">
+<<<<<<< Updated upstream
             <color red="0.23529411759999999" green="0.23529411759999999" blue="0.26274509800000001" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
+=======
+            <color red="0.23529411764705882" green="0.23529411764705882" blue="0.2627450980392157" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
+>>>>>>> Stashed changes
         </systemColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>

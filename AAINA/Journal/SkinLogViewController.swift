@@ -1,19 +1,21 @@
 //
-//  JournalEntryViewController.swift
+//  SkinLogViewController.swift
 //  AAINA
 //
 
 import UIKit
 import PhotosUI
 
-class JournalEntryViewController: UIViewController {
+class SkinLogViewController: UIViewController {
 
     // MARK: - Callback
-    var onSave: ((JournalEntry) -> Void)?
+    var onSave: ((SkinLogEntry) -> Void)?
 
     // MARK: - State
-    private var selectedPhotos  = [UIImage]()
-    private var userTags        = [String]()   // custom tags added by user
+    private var isFlareUp      = false
+    private var selectedTags   = Set<String>()
+    private var selectedPhotos = [UIImage]()
+    private let tagOptions     = ["Acne", "Redness", "Dryness", "Sensitivity", "Breakout", "Texture"]
 
     // MARK: - Root layout
     private let scrollView   = UIScrollView()
@@ -27,16 +29,16 @@ class JournalEntryViewController: UIViewController {
     private let notesPlaceholder = UILabel()
     private let notesSep         = UIView()
 
-    // Tags card
-    private let tagsCard      = UIView()
-    private let tagField      = UITextField()
-    private let tagsWrap      = UIView()    // wrapping view for pill flow
-    private var tagPillStack  = UIStackView()
-
     // Photos card
     private let photosCard      = UIView()
     private let photoScrollView = UIScrollView()
     private let photoStrip      = UIStackView()
+
+    // Flare card
+    private let flareCard      = UIView()
+    private let checkboxButton = UIButton(type: .custom)
+    private let tagsContainer  = UIView()
+    private let tagsGrid       = UIStackView()
 
     // Save
     private let saveButton = UIButton(type: .custom)
@@ -50,8 +52,8 @@ class JournalEntryViewController: UIViewController {
         setupBlobs()
         setupScrollView()
         setupNotesCard()
-        setupTagsCard()
         setupPhotosCard()
+        setupFlareCard()
         setupSaveButton()
         setupKeyboard()
     }
@@ -67,8 +69,29 @@ class JournalEntryViewController: UIViewController {
     // MARK: - Navigation bar
 
     private func setupNavBar() {
-        title = "My Notes"
+        title = "Skin Log"
         navigationController?.navigationBar.prefersLargeTitles = false
+        let exportBtn = UIBarButtonItem(
+            image: UIImage(systemName: "square.and.arrow.up"),
+            style: .plain,
+            target: self,
+            action: #selector(exportTapped)
+        )
+        exportBtn.tintColor = .label
+        navigationItem.rightBarButtonItem = exportBtn
+    }
+
+    @objc private func exportTapped() {
+        let text  = notesTextView.text.trimmingCharacters(in: .whitespacesAndNewlines)
+        let entry = SkinLogEntry(
+            isFlareUp:      isFlareUp,
+            flareUps:       Array(selectedTags).sorted(),
+            note:           text,
+            photoFileNames: []   // photos not yet saved — export draft
+        )
+        let pdf = SkinLogPDFExporter.generate(from: entry)
+        let av  = UIActivityViewController(activityItems: [pdf], applicationActivities: nil)
+        present(av, animated: true)
     }
 
     // MARK: - Ambient blobs
@@ -141,7 +164,7 @@ class JournalEntryViewController: UIViewController {
         contentView.addSubview(notesCard)
 
         let badge  = makeIconBadge(systemName: "note.text")
-        let header = makeSectionLabel("NOTE")
+        let header = makeSectionLabel("SKIN NOTES")
 
         notesTextView.backgroundColor        = .clear
         notesTextView.font                   = .systemFont(ofSize: 15)
@@ -152,7 +175,7 @@ class JournalEntryViewController: UIViewController {
         notesTextView.delegate               = self
         notesTextView.translatesAutoresizingMaskIntoConstraints = false
 
-        notesPlaceholder.text          = "Skin tips, product finds, ingredients you love or hate — anything worth remembering..."
+        notesPlaceholder.text          = "Describe your skin condition today — redness, dryness, breakouts, reactions..."
         notesPlaceholder.font          = .systemFont(ofSize: 15)
         notesPlaceholder.textColor     = .ainaTextTertiary
         notesPlaceholder.numberOfLines = 0
@@ -191,126 +214,6 @@ class JournalEntryViewController: UIViewController {
         ])
     }
 
-    // MARK: - Tags card
-
-    private func setupTagsCard() {
-        tagsCard.layer.cornerRadius = 20
-        tagsCard.clipsToBounds = true
-        tagsCard.translatesAutoresizingMaskIntoConstraints = false
-        tagsCard.applyGlass(cornerRadius: 20)
-        contentView.addSubview(tagsCard)
-
-        let badge  = makeIconBadge(systemName: "tag.fill")
-        let header = makeSectionLabel("TAGS")
-
-        let subtitle = UILabel()
-        subtitle.text          = "Add tags to find this note later"
-        subtitle.font          = .systemFont(ofSize: 12)
-        subtitle.textColor     = .ainaTextSecondary
-        subtitle.translatesAutoresizingMaskIntoConstraints = false
-
-        // Tag input row
-        let inputContainer = UIView()
-        inputContainer.backgroundColor    = UIColor.ainaCoralPink.withAlphaComponent(0.06)
-        inputContainer.layer.cornerRadius = 12
-        inputContainer.translatesAutoresizingMaskIntoConstraints = false
-
-        tagField.placeholder       = "e.g. Products, Tips, Research…"
-        tagField.font              = .systemFont(ofSize: 14)
-        tagField.textColor         = .ainaTextPrimary
-        tagField.tintColor         = .ainaCoralPink
-        tagField.returnKeyType     = .done
-        tagField.delegate          = self
-        tagField.translatesAutoresizingMaskIntoConstraints = false
-        inputContainer.addSubview(tagField)
-
-        NSLayoutConstraint.activate([
-            inputContainer.heightAnchor.constraint(equalToConstant: 40),
-            tagField.leadingAnchor.constraint(equalTo: inputContainer.leadingAnchor, constant: 12),
-            tagField.trailingAnchor.constraint(equalTo: inputContainer.trailingAnchor, constant: -12),
-            tagField.centerYAnchor.constraint(equalTo: inputContainer.centerYAnchor)
-        ])
-
-        // Pill stack for existing tags (vertical — one tag per row)
-        tagPillStack.axis      = .vertical
-        tagPillStack.spacing   = 8
-        tagPillStack.alignment = .fill
-        tagPillStack.translatesAutoresizingMaskIntoConstraints = false
-
-        [badge, header, subtitle, inputContainer, tagPillStack].forEach { tagsCard.addSubview($0) }
-
-        NSLayoutConstraint.activate([
-            tagsCard.topAnchor.constraint(equalTo: notesCard.bottomAnchor, constant: 16),
-            tagsCard.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
-            tagsCard.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
-
-            badge.topAnchor.constraint(equalTo: tagsCard.topAnchor, constant: 20),
-            badge.leadingAnchor.constraint(equalTo: tagsCard.leadingAnchor, constant: 20),
-
-            header.centerYAnchor.constraint(equalTo: badge.centerYAnchor),
-            header.leadingAnchor.constraint(equalTo: badge.trailingAnchor, constant: 12),
-
-            subtitle.topAnchor.constraint(equalTo: badge.bottomAnchor, constant: 4),
-            subtitle.leadingAnchor.constraint(equalTo: tagsCard.leadingAnchor, constant: 20),
-            subtitle.trailingAnchor.constraint(equalTo: tagsCard.trailingAnchor, constant: -20),
-
-            inputContainer.topAnchor.constraint(equalTo: subtitle.bottomAnchor, constant: 12),
-            inputContainer.leadingAnchor.constraint(equalTo: tagsCard.leadingAnchor, constant: 16),
-            inputContainer.trailingAnchor.constraint(equalTo: tagsCard.trailingAnchor, constant: -16),
-
-            tagPillStack.topAnchor.constraint(equalTo: inputContainer.bottomAnchor, constant: 10),
-            tagPillStack.leadingAnchor.constraint(equalTo: tagsCard.leadingAnchor, constant: 16),
-            tagPillStack.trailingAnchor.constraint(equalTo: tagsCard.trailingAnchor, constant: -16),
-            tagPillStack.bottomAnchor.constraint(equalTo: tagsCard.bottomAnchor, constant: -16)
-        ])
-    }
-
-    private func rebuildTagPills() {
-        tagPillStack.arrangedSubviews.forEach { $0.removeFromSuperview() }
-        for (i, tag) in userTags.enumerated() {
-            tagPillStack.addArrangedSubview(makeTagPill(tag, index: i))
-        }
-        // Force layout update so the card resizes
-        tagsCard.setNeedsLayout()
-        tagsCard.layoutIfNeeded()
-    }
-
-    private func makeTagPill(_ title: String, index: Int) -> UIView {
-        let pill = UIView()
-        pill.backgroundColor    = UIColor.ainaDustyRose.withAlphaComponent(0.15)
-        pill.layer.cornerRadius = 14
-        pill.translatesAutoresizingMaskIntoConstraints = false
-
-        let label = UILabel()
-        label.text      = title
-        label.font      = .systemFont(ofSize: 13, weight: .medium)
-        label.textColor = .ainaDustyRose
-        label.translatesAutoresizingMaskIntoConstraints = false
-        pill.addSubview(label)
-
-        let xBtn = UIButton(type: .system)
-        xBtn.setImage(UIImage(systemName: "xmark"), for: .normal)
-        xBtn.tintColor = .ainaDustyRose
-        xBtn.tag = index
-        xBtn.addTarget(self, action: #selector(removeTag(_:)), for: .touchUpInside)
-        xBtn.translatesAutoresizingMaskIntoConstraints = false
-        pill.addSubview(xBtn)
-
-        NSLayoutConstraint.activate([
-            label.leadingAnchor.constraint(equalTo: pill.leadingAnchor, constant: 10),
-            label.centerYAnchor.constraint(equalTo: pill.centerYAnchor),
-
-            xBtn.leadingAnchor.constraint(equalTo: label.trailingAnchor, constant: 4),
-            xBtn.trailingAnchor.constraint(equalTo: pill.trailingAnchor, constant: -8),
-            xBtn.centerYAnchor.constraint(equalTo: pill.centerYAnchor),
-            xBtn.widthAnchor.constraint(equalToConstant: 16),
-            xBtn.heightAnchor.constraint(equalToConstant: 28),
-
-            pill.heightAnchor.constraint(equalToConstant: 30)
-        ])
-        return pill
-    }
-
     // MARK: - Photos card
 
     private func setupPhotosCard() {
@@ -320,11 +223,11 @@ class JournalEntryViewController: UIViewController {
         photosCard.applyGlass(cornerRadius: 20)
         contentView.addSubview(photosCard)
 
-        let badge    = makeIconBadge(systemName: "paperclip")
-        let header   = makeSectionLabel("ATTACHMENTS & PHOTOS")
+        let badge    = makeIconBadge(systemName: "camera.fill")
+        let header   = makeSectionLabel("SKIN PHOTOS")
 
         let subtitle = UILabel()
-        subtitle.text          = "Attach product images, screenshots or references"
+        subtitle.text          = "Attach photos to include in your report"
         subtitle.font          = .systemFont(ofSize: 12)
         subtitle.textColor     = .ainaTextSecondary
         subtitle.numberOfLines = 1
@@ -342,7 +245,7 @@ class JournalEntryViewController: UIViewController {
         [badge, header, subtitle, photoScrollView].forEach { photosCard.addSubview($0) }
 
         NSLayoutConstraint.activate([
-            photosCard.topAnchor.constraint(equalTo: tagsCard.bottomAnchor, constant: 16),
+            photosCard.topAnchor.constraint(equalTo: notesCard.bottomAnchor, constant: 16),
             photosCard.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
             photosCard.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
 
@@ -422,14 +325,14 @@ class JournalEntryViewController: UIViewController {
     }
 
     private func makeAddPhotoTile() -> UIView {
-        let tile = JEDashedTileView()
+        let tile = SLDashedTileView()
         tile.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             tile.widthAnchor.constraint(equalToConstant: 80),
             tile.heightAnchor.constraint(equalToConstant: 80)
         ])
 
-        let icon = UIImageView(image: UIImage(systemName: "paperclip"))
+        let icon = UIImageView(image: UIImage(systemName: "camera.fill"))
         icon.tintColor   = .ainaDustyRose
         icon.contentMode = .scaleAspectFit
         icon.translatesAutoresizingMaskIntoConstraints = false
@@ -455,10 +358,132 @@ class JournalEntryViewController: UIViewController {
         return tile
     }
 
+    // MARK: - Flare card
+
+    private func setupFlareCard() {
+        flareCard.layer.cornerRadius = 20
+        flareCard.clipsToBounds      = true
+        flareCard.translatesAutoresizingMaskIntoConstraints = false
+        flareCard.applyGlass(cornerRadius: 20)
+        contentView.addSubview(flareCard)
+
+        let cardStack = UIStackView()
+        cardStack.axis    = .vertical
+        cardStack.spacing = 0
+        cardStack.translatesAutoresizingMaskIntoConstraints = false
+        flareCard.addSubview(cardStack)
+
+        // Checkbox row
+        let checkRow = UIStackView()
+        checkRow.axis      = .horizontal
+        checkRow.spacing   = 12
+        checkRow.alignment = .center
+
+        checkboxButton.setImage(UIImage(systemName: "square"), for: .normal)
+        checkboxButton.setImage(UIImage(systemName: "checkmark.square.fill"), for: .selected)
+        checkboxButton.tintColor = .ainaCoralPink
+        checkboxButton.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            checkboxButton.widthAnchor.constraint(equalToConstant: 28),
+            checkboxButton.heightAnchor.constraint(equalToConstant: 28)
+        ])
+        checkboxButton.addTarget(self, action: #selector(checkboxTapped), for: .touchUpInside)
+
+        let flareLabel       = UILabel()
+        flareLabel.text      = "Experiencing a flare-up today?"
+        flareLabel.font      = .systemFont(ofSize: 15, weight: .medium)
+        flareLabel.textColor = .ainaTextPrimary
+
+        checkRow.addArrangedSubview(checkboxButton)
+        checkRow.addArrangedSubview(flareLabel)
+
+        // Tags container (hidden until checkbox ticked)
+        tagsContainer.isHidden = true
+        tagsContainer.alpha    = 0
+        tagsContainer.translatesAutoresizingMaskIntoConstraints = false
+
+        let tagsHeader = makeSectionLabel("WHAT WORSENED?")
+        tagsHeader.translatesAutoresizingMaskIntoConstraints = false
+
+        tagsGrid.axis    = .vertical
+        tagsGrid.spacing = 8
+        tagsGrid.translatesAutoresizingMaskIntoConstraints = false
+
+        let innerStack = UIStackView(arrangedSubviews: [tagsHeader, tagsGrid])
+        innerStack.axis    = .vertical
+        innerStack.spacing = 12
+        innerStack.translatesAutoresizingMaskIntoConstraints = false
+        tagsContainer.addSubview(innerStack)
+
+        NSLayoutConstraint.activate([
+            innerStack.topAnchor.constraint(equalTo: tagsContainer.topAnchor, constant: 16),
+            innerStack.leadingAnchor.constraint(equalTo: tagsContainer.leadingAnchor),
+            innerStack.trailingAnchor.constraint(equalTo: tagsContainer.trailingAnchor),
+            innerStack.bottomAnchor.constraint(equalTo: tagsContainer.bottomAnchor)
+        ])
+
+        cardStack.addArrangedSubview(checkRow)
+        cardStack.addArrangedSubview(tagsContainer)
+
+        NSLayoutConstraint.activate([
+            flareCard.topAnchor.constraint(equalTo: photosCard.bottomAnchor, constant: 16),
+            flareCard.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
+            flareCard.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
+
+            cardStack.topAnchor.constraint(equalTo: flareCard.topAnchor, constant: 20),
+            cardStack.leadingAnchor.constraint(equalTo: flareCard.leadingAnchor, constant: 20),
+            cardStack.trailingAnchor.constraint(equalTo: flareCard.trailingAnchor, constant: -20),
+            cardStack.bottomAnchor.constraint(equalTo: flareCard.bottomAnchor, constant: -20)
+        ])
+
+        buildTagsGrid()
+    }
+
+    private func buildTagsGrid() {
+        tagsGrid.arrangedSubviews.forEach { $0.removeFromSuperview() }
+        for row in stride(from: 0, to: tagOptions.count, by: 2) {
+            let rowStack = UIStackView()
+            rowStack.axis         = .horizontal
+            rowStack.distribution = .fillEqually
+            rowStack.spacing      = 10
+            for col in 0..<2 {
+                let idx = row + col
+                guard idx < tagOptions.count else { break }
+                rowStack.addArrangedSubview(makeTagButton(tagOptions[idx]))
+            }
+            tagsGrid.addArrangedSubview(rowStack)
+        }
+    }
+
+    private func makeTagButton(_ title: String) -> UIView {
+        let glass = UIVisualEffectView(effect: UIGlassEffect())
+        glass.layer.cornerRadius = 20
+        glass.clipsToBounds      = true
+        glass.translatesAutoresizingMaskIntoConstraints = false
+        glass.heightAnchor.constraint(equalToConstant: 40).isActive = true
+
+        let btn = UIButton(type: .custom)
+        btn.setTitle(title, for: .normal)
+        btn.setTitleColor(.ainaTextPrimary, for: .normal)
+        btn.setTitleColor(.white, for: .selected)
+        btn.titleLabel?.font = .systemFont(ofSize: 14)
+        btn.translatesAutoresizingMaskIntoConstraints = false
+        btn.addTarget(self, action: #selector(tagTapped(_:)), for: .touchUpInside)
+        glass.contentView.addSubview(btn)
+
+        NSLayoutConstraint.activate([
+            btn.topAnchor.constraint(equalTo: glass.contentView.topAnchor),
+            btn.bottomAnchor.constraint(equalTo: glass.contentView.bottomAnchor),
+            btn.leadingAnchor.constraint(equalTo: glass.contentView.leadingAnchor),
+            btn.trailingAnchor.constraint(equalTo: glass.contentView.trailingAnchor)
+        ])
+        return glass
+    }
+
     // MARK: - Save button
 
     private func setupSaveButton() {
-        saveButton.setTitle("Save Note", for: .normal)
+        saveButton.setTitle("Save Log", for: .normal)
         saveButton.setTitleColor(.white, for: .normal)
         saveButton.titleLabel?.font   = .systemFont(ofSize: 17, weight: .semibold)
         saveButton.layer.cornerRadius = 16
@@ -468,7 +493,7 @@ class JournalEntryViewController: UIViewController {
         contentView.addSubview(saveButton)
 
         NSLayoutConstraint.activate([
-            saveButton.topAnchor.constraint(equalTo: photosCard.bottomAnchor, constant: 24),
+            saveButton.topAnchor.constraint(equalTo: flareCard.bottomAnchor, constant: 24),
             saveButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
             saveButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
             saveButton.heightAnchor.constraint(equalToConstant: 56),
@@ -567,29 +592,36 @@ class JournalEntryViewController: UIViewController {
         rebuildPhotoStrip()
     }
 
-    @objc private func removeTag(_ sender: UIButton) {
-        guard sender.tag < userTags.count else { return }
-        userTags.remove(at: sender.tag)
-        rebuildTagPills()
+    @objc private func checkboxTapped() {
+        isFlareUp.toggle()
+        checkboxButton.isSelected = isFlareUp
+        if isFlareUp { tagsContainer.isHidden = false }
+        UIView.animate(withDuration: 0.28, animations: {
+            self.tagsContainer.alpha = self.isFlareUp ? 1 : 0
+        }) { _ in
+            if !self.isFlareUp { self.tagsContainer.isHidden = true }
+        }
     }
 
-    private func addTag(_ text: String) {
-        let trimmed = text.trimmingCharacters(in: .whitespacesAndNewlines)
-        guard !trimmed.isEmpty, !userTags.contains(trimmed) else { return }
-        userTags.append(trimmed)
-        rebuildTagPills()
+    @objc private func tagTapped(_ sender: UIButton) {
+        sender.isSelected.toggle()
+        if let glass = sender.superview?.superview as? UIVisualEffectView {
+            UIView.animate(withDuration: 0.15) {
+                glass.backgroundColor = sender.isSelected ? .ainaTintedGlassMedium : .clear
+            }
+        }
+        if let title = sender.title(for: .normal) {
+            if sender.isSelected { selectedTags.insert(title) } else { selectedTags.remove(title) }
+        }
     }
 
     @objc private func saveTapped() {
         let text      = notesTextView.text.trimmingCharacters(in: .whitespacesAndNewlines)
         let fileNames = selectedPhotos.compactMap { JournalPhotoStore.save($0) }
-        let now       = Date()
-        let entry = JournalEntry(
-            id:             String(now.timeIntervalSince1970),
-            userID:         "",
+        let entry = SkinLogEntry(
+            isFlareUp:      isFlareUp,
+            flareUps:       Array(selectedTags).sorted(),
             note:           text,
-            flareUps:       userTags,      // stored in flareUps field as custom tags
-            date:           now,
             photoFileNames: fileNames
         )
         onSave?(entry)
@@ -599,7 +631,7 @@ class JournalEntryViewController: UIViewController {
 
 // MARK: - UITextViewDelegate
 
-extension JournalEntryViewController: UITextViewDelegate {
+extension SkinLogViewController: UITextViewDelegate {
     func textViewDidChange(_ textView: UITextView) {
         notesPlaceholder.isHidden = !textView.text.isEmpty
         UIView.animate(withDuration: 0.2) {
@@ -610,24 +642,11 @@ extension JournalEntryViewController: UITextViewDelegate {
     }
 }
 
-// MARK: - UITextFieldDelegate (tag input)
-
-extension JournalEntryViewController: UITextFieldDelegate {
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        if let text = textField.text, !text.isEmpty {
-            addTag(text)
-            textField.text = nil
-        }
-        textField.resignFirstResponder()
-        return true
-    }
-}
-
 // MARK: - Photo picking
 
-extension JournalEntryViewController: PHPickerViewControllerDelegate,
-                                       UIImagePickerControllerDelegate,
-                                       UINavigationControllerDelegate {
+extension SkinLogViewController: PHPickerViewControllerDelegate,
+                                  UIImagePickerControllerDelegate,
+                                  UINavigationControllerDelegate {
 
     fileprivate func presentPicker() {
         var config            = PHPickerConfiguration()
@@ -676,7 +695,7 @@ extension JournalEntryViewController: PHPickerViewControllerDelegate,
 
 // MARK: - Dashed tile
 
-private final class JEDashedTileView: UIView {
+private final class SLDashedTileView: UIView {
     private let dash = CAShapeLayer()
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -695,4 +714,3 @@ private final class JEDashedTileView: UIView {
         dash.path  = UIBezierPath(roundedRect: bounds, cornerRadius: 14).cgPath
     }
 }
-

@@ -9,7 +9,8 @@ final class FaceScanOutputViewController: UIViewController {
 
     // MARK: - Input
     var scanResult: FaceScanResult!
-    var dataModel: DataModel!
+    var dataModel: AppDataModel!
+    var onboardingData: OnboardingData!
 
     // MARK: - UI
     private let scrollView   = UIScrollView()
@@ -413,13 +414,12 @@ final class FaceScanOutputViewController: UIViewController {
 
     @objc private func continueTapped() {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        guard let tabBar = storyboard.instantiateViewController(
-            withIdentifier: "MainTabBarViewController"
-        ) as? MainTabBarViewController else { return }
-        tabBar.dataModel = dataModel
-        if let sceneDelegate = UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate {
-            sceneDelegate.window?.rootViewController = tabBar
-        }
+        guard let resultVC = storyboard.instantiateViewController(
+            withIdentifier: "OnboardingResultViewController"
+        ) as? OnboardingResultViewController else { return }
+        resultVC.onboardingData = onboardingData
+        resultVC.dataModel = dataModel
+        navigationController?.pushViewController(resultVC, animated: true)
     }
 
     // MARK: - Helpers
