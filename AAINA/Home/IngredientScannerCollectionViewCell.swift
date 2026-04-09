@@ -43,7 +43,6 @@ class IngredientScannerCollectionViewCell: UICollectionViewCell {
         containerView.layer.borderWidth = 1
         containerView.layer.borderColor = UIColor.white.withAlphaComponent(0.2).cgColor
         
-        
         descriptionLabel.font = UIFont.systemFont(ofSize: 14)
         descriptionLabel.textColor = .darkGray
         descriptionLabel.numberOfLines = 3

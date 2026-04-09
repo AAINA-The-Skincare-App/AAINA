@@ -8,14 +8,19 @@ import UIKit
 final class FaceScanOutputViewController: UIViewController {
 
     // MARK: - Input
-    var scanResult: FaceScanResult!
+    var capturedImage: UIImage?
     var dataModel: AppDataModel!
     var onboardingData: OnboardingData!
-
+    var scanResult: FaceScanResult?
     // MARK: - UI
     private let scrollView   = UIScrollView()
     private let contentStack = UIStackView()
     private let continueBtn  = UIButton(type: .system)
+
+    // Loading
+    private let loadingView  = UIView()
+    private let spinner      = UIActivityIndicatorView(style: .large)
+    private let loadingLabel = UILabel()
 
     // Decorative blobs
     private let blob1 = UIView()
@@ -29,13 +34,113 @@ final class FaceScanOutputViewController: UIViewController {
         view.applyAINABackground()
         setupBlobs()
         setupScrollView()
-        buildContent()
         setupContinueButton()
+        setupLoadingView()
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        startAnalysis()
     }
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         view.applyAINABackground()
+    }
+
+    // MARK: - Loading view
+
+    private func setupLoadingView() {
+        loadingView.backgroundColor = .clear
+        loadingView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(loadingView)
+
+        spinner.color = .ainaDustyRose
+        spinner.startAnimating()
+        spinner.translatesAutoresizingMaskIntoConstraints = false
+
+        loadingLabel.text = "Analysing your skin…"
+        loadingLabel.font = .systemFont(ofSize: 17, weight: .semibold)
+        loadingLabel.textColor = .ainaTextPrimary
+        loadingLabel.textAlignment = .center
+        loadingLabel.translatesAutoresizingMaskIntoConstraints = false
+
+        let sub = UILabel()
+        sub.text = "This takes just a moment"
+        sub.font = .systemFont(ofSize: 14)
+        sub.textColor = .ainaTextSecondary
+        sub.textAlignment = .center
+        sub.translatesAutoresizingMaskIntoConstraints = false
+
+        loadingView.addSubview(spinner)
+        loadingView.addSubview(loadingLabel)
+        loadingView.addSubview(sub)
+
+        NSLayoutConstraint.activate([
+            loadingView.topAnchor.constraint(equalTo: view.topAnchor),
+            loadingView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            loadingView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            loadingView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+
+            spinner.centerXAnchor.constraint(equalTo: loadingView.centerXAnchor),
+            spinner.centerYAnchor.constraint(equalTo: loadingView.centerYAnchor, constant: -30),
+
+            loadingLabel.topAnchor.constraint(equalTo: spinner.bottomAnchor, constant: 24),
+            loadingLabel.leadingAnchor.constraint(equalTo: loadingView.leadingAnchor, constant: 32),
+            loadingLabel.trailingAnchor.constraint(equalTo: loadingView.trailingAnchor, constant: -32),
+
+            sub.topAnchor.constraint(equalTo: loadingLabel.bottomAnchor, constant: 6),
+            sub.leadingAnchor.constraint(equalTo: loadingView.leadingAnchor, constant: 32),
+            sub.trailingAnchor.constraint(equalTo: loadingView.trailingAnchor, constant: -32),
+        ])
+
+        // Content hidden until analysis completes
+        scrollView.alpha = 0
+        continueBtn.alpha = 0
+    }
+
+    // MARK: - AI Analysis
+
+    private func startAnalysis() {
+        guard let image = capturedImage else {
+            // No image provided — skip face analysis entirely
+            navigateToRoutineLoading()
+            return
+        }
+        Task {
+            do {
+                let result = try await GeminiFreeService().analyzeFace(image: image)
+                await MainActor.run { self.showResult(result) }
+            } catch {
+                await MainActor.run { self.showFailureAlert() }
+            }
+        }
+    }
+
+    private func showResult(_ result: FaceScanResult) {
+        buildContent(result)
+        UIView.animate(withDuration: 0.4) {
+            self.loadingView.alpha = 0
+            self.scrollView.alpha = 1
+            self.continueBtn.alpha = 1
+        } completion: { _ in
+            self.loadingView.removeFromSuperview()
+        }
+    }
+
+    private func showFailureAlert() {
+        let alert = UIAlertController(
+            title: "Something went wrong",
+            message: "We couldn't analyse your skin right now.",
+            preferredStyle: .alert
+        )
+        alert.addAction(UIAlertAction(title: "Retry", style: .default) { [weak self] _ in
+            self?.startAnalysis()
+        })
+        alert.addAction(UIAlertAction(title: "Skip", style: .cancel) { [weak self] _ in
+            self?.navigateToRoutineLoading()
+        })
+        present(alert, animated: true)
     }
 
     // MARK: - Background blobs
@@ -63,15 +168,12 @@ final class FaceScanOutputViewController: UIViewController {
             blob2.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: -60)
         ])
 
-        UIView.animate(
-            withDuration: 8, delay: 0,
-            options: [.autoreverse, .repeat, .allowUserInteraction]
-        ) { self.blob1.transform = CGAffineTransform(translationX: -20, y: 20).scaledBy(x: 1.05, y: 1.05) }
-
-        UIView.animate(
-            withDuration: 10, delay: 1,
-            options: [.autoreverse, .repeat, .allowUserInteraction]
-        ) { self.blob2.transform = CGAffineTransform(translationX: 15, y: -25).scaledBy(x: 1.08, y: 1.08) }
+        UIView.animate(withDuration: 8, delay: 0, options: [.autoreverse, .repeat, .allowUserInteraction]) {
+            self.blob1.transform = CGAffineTransform(translationX: -20, y: 20).scaledBy(x: 1.05, y: 1.05)
+        }
+        UIView.animate(withDuration: 10, delay: 1, options: [.autoreverse, .repeat, .allowUserInteraction]) {
+            self.blob2.transform = CGAffineTransform(translationX: 15, y: -25).scaledBy(x: 1.08, y: 1.08)
+        }
     }
 
     // MARK: - Scroll view
@@ -103,32 +205,28 @@ final class FaceScanOutputViewController: UIViewController {
 
     // MARK: - Content
 
-    private func buildContent() {
-        // Header
-        let header = makeHeaderView()
-        contentStack.addArrangedSubview(header)
+    private func buildContent(_ result: FaceScanResult) {
+        contentStack.arrangedSubviews.forEach { $0.removeFromSuperview() }
 
-        // Summary card
-        if !scanResult.summary.isEmpty {
-            contentStack.addArrangedSubview(makeSummaryCard())
+        contentStack.addArrangedSubview(makeHeaderView())
+
+        if !result.summary.isEmpty {
+            contentStack.addArrangedSubview(makeSummaryCard(result))
         }
 
-        // Skin type + skin tone row
         let typeRow = UIStackView(arrangedSubviews: [
-            makePillCard(icon: "drop.fill",  label: "Skin Type", value: scanResult.skinType, color: .ainaDustyRose),
-            makePillCard(icon: "sun.max.fill", label: "Skin Tone", value: scanResult.skinTone, color: .ainaCoralPink)
+            makePillCard(icon: "drop.fill",    label: "Skin Type", value: result.skinType, color: .ainaDustyRose),
+            makePillCard(icon: "sun.max.fill", label: "Skin Tone", value: result.skinTone, color: .ainaCoralPink)
         ])
         typeRow.axis = .horizontal
         typeRow.spacing = 12
         typeRow.distribution = .fillEqually
         contentStack.addArrangedSubview(typeRow)
 
-        // Concerns card
-        if !scanResult.concerns.isEmpty {
-            contentStack.addArrangedSubview(makeConcernsCard())
+        if !result.concerns.isEmpty {
+            contentStack.addArrangedSubview(makeConcernsCard(result))
         }
 
-        // Disclaimer
         contentStack.addArrangedSubview(makeDisclaimerCard())
     }
 
@@ -178,16 +276,14 @@ final class FaceScanOutputViewController: UIViewController {
         return wrapper
     }
 
-    private func makeSummaryCard() -> UIView {
+    private func makeSummaryCard(_ result: FaceScanResult) -> UIView {
         let card = makeCard()
-
         let sectionLabel = makeSectionLabel("Overview")
         let text = UILabel()
-        text.text = scanResult.summary
+        text.text = result.summary
         text.font = .systemFont(ofSize: 15)
         text.textColor = .ainaTextPrimary
         text.numberOfLines = 0
-        text.lineBreakMode = .byWordWrapping
 
         let stack = UIStackView(arrangedSubviews: [sectionLabel, text])
         stack.axis = .vertical
@@ -246,9 +342,8 @@ final class FaceScanOutputViewController: UIViewController {
         return card
     }
 
-    private func makeConcernsCard() -> UIView {
+    private func makeConcernsCard(_ result: FaceScanResult) -> UIView {
         let card = makeCard()
-
         let sectionLabel = makeSectionLabel("Concerns Detected")
         sectionLabel.translatesAutoresizingMaskIntoConstraints = false
 
@@ -257,7 +352,7 @@ final class FaceScanOutputViewController: UIViewController {
         rows.spacing = 0
         rows.translatesAutoresizingMaskIntoConstraints = false
 
-        for (idx, concern) in scanResult.concerns.enumerated() {
+        for (idx, concern) in result.concerns.enumerated() {
             if idx > 0 {
                 let sep = UIView()
                 sep.backgroundColor = UIColor.ainaTextTertiary.withAlphaComponent(0.2)
@@ -413,13 +508,14 @@ final class FaceScanOutputViewController: UIViewController {
     }
 
     @objc private func continueTapped() {
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        guard let resultVC = storyboard.instantiateViewController(
-            withIdentifier: "OnboardingResultViewController"
-        ) as? OnboardingResultViewController else { return }
-        resultVC.onboardingData = onboardingData
-        resultVC.dataModel = dataModel
-        navigationController?.pushViewController(resultVC, animated: true)
+        navigateToRoutineLoading()
+    }
+
+    private func navigateToRoutineLoading() {
+        let loadingVC = RoutineLoadingViewController()
+        loadingVC.onboardingData = onboardingData
+        loadingVC.dataModel = dataModel
+        navigationController?.pushViewController(loadingVC, animated: true)
     }
 
     // MARK: - Helpers

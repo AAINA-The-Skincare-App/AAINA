@@ -28,7 +28,7 @@ enum SkinLogPDFExporter {
             ctx.beginPage()
             var y: CGFloat = margin
 
-            // ── Header bar ───────────────────────────────────────────────
+            // ── Header bar 
             let headerRect = CGRect(x: 0, y: 0, width: pageWidth, height: 70)
             UIColor(red: 0.91, green: 0.62, blue: 0.62, alpha: 1).setFill()
             UIRectFill(headerRect)
@@ -40,20 +40,20 @@ enum SkinLogPDFExporter {
             "Skin Log Report".draw(at: CGPoint(x: margin, y: 22), withAttributes: titleAttrs)
             y = 90
 
-            // ── Date ─────────────────────────────────────────────────────
+            // ── Date
             draw(label: "Date", value: dateString, x: margin, y: &y, pageWidth: pageWidth, margin: margin)
 
-            // ── Flare-up status ───────────────────────────────────────────
+            // ── Flare-up status
             let flareValue = entry.isFlareUp ? "Yes" : "No"
             draw(label: "Flare-up", value: flareValue, x: margin, y: &y, pageWidth: pageWidth, margin: margin)
 
-            // ── Skin concerns ─────────────────────────────────────────────
+            // ── Skin concerns
             if !entry.flareUps.isEmpty {
                 draw(label: "Skin Concerns", value: entry.flareUps.joined(separator: ", "),
                      x: margin, y: &y, pageWidth: pageWidth, margin: margin)
             }
 
-            // ── Notes ─────────────────────────────────────────────────────
+            // ── Notes
             if !entry.note.isEmpty {
                 y += 12
                 drawSectionTitle("Notes", x: margin, y: &y)
@@ -72,14 +72,14 @@ enum SkinLogPDFExporter {
                 y += noteHeight + 16
             }
 
-            // ── Photo count note ──────────────────────────────────────────
+            // ── Photo count note
             if !entry.photoFileNames.isEmpty {
                 y += 4
                 draw(label: "Photos attached", value: "\(entry.photoFileNames.count)",
                      x: margin, y: &y, pageWidth: pageWidth, margin: margin)
             }
 
-            // ── Footer ────────────────────────────────────────────────────
+            // ── Footer
             let footerY: CGFloat = pageHeight - 40
             let footerAttrs: [NSAttributedString.Key: Any] = [
                 .font: UIFont.systemFont(ofSize: 10),
