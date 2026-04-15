@@ -18,7 +18,8 @@ class IngredientDetailViewController: UIViewController {
         self.additionalSafeAreaInsets.bottom = 10
         super.viewDidLoad()
 
-        view.backgroundColor = .systemBackground
+        view.backgroundColor = .clear
+        view.applyAINABackground()
 
         ui.build(in: view, ingredient: ingredient)
 
