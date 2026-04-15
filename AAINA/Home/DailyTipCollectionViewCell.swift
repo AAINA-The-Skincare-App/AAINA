@@ -1,71 +1,95 @@
 //
 //  DailyTipCollectionViewCell.swift
-//  homeScreenApp
+//  AAINA
 //
-//  Created by GEU on 06/02/26.
+//  Created by GEU on 27/03/26.
 //
 
 import UIKit
 
 class DailyTipCollectionViewCell: UICollectionViewCell {
     
-    @IBOutlet weak var cardView: UIView!
-    @IBOutlet weak var tipIconImageView: UIImageView!
-    @IBOutlet weak var tipTitleLabel: UILabel!
-    @IBOutlet weak var tipDescriptionLabel: UILabel!
+    static let identifier = "DailyTipCollectionViewCell"
+    
+    @IBOutlet weak var containerView: UIView!
+    @IBOutlet weak var tipImageView: UIImageView!
+    @IBOutlet weak var titleLabel: UILabel!
+    @IBOutlet weak var tipLabel: UILabel!
     
     override func awakeFromNib() {
         super.awakeFromNib()
         setupUI()
-        // Initialization code
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        containerView.layer.cornerRadius = 24
+        
+        // Shadow path updated after layout so it matches the rounded card
+        containerView.layer.shadowPath = UIBezierPath(
+            roundedRect: containerView.bounds,
+            cornerRadius: containerView.layer.cornerRadius
+        ).cgPath
     }
     
     private func setupUI() {
-        setupCardView()
-        setupIcons()
-        setupLabels()
-    }
-    
-    private func setupCardView() {
-        cardView.backgroundColor = .white
-        cardView.layer.cornerRadius = 20
-        cardView.layer.masksToBounds = false
+        backgroundColor = .clear
+        contentView.backgroundColor = .clear
         
-        // Soft shadow
-        cardView.layer.shadowColor = UIColor.black.cgColor
-        cardView.layer.shadowOpacity = 0.08
-        cardView.layer.shadowRadius = 12
-        cardView.layer.shadowOffset = CGSize(width: 0, height: 6)
-    }
-    
-    private func setupIcons() {
-        tipIconImageView.contentMode = .scaleAspectFit
-    }
-    
-    private func setupLabels() {
+        // Glass card — rgba(255,255,255,0.55) surface with coral tint
+//        containerView.backgroundColor = UIColor.ainaTintedGlassMedium
+//        containerView.layer.cornerRadius = 24
+//        containerView.layer.cornerCurve = .continuous
+//        containerView.clipsToBounds = false
+//        
+//        // Glass border
+//        containerView.layer.borderWidth = 1
+//        containerView.layer.borderColor = UIColor.white.withAlphaComponent(0.7).cgColor
+//        
+//        // Shadow — --shadow-card token
+//        containerView.layer.shadowColor = UIColor.ainaCardShadowColor.cgColor
+//        containerView.layer.shadowOpacity = 0.10
+//        containerView.layer.shadowRadius = 24
+//        containerView.layer.shadowOffset = CGSize(width: 0, height: 4)
+//        containerView.layer.masksToBounds = false
         
-        let sectionTitleFont = UIFont.systemFont(ofSize: 14, weight: .semibold)
-        let sectionTitleColor = UIColor.systemGray
         
-        tipTitleLabel.font = sectionTitleFont
-        tipTitleLabel.textColor = sectionTitleColor
-        tipTitleLabel.numberOfLines = 1
-        
-        let descriptionFont = UIFont.systemFont(ofSize: 16, weight: .regular)
-        let descriptionColor = UIColor.label
-        
-        tipDescriptionLabel.font = descriptionFont
-        tipDescriptionLabel.textColor = descriptionColor
-        tipDescriptionLabel.numberOfLines = 0
-        
-        tipDescriptionLabel.setContentCompressionResistancePriority(.required, for: .vertical)
-    }
-    
-    func configure(with dailyTip: DailyTip) {
-        tipTitleLabel.text = dailyTip.tipTitle
-        tipDescriptionLabel.text = dailyTip.tipDesc
+        containerView.backgroundColor = .clear
 
-        tipIconImageView.image = UIImage(systemName: "sparkles")
+        containerView.applyGlass(cornerRadius: 24)
+
+//        containerView.layer.shadowColor = UIColor.ainaCardShadowColor.cgColor
+//        containerView.layer.shadowOpacity = 0.10
+//        containerView.layer.shadowOffset = CGSize(width: 0, height: 8)
+//        containerView.layer.shadowRadius = 20
+        containerView.layer.masksToBounds = false
+
+        containerView.layer.borderWidth = 1
+        containerView.layer.borderColor = UIColor.white.withAlphaComponent(0.2).cgColor
+        
+        // Icon
+        tipImageView.contentMode = .scaleAspectFit
+        tipImageView.tintColor = UIColor.ainaDustyRose
+        
+        // Title — "Daily Tip" label
+        titleLabel.font = UIFont.systemFont(ofSize: 13, weight: .semibold)
+        titleLabel.textColor = UIColor.ainaDustyRose
+        titleLabel.numberOfLines = 1
+        
+        // Tip body
+        tipLabel.font = UIFont.systemFont(ofSize: 15, weight: .regular)
+        tipLabel.textColor = UIColor.ainaTextPrimary
+        tipLabel.numberOfLines = 2
+        tipLabel.lineBreakMode = .byWordWrapping
+        tipLabel.adjustsFontSizeToFitWidth = false
+        tipLabel.minimumScaleFactor = 1.0
+        tipLabel.setContentCompressionResistancePriority(.required, for: .vertical)
+        tipLabel.setContentHuggingPriority(.required, for: .vertical)
     }
     
+    func configure(title: String, tip: String, image: UIImage?) {
+        titleLabel.text = title
+        tipLabel.text = tip
+        tipImageView.image = image?.withRenderingMode(.alwaysTemplate)
+    }
 }

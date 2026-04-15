@@ -3,7 +3,7 @@ import UIKit
 class OnboardingGoalsViewController: UIViewController {
 
     var onboardingData: OnboardingData!
-    var dataModel: DataModel!
+    var dataModel: AppDataModel!
 
     @IBOutlet weak var progressView: UIProgressView!
     @IBOutlet var goalButtons: [UIButton]!

@@ -3,7 +3,7 @@ import UIKit
 class OnboardingSensitivityViewController: UIViewController {
 
     var onboardingData: OnboardingData!
-    var dataModel: DataModel!
+    var dataModel: AppDataModel!
     
     @IBOutlet weak var sensitivityCardView: UIView!
     @IBOutlet var sensitivityButtons: [UIButton]!
