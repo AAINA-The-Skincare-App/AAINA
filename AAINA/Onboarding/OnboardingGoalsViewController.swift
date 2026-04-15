@@ -4,6 +4,7 @@ class OnboardingGoalsViewController: UIViewController {
 
     var onboardingData: OnboardingData!
     var dataModel: DataModel!
+    var isEditingProfile: Bool = false
 
     @IBOutlet weak var progressView: UIProgressView!
     @IBOutlet var goalButtons: [UIButton]!
@@ -12,8 +13,10 @@ class OnboardingGoalsViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
 
         view.applyAINABackground()
+        if onboardingData == nil { onboardingData = OnboardingData() }
 
         setupCard()
 
@@ -22,6 +25,19 @@ class OnboardingGoalsViewController: UIViewController {
 
         setupButtons()
         setupNextButton()
+        if isEditingProfile {
+            nextButton.setTitle("Save", for: .normal)
+            nextButton.isEnabled = true
+            nextButton.alpha = 1.0
+            progressView.isHidden = true
+            view.subviews.forEach { subview in
+                if let label = subview as? UILabel,
+                   label.text?.contains("Step") == true {
+                    label.isHidden = true
+                }
+            }
+            preselectSavedGoals()
+        }
     }
 
     // MARK: - Actions
@@ -49,7 +65,33 @@ class OnboardingGoalsViewController: UIViewController {
 
     @IBAction func nextTapped(_ sender: UIButton) {
         guard !onboardingData.goals.isEmpty else { return }
-        performSegue(withIdentifier: "GoalToWork", sender: self)
+
+        if isEditingProfile {
+            var od = OnboardingData()
+            if let existing = UserDefaults.standard.data(forKey: "onboardingData"),
+               let decoded = try? JSONDecoder().decode(OnboardingData.self, from: existing) {
+                od = decoded
+            }
+            od.goals = onboardingData.goals
+            if let encoded = try? JSONEncoder().encode(od) {
+                UserDefaults.standard.set(encoded, forKey: "onboardingData")
+                UserDefaults.standard.synchronize()
+            }
+            if var updated = AppDataModel.shared.userProfile {
+                updated.goals = onboardingData.goals
+                AppDataModel.shared.saveProfile(updated)
+            }
+            navigationController?.popViewController(animated: true)
+            return
+        }
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        if let vc = storyboard.instantiateViewController(
+            withIdentifier: "OnboardingExposureViewController"
+        ) as? OnboardingExposureViewController {
+            vc.onboardingData = onboardingData
+            vc.dataModel = dataModel
+            navigationController?.pushViewController(vc, animated: true)
+        }
     }
 
     // MARK: - Navigation
@@ -67,7 +109,7 @@ class OnboardingGoalsViewController: UIViewController {
     private func setupCard() {
         goalsCard.backgroundColor = .clear
 
-        // ✅ SAME AS DOB & SENSITIVITY
+        // SAME AS DOB & SENSITIVITY
         goalsCard.applyGlass(cornerRadius: 24)
 
         goalsCard.layer.shadowColor = UIColor.ainaCardShadowColor.cgColor
@@ -85,7 +127,7 @@ class OnboardingGoalsViewController: UIViewController {
 
             $0.layer.cornerRadius = 22
 
-            // ✅ MATCH OTHER SCREENS
+            //MATCH OTHER SCREENS
             $0.backgroundColor = UIColor.white.withAlphaComponent(0.25)
 
             $0.layer.borderWidth = 1
@@ -99,18 +141,26 @@ class OnboardingGoalsViewController: UIViewController {
 
         if isSelected {
 
-            // ✅ MATCH SKIN TYPE / SENSITIVITY
+            //MATCH SKIN TYPE / SENSITIVITY
             button.backgroundColor = UIColor.ainaCoralPink.withAlphaComponent(0.15)
             button.layer.borderColor = UIColor.ainaCoralPink.cgColor
             button.setTitleColor(.ainaCoralPink, for: .normal)
 
         } else {
 
-            // ✅ MATCH UNSELECTED STYLE
+            //MATCH UNSELECTED STYLE
             button.backgroundColor = UIColor.white.withAlphaComponent(0.25)
             button.layer.borderColor = UIColor.ainaTextTertiary.withAlphaComponent(0.25).cgColor
             button.setTitleColor(.ainaTextPrimary, for: .normal)
         }
+    }
+    private func preselectSavedGoals() {
+        if let data = UserDefaults.standard.data(forKey: "onboardingData"),
+           let od = try? JSONDecoder().decode(OnboardingData.self, from: data) {
+            onboardingData.goals = od.goals
+        }
+        updateAllButtons()
+        validateNextButton()
     }
 
     private func setupNextButton() {
