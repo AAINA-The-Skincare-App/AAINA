@@ -3,12 +3,14 @@ import UIKit
 class OnboardingSkinTypeViewController: UIViewController {
 
     var onboardingData: OnboardingData!
-    var dataModel: AppDataModel!
+    var dataModel: DataModel!
+    var isEditingProfile: Bool = false
 
     @IBOutlet var tZoneButtons: [UIButton]!
     @IBOutlet var uZoneButtons: [UIButton]!
     @IBOutlet var cZoneButtons: [UIButton]!
 
+    @IBOutlet weak var stepLabel: UILabel!
     @IBOutlet weak var tZoneCardView: UIView!
     @IBOutlet weak var uZoneCardView: UIView!
     @IBOutlet weak var cZoneCardView: UIView!
@@ -33,6 +35,9 @@ class OnboardingSkinTypeViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.applyAINABackground()
+        if onboardingData == nil {
+            onboardingData = OnboardingData()
+        }
         progressView.progressTintColor = .ainaCoralPink
         progressView.trackTintColor = UIColor.ainaRoseLight.withAlphaComponent(0.3)
 
@@ -42,6 +47,11 @@ class OnboardingSkinTypeViewController: UIViewController {
         styleButtons(uZoneButtons)
         styleButtons(cZoneButtons)
         setupNextButton()
+        if isEditingProfile {
+            nextButton.setTitle("Save", for: .normal)
+            nextButton.isEnabled = true
+            nextButton.alpha = 1.0
+        }
         setupPopupUI()
         setupNotSureUI()
 
@@ -56,6 +66,15 @@ class OnboardingSkinTypeViewController: UIViewController {
 
         let tap = UITapGestureRecognizer(target: self, action: #selector(backgroundTapped))
         backgroundView.addGestureRecognizer(tap)
+        if isEditingProfile {
+            preselectSavedValues()
+            progressView.isHidden = true
+            stepLabel.isHidden = true
+            
+            navigationItem.title = "Edit Skin Type"
+            print("tZone buttons tags:", tZoneButtons.map { $0.tag })
+            print("profile tZone:", AppDataModel.shared.userProfile?.tZone ?? "nil")
+        }
         
     }
 
@@ -88,15 +107,54 @@ class OnboardingSkinTypeViewController: UIViewController {
     }
 
     @IBAction func nextTapped(_ sender: UIButton) {
-        guard onboardingData.tZone != nil,
-              onboardingData.uZone != nil,
-              onboardingData.cZone != nil else {
-            print("Selection incomplete")
+        guard let tZone = onboardingData.tZone,
+              let uZone = onboardingData.uZone,
+              let cZone = onboardingData.cZone else { return }
+        if isEditingProfile {
+
+            // Force write new values directly
+            var od = OnboardingData()
+            od.tZone = tZone
+            od.uZone = uZone
+            od.cZone = cZone
+            
+            // Preserve other fields if they exist
+            if let existing = UserDefaults.standard.data(forKey: "onboardingData"),
+               let decoded = try? JSONDecoder().decode(OnboardingData.self, from: existing) {
+                od.birthYear = decoded.birthYear
+                od.sensitivity = decoded.sensitivity
+                od.goals = decoded.goals
+                od.uvExposure = decoded.uvExposure
+            }
+            
+            if let encoded = try? JSONEncoder().encode(od) {
+                UserDefaults.standard.set(encoded, forKey: "onboardingData")
+                UserDefaults.standard.synchronize()
+                print("Saved tZone:", od.tZone ?? "nil")
+                print("Saved uZone:", od.uZone ?? "nil")
+                print("Saved cZone:", od.cZone ?? "nil")
+            }
+            
+            if var updated = AppDataModel.shared.userProfile {
+                updated.tZone = tZone
+                updated.uZone = uZone
+                updated.cZone = cZone
+                AppDataModel.shared.saveProfile(updated)
+            }
+            
+            navigationController?.popViewController(animated: true)
             return
         }
+//        performSegue(withIdentifier: "SkinTypeToSensitivity", sender: self)
 
-        print("Skin Type Data:", onboardingData)
-        // performSegue(withIdentifier: "SkinTypeToSensitivity", sender: self)
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        if let vc = storyboard.instantiateViewController(
+            withIdentifier: "OnboardingSensitivityViewController"
+        ) as? OnboardingSensitivityViewController {
+            vc.onboardingData = onboardingData
+            vc.dataModel = dataModel
+            navigationController?.pushViewController(vc, animated: true)
+        }
     }
 
     // MARK: - Gesture
@@ -156,7 +214,31 @@ class OnboardingSkinTypeViewController: UIViewController {
             self.infoView.transform = .identity
         })
     }
+    private func preselectSavedValues() {
+        func tag(for type: SkinType) -> Int {
+            switch type {
+            case .oily:        return 0
+            case .normal:      return 1
+            case .dry:         return 2
+            case .combination: return 1
+            }
+        }
 
+        if let tZone = onboardingData.tZone,
+           let btn = tZoneButtons.first(where: { $0.tag == tag(for: tZone) }) {
+            updateSelection(selected: btn, in: tZoneButtons)
+        }
+        if let uZone = onboardingData.uZone,
+           let btn = uZoneButtons.first(where: { $0.tag == tag(for: uZone) }) {
+            updateSelection(selected: btn, in: uZoneButtons)
+        }
+        if let cZone = onboardingData.cZone,
+           let btn = cZoneButtons.first(where: { $0.tag == tag(for: cZone) }) {
+            updateSelection(selected: btn, in: cZoneButtons)
+        }
+
+        validateSelections()
+    }
     func hideInfo() {
         backgroundView.isUserInteractionEnabled = false
 
@@ -201,7 +283,7 @@ class OnboardingSkinTypeViewController: UIViewController {
             $0.setTitleColor(.ainaTextPrimary, for: .selected)
             $0.setTitleColor(.ainaTextPrimary, for: .highlighted)
             $0.tintColor = .clear
-            $0.adjustsImageWhenHighlighted = false
+//            $0.adjustsImageWhenHighlighted = false
             $0.layer.borderColor = UIColor.white.withAlphaComponent(0.3).cgColor
 
            
@@ -209,16 +291,27 @@ class OnboardingSkinTypeViewController: UIViewController {
     }
     private func setupNotSureUI() {
 
-        notSureView.backgroundColor = .clear
-        notSureView.applyGlass(cornerRadius: 14)
+        // Clean white card matching the Privacy card style
+        notSureView.backgroundColor = .white
+        notSureView.layer.cornerRadius = 14
+        notSureView.layer.masksToBounds = false
+        notSureView.layer.borderWidth = 0
 
-        notSureView.layer.borderWidth = 1
-        notSureView.layer.borderColor = UIColor.white.withAlphaComponent(0.2).cgColor
+        // Soft shadow
+        notSureView.layer.shadowColor = UIColor.black.cgColor
+        notSureView.layer.shadowOpacity = 0.07
+        notSureView.layer.shadowOffset = CGSize(width: 0, height: 4)
+        notSureView.layer.shadowRadius = 12
 
+        // Icon
         notSureIcon.tintColor = .ainaCoralPink
         notSureIcon.image = UIImage(systemName: "sparkles")
 
-        notSureLabel.textColor = UIColor.ainaTextPrimary.withAlphaComponent(0.7)
+        // Text style
+        notSureLabel.font = UIFont.systemFont(ofSize: 13, weight: .regular)
+        notSureLabel.textColor = UIColor(red: 0.35, green: 0.35, blue: 0.35, alpha: 1)
+        notSureLabel.numberOfLines = 0
+        notSureLabel.lineBreakMode = .byWordWrapping
     }
 
     private func setupButtons(_ buttons: [UIButton]) {
@@ -249,7 +342,7 @@ class OnboardingSkinTypeViewController: UIViewController {
 
     private func setupPopupUI() {
 
-        infoView.backgroundColor = UIColor.white.withAlphaComponent(0.35)
+        infoView.backgroundColor = UIColor.white.withAlphaComponent(0.95)
         infoView.layer.cornerRadius = 20
 
         // Shadow
@@ -332,6 +425,8 @@ class OnboardingSkinTypeViewController: UIViewController {
         default: return .normal
         }
     }
+//    print("isEditingProfile:", isEditingProfile)
+//    print("profile:", AppDataModel.shared.userProfile?.tZone ?? "nil")
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "SkinTypeToSensitivity",

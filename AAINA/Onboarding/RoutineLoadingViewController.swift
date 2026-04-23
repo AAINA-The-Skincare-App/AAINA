@@ -71,8 +71,17 @@ class RoutineLoadingViewController: UIViewController {
                     prompt: prompt,
                     image: nil
                 )
-                dataModel.saveAIRoutine(output.routine)
-                await MainActor.run { self.transitionToOnboardingResult() }
+
+                dataModel.saveAIRoutine(output)
+
+                // Build and persist UserProfile with the real login name
+                let loginName = UserDefaults.standard.string(forKey: "userName") ?? "User"
+                if let profile = UserProfile.from(onboarding: self.onboardingData, name: loginName) {
+                    AppDataModel.shared.saveProfile(profile)
+                }
+
+                await MainActor.run { transitionToMainApp() }
+
             } catch {
                 await MainActor.run { self.showFailureAlert() }
             }

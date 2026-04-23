@@ -11,8 +11,10 @@ class OnboardingDOBViewController: UIViewController,
     @IBOutlet weak var privacyContainerView: UIView!
     @IBOutlet weak var privacyIcon: UIImageView!
     @IBOutlet weak var privacyLabel: UILabel!
-    // Injected from SceneDelegate
-    var dataModel: AppDataModel!
+    @IBOutlet weak var progressView: UIProgressView!
+
+    var dataModel: DataModel!
+    var isEditingProfile: Bool = false
 
     var onboardingData = OnboardingData()
     var selectedYear: Int? = nil
@@ -30,11 +32,11 @@ class OnboardingDOBViewController: UIViewController,
         super.viewDidLoad()
 
         view.applyAINABackground()
-       
-        setupDOBCard()            
+        setupDOBCard()
         setupPrivacyView()
         setupNextButton()
 
+        // Picker setup FIRST
         yearPicker.delegate = self
         yearPicker.dataSource = self
         yearPicker.setValue(UIColor.ainaTextPrimary, forKey: "textColor")
@@ -42,8 +44,28 @@ class OnboardingDOBViewController: UIViewController,
         selectedYear = nil
         nextButton.isEnabled = false
         nextButton.alpha = 0.5
-    }
 
+        // isEditingProfile block AFTER picker is ready
+        if isEditingProfile {
+            nextButton.setTitle("Save", for: .normal)
+            nextButton.isEnabled = true
+            nextButton.alpha = 1.0
+            progressView.isHidden = true
+            view.subviews.forEach { subview in
+                if let label = subview as? UILabel,
+                   label.text?.contains("Step") == true {
+                    label.isHidden = true
+                }
+            }
+            if let data = UserDefaults.standard.data(forKey: "onboardingData"),
+               let od = try? JSONDecoder().decode(OnboardingData.self, from: data),
+               let savedYear = od.birthYear,
+               let index = years.firstIndex(of: savedYear) {
+                yearPicker.selectRow(index, inComponent: 0, animated: false)
+                selectedYear = savedYear
+            }
+        }
+    }
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
 
@@ -52,8 +74,6 @@ class OnboardingDOBViewController: UIViewController,
         progressView.progressTintColor = .ainaCoralPink
         progressView.trackTintColor = UIColor.ainaRoseLight.withAlphaComponent(0.3)
         progressView.layer.cornerRadius = 2
-
-        privacyLabel.textColor = .ainaTextSecondary
 
         if yearPicker.subviews.count > 1 {
             yearPicker.subviews[1].backgroundColor = UIColor.ainaTintedGlassMedium
@@ -113,16 +133,29 @@ class OnboardingDOBViewController: UIViewController,
 
     private func setupPrivacyView() {
 
-        privacyContainerView.backgroundColor = .clear
-        privacyContainerView.applyGlass(cornerRadius: 14)
+        // Clean white card — no glass blur
+        privacyContainerView.backgroundColor = .white
+        privacyContainerView.layer.cornerRadius = 14
+        privacyContainerView.layer.masksToBounds = false
 
-        privacyContainerView.layer.borderWidth = 1
-        privacyContainerView.layer.borderColor = UIColor.white.withAlphaComponent(0.2).cgColor
+        // Soft floating shadow
+        privacyContainerView.layer.shadowColor = UIColor.black.cgColor
+        privacyContainerView.layer.shadowOpacity = 0.07
+        privacyContainerView.layer.shadowOffset = CGSize(width: 0, height: 4)
+        privacyContainerView.layer.shadowRadius = 12
 
+        // No border
+        privacyContainerView.layer.borderWidth = 0
+
+        // Icon
         privacyIcon.tintColor = .ainaCoralPink
-        privacyIcon.image = UIImage(systemName: "lock.shield")
+        privacyIcon.image = UIImage(systemName: "lock.shield.fill")
 
-        privacyLabel.textColor = UIColor.ainaTextPrimary.withAlphaComponent(0.7)
+        // Text style — slightly smaller, secondary colour, multi-line
+        privacyLabel.font = UIFont.systemFont(ofSize: 13, weight: .regular)
+        privacyLabel.textColor = UIColor(red: 0.35, green: 0.35, blue: 0.35, alpha: 1)
+        privacyLabel.numberOfLines = 0
+        privacyLabel.lineBreakMode = .byWordWrapping
     }
 
     // MARK: - BUTTON
@@ -143,13 +176,68 @@ class OnboardingDOBViewController: UIViewController,
                     numberOfRowsInComponent component: Int) -> Int {
         return years.count
     }
-
     func pickerView(_ pickerView: UIPickerView,
-                    titleForRow row: Int,
-                    forComponent component: Int) -> String? {
-        return "\(years[row])"
+                    attributedTitleForRow row: Int,
+                    forComponent component: Int) -> NSAttributedString {
+
+        let year = "\(years[row])"
+
+        let isSelected = (row == pickerView.selectedRow(inComponent: component))
+
+        let attributes: [NSAttributedString.Key: Any] = [
+            .foregroundColor: isSelected ? UIColor.ainaTextPrimary : UIColor.gray,
+            .font: isSelected ? UIFont.boldSystemFont(ofSize: 22)
+                              : UIFont.systemFont(ofSize: 18)
+        ]
+
+        return NSAttributedString(string: year, attributes: attributes)
     }
 
+//    func pickerView(_ pickerView: UIPickerView,
+//                    didSelectRow row: Int,
+//                    inComponent component: Int) {
+//
+//        selectedYear = years[row]
+//        nextButton.isEnabled = true
+//        nextButton.alpha = 1.0
+//
+//        print("Selected year:", selectedYear ?? 0)
+//    }
+
+    // MARK: - Navigation
+
+    @IBAction func nextButtonTapped(_ sender: UIButton) {
+        guard let year = selectedYear else { return }
+        onboardingData.birthYear = year
+
+        if isEditingProfile {
+            var od = OnboardingData()
+            if let existing = UserDefaults.standard.data(forKey: "onboardingData"),
+               let decoded = try? JSONDecoder().decode(OnboardingData.self, from: existing) {
+                od = decoded
+            }
+            od.birthYear = year
+            if let encoded = try? JSONEncoder().encode(od) {
+                UserDefaults.standard.set(encoded, forKey: "onboardingData")
+                UserDefaults.standard.synchronize()
+            }
+            if var updated = AppDataModel.shared.userProfile {
+                updated.birthYear = year
+                AppDataModel.shared.saveProfile(updated)
+            }
+            navigationController?.popViewController(animated: true)
+            return
+        }
+        // original onboarding flow
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        if let vc = storyboard.instantiateViewController(
+            withIdentifier: "OnboardingSkinTypeViewController"
+        ) as? OnboardingSkinTypeViewController {
+            vc.onboardingData = onboardingData
+            vc.dataModel = dataModel
+            navigationController?.pushViewController(vc, animated: true)
+        }
+    }
     func pickerView(_ pickerView: UIPickerView,
                     didSelectRow row: Int,
                     inComponent component: Int) {
@@ -158,20 +246,8 @@ class OnboardingDOBViewController: UIViewController,
         nextButton.isEnabled = true
         nextButton.alpha = 1.0
 
-        print("Selected year:", selectedYear ?? 0)
-    }
-
-    // MARK: - Navigation
-
-    @IBAction func nextButtonTapped(_ sender: UIButton) {
-
-        guard let year = selectedYear else {
-            print("No year selected")
-            return
-        }
-
-        onboardingData.birthYear = year
-        print("Onboarding data updated:", onboardingData)
+       // Refresh picker to update colors
+        pickerView.reloadAllComponents()
     }
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
