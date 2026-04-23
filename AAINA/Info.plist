@@ -3,13 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>NSCameraUsageDescription</key>
-	<string>App uses the camera to scan your skin and personalise your routine.</string>
+	<string>AAINA uses the camera to scan product ingredient labels and compare them with your routine.</string>
 	<key>NSUserNotificationUsageDescription</key>
 	<string>App sends notifications to alert you when your reminders are due.</string>
-	<key>NSRemindersUsageDescription</key>
-	<string>App needs reminders access to create reminders.</string>
-	<key>NSCalendarsUsageDescription</key>
-	<string>App needs calendar access to create reminders.</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>

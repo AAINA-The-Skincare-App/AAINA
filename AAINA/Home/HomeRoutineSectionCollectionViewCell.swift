@@ -7,21 +7,23 @@
 
 import UIKit
 
-class HomeRoutineSectionCollectionViewCell: UICollectionViewCell {
+protocol HomeRoutineSectionCollectionViewCellDelegate: AnyObject {
+    func homeRoutineCell(_ cell: HomeRoutineSectionCollectionViewCell, didChangeSegment index: Int)
+}
+
+final class HomeRoutineSectionCollectionViewCell: UICollectionViewCell {
     
     static let identifier = "HomeRoutineSectionCollectionViewCell"
     
+    weak var delegate: HomeRoutineSectionCollectionViewCellDelegate?
+    
     private var steps: [String] = []
     private var completedStates: [Bool] = []
+    private var selectedSegment: Int = 0   // 0 = Morning, 1 = Evening
     
     @IBOutlet weak var containerView: UIView!
-    
-    @IBOutlet weak var progressView: UIProgressView!
-    
-    @IBOutlet weak var stepsLabel: UILabel!
-    @IBOutlet weak var completedLabel: UILabel!
-    
-    @IBOutlet weak var stackView: UIStackView!
+    @IBOutlet weak var segmentControl: UISegmentedControl!
+    @IBOutlet weak var listStackView: UIStackView!
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -33,148 +35,162 @@ class HomeRoutineSectionCollectionViewCell: UICollectionViewCell {
         containerView.layer.cornerRadius = 24
     }
     
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        clearStepRows()
+    }
+    
     private func setupUI() {
         backgroundColor = .clear
         contentView.backgroundColor = .clear
         
-        containerView.backgroundColor = .clear
-
-        containerView.applyGlass(cornerRadius: 24)
-
-//        containerView.layer.shadowColor = UIColor.ainaCardShadowColor.cgColor
-//        containerView.layer.shadowOpacity = 0.10
-//        containerView.layer.shadowOffset = CGSize(width: 0, height: 8)
-//        containerView.layer.shadowRadius = 20
+        containerView.backgroundColor = UIColor.white.withAlphaComponent(0.88)
+        containerView.layer.cornerRadius = 24
+        containerView.layer.cornerCurve = .continuous
         containerView.layer.masksToBounds = false
-
-        containerView.layer.borderWidth = 1
-        containerView.layer.borderColor = UIColor.white.withAlphaComponent(0.2).cgColor
+        containerView.layer.borderWidth = 0
+        containerView.layer.borderColor = UIColor.black.withAlphaComponent(0.06).cgColor
+        containerView.layer.shadowColor = UIColor.black.cgColor
+        containerView.layer.shadowOpacity = 0.07
+        containerView.layer.shadowOffset = CGSize(width: 0, height: 6)
+        containerView.layer.shadowRadius = 18
         
-        stepsLabel.textColor = .black
-        stepsLabel.font = UIFont.systemFont(ofSize: 22, weight: .bold)
+        listStackView.axis = .vertical
+        listStackView.spacing = 18
+        listStackView.alignment = .fill
+        listStackView.distribution = .fill
         
-        completedLabel.textColor = .gray
-        completedLabel.font = UIFont.systemFont(ofSize: 18, weight: .regular)
-        
-        progressView.progressTintColor = UIColor.systemBlue
-        progressView.trackTintColor = UIColor.systemGray5
-        progressView.layer.cornerRadius = 4
-        progressView.clipsToBounds = true
-        
-        if let sublayers = progressView.layer.sublayers, sublayers.count > 1 {
-            sublayers[1].cornerRadius = 4
-            sublayers[1].masksToBounds = true
-        }
-        
-        stackView.axis = .vertical
-        stackView.spacing = 16
-        stackView.alignment = .fill
-        stackView.distribution = .fill
+        setupSegmentControl()
     }
     
-    // MARK: - CONFIGURE
+    private func setupSegmentControl() {
+        segmentControl.removeAllSegments()
+        segmentControl.insertSegment(withTitle: "Morning", at: 0, animated: false)
+        segmentControl.insertSegment(withTitle: "Evening", at: 1, animated: false)
+        segmentControl.selectedSegmentIndex = selectedSegment
+    }
     
-    func configure(steps: [String], completedCount: Int) {
+    func configure(
+        steps: [String],
+        completedCount: Int,
+        selectedSegment: Int
+    ) {
         self.steps = steps
+        self.selectedSegment = selectedSegment
         
-        // Initialize states
         completedStates = steps.enumerated().map { index, _ in
             index < completedCount
         }
         
-        updateUI()
+        segmentControl.selectedSegmentIndex = selectedSegment
         reloadSteps()
     }
     
-    // MARK: - UI UPDATE
-    
-    private func updateUI() {
-        let completedCount = completedStates.filter { $0 }.count
-        let totalCount = steps.count
-        
-        stepsLabel.text = "\(completedCount)/\(totalCount) Steps"
-        completedLabel.text = "completed"
-        
-        let progress = totalCount == 0 ? 0 : Float(completedCount) / Float(totalCount)
-        progressView.setProgress(progress, animated: true)
+    private func clearStepRows() {
+        listStackView.arrangedSubviews.forEach {
+            listStackView.removeArrangedSubview($0)
+            $0.removeFromSuperview()
+        }
     }
     
     private func reloadSteps() {
-        stackView.arrangedSubviews.forEach {
-            stackView.removeArrangedSubview($0)
-            $0.removeFromSuperview()
-        }
+        clearStepRows()
         
         for (index, step) in steps.enumerated() {
             let row = makeStepRow(title: step, index: index)
-            stackView.addArrangedSubview(row)
+            listStackView.addArrangedSubview(row)
         }
     }
     
-    // MARK: - ROW
-    
     private func makeStepRow(title: String, index: Int) -> UIView {
-        
         let rowView = UIView()
         rowView.translatesAutoresizingMaskIntoConstraints = false
         
-        let button = UIButton(type: .system)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.layer.cornerRadius = 12
-        button.tag = index
-        
-        updateButtonUI(button, isCompleted: completedStates[index])
-        
-        button.addTarget(self, action: #selector(stepTapped(_:)), for: .touchUpInside)
+        let numberLabel = UILabel()
+        numberLabel.translatesAutoresizingMaskIntoConstraints = false
+        numberLabel.text = "\(index + 1)"
+        numberLabel.textAlignment = .center
+        numberLabel.textColor = UIColor.ainaCoralPink.withAlphaComponent(0.9)
+        numberLabel.font = UIFont.systemFont(ofSize: 15, weight: .medium)
+        numberLabel.layer.cornerRadius = 14
+        numberLabel.layer.borderWidth = 1.5
+        numberLabel.layer.borderColor = UIColor.ainaCoralPink.withAlphaComponent(0.9).cgColor
+        numberLabel.backgroundColor = UIColor.ainaCoralPink.withAlphaComponent(0.08)
+        numberLabel.clipsToBounds = true
         
         let titleLabel = UILabel()
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         titleLabel.text = title
         titleLabel.textColor = .black
-        titleLabel.font = UIFont.systemFont(ofSize: 17, weight: .medium)
+        titleLabel.font = UIFont.systemFont(ofSize: 18, weight: .medium)
+        titleLabel.numberOfLines = 1
+        titleLabel.lineBreakMode = .byTruncatingTail
         
-        rowView.addSubview(button)
+        let statusButton = UIButton(type: .system)
+        statusButton.translatesAutoresizingMaskIntoConstraints = false
+        statusButton.tag = index
+        statusButton.layer.cornerRadius = 14
+        statusButton.clipsToBounds = true
+        statusButton.addTarget(self, action: #selector(handleStatusButtonTapped(_:)), for: .touchUpInside)
+        
+        updateStatusButtonUI(statusButton, isCompleted: completedStates[index])
+        
+        rowView.addSubview(numberLabel)
         rowView.addSubview(titleLabel)
+        rowView.addSubview(statusButton)
         
         NSLayoutConstraint.activate([
-            rowView.heightAnchor.constraint(equalToConstant: 28),
+            rowView.heightAnchor.constraint(equalToConstant: 42),
             
-            button.leadingAnchor.constraint(equalTo: rowView.leadingAnchor),
-            button.centerYAnchor.constraint(equalTo: rowView.centerYAnchor),
-            button.widthAnchor.constraint(equalToConstant: 24),
-            button.heightAnchor.constraint(equalToConstant: 24),
+            numberLabel.leadingAnchor.constraint(equalTo: rowView.leadingAnchor),
+            numberLabel.centerYAnchor.constraint(equalTo: rowView.centerYAnchor),
+            numberLabel.widthAnchor.constraint(equalToConstant: 28),
+            numberLabel.heightAnchor.constraint(equalToConstant: 28),
             
-            titleLabel.leadingAnchor.constraint(equalTo: button.trailingAnchor, constant: 16),
-            titleLabel.trailingAnchor.constraint(equalTo: rowView.trailingAnchor),
-            titleLabel.centerYAnchor.constraint(equalTo: rowView.centerYAnchor)
+            titleLabel.leadingAnchor.constraint(equalTo: numberLabel.trailingAnchor, constant: 14),
+            titleLabel.centerYAnchor.constraint(equalTo: rowView.centerYAnchor),
+            
+            statusButton.leadingAnchor.constraint(greaterThanOrEqualTo: titleLabel.trailingAnchor, constant: 12),
+            statusButton.trailingAnchor.constraint(equalTo: rowView.trailingAnchor),
+            statusButton.centerYAnchor.constraint(equalTo: rowView.centerYAnchor),
+            statusButton.widthAnchor.constraint(equalToConstant: 28),
+            statusButton.heightAnchor.constraint(equalToConstant: 28)
         ])
         
         return rowView
     }
     
-    // MARK: - BUTTON UI
-    
-    private func updateButtonUI(_ button: UIButton, isCompleted: Bool) {
+    private func updateStatusButtonUI(_ button: UIButton, isCompleted: Bool) {
+        let symbolConfig = UIImage.SymbolConfiguration(pointSize: 12, weight: .bold)
+        
         if isCompleted {
-            button.backgroundColor = .systemBlue
-            button.setImage(UIImage(systemName: "checkmark"), for: .normal)
+            button.backgroundColor = UIColor.ainaCoralPink.withAlphaComponent(0.9)
+            button.layer.borderWidth = 0
+            
             button.tintColor = .white
+            button.setImage(UIImage(systemName: "checkmark", withConfiguration: symbolConfig), for: .normal)
+            
         } else {
-            button.backgroundColor = UIColor.white.withAlphaComponent(0.8)
+            button.backgroundColor = UIColor.white.withAlphaComponent(0.25)
             button.layer.borderWidth = 1
-            button.layer.borderColor = UIColor.systemGray5.cgColor
-            button.setImage(nil, for: .normal)
+            button.layer.borderColor = UIColor.ainaCoralPink.withAlphaComponent(0.9).cgColor
+            
+            button.tintColor = UIColor.white.withAlphaComponent(0.5)
+            button.setImage(UIImage(systemName: "", withConfiguration: symbolConfig), for: .normal)
         }
     }
     
-    // MARK: - ACTION
+    @IBAction func segmentValueChanged(_ sender: UISegmentedControl) {
+        selectedSegment = sender.selectedSegmentIndex
+        delegate?.homeRoutineCell(self, didChangeSegment: sender.selectedSegmentIndex)
+    }
     
-    @objc private func stepTapped(_ sender: UIButton) {
+    @IBAction func handleStatusButtonTapped(_ sender: UIButton) {
         let index = sender.tag
         
-        completedStates[index].toggle()
+        guard index >= 0, index < completedStates.count else { return }
         
-        updateButtonUI(sender, isCompleted: completedStates[index])
-        updateUI()
+        completedStates[index].toggle()
+        updateStatusButtonUI(sender, isCompleted: completedStates[index])
     }
 }

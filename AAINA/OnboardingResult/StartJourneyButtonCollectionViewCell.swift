@@ -39,7 +39,6 @@ class StartJourneyButtonCollectionViewCell: UICollectionViewCell {
         button.layer.masksToBounds = false
     }
 
-    // MARK: - Action
     @IBAction func didTapButton(_ sender: UIButton) {
         onTap?()
     }

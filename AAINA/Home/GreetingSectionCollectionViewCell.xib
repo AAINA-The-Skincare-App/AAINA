@@ -9,36 +9,53 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="gTV-IL-0wX" customClass="GreetingSectionCollectionViewCell" customModule="AAINA" customModuleProvider="target">
-            <rect key="frame" x="0.0" y="0.0" width="252" height="132"/>
+        <collectionViewCell opaque="NO" multipleTouchEnabled="YES" contentMode="center" id="gTV-IL-0wX" customClass="GreetingSectionCollectionViewCell" customModule="AAINA" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="393" height="116"/>
             <autoresizingMask key="autoresizingMask"/>
-            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                <rect key="frame" x="0.0" y="0.0" width="252" height="132"/>
+            <view key="contentView" opaque="NO" multipleTouchEnabled="YES" contentMode="center">
+                <rect key="frame" x="0.0" y="0.0" width="393" height="116"/>
                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 <subviews>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eiI-9m-Xxg">
-                        <rect key="frame" x="16" y="15.999999999999998" width="52" height="26.333333333333321"/>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Hello! 🌸" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" translatesAutoresizingMaskIntoConstraints="NO" id="eiI-9m-Xxg">
+                        <rect key="frame" x="16" y="10" width="177.33333333333334" height="53"/>
+                        <fontDescription key="fontDescription" type="boldSystem" pointSize="44"/>
+                        <nil key="textColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Your glow, Thoughtfully crafted" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" translatesAutoresizingMaskIntoConstraints="NO" id="ca3-qo-215">
+                        <rect key="frame" x="16" y="71" width="291" height="27"/>
                         <fontDescription key="fontDescription" type="system" pointSize="22"/>
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ca3-qo-215">
-                        <rect key="frame" x="16" y="50.333333333333336" width="42" height="21.000000000000007"/>
-                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                        <nil key="textColor"/>
-                        <nil key="highlightedColor"/>
-                    </label>
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ppT-PJ-ijH">
+                        <rect key="frame" x="332" y="77.666666666666671" width="45" height="45"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="45" id="0Nb-vr-Qes"/>
+                            <constraint firstAttribute="width" constant="45" id="ufT-Ng-TsG"/>
+                        </constraints>
+                        <state key="normal" title="Button"/>
+                        <buttonConfiguration key="configuration" style="plain"/>
+                        <connections>
+                            <action selector="handleProfileTapped:" destination="gTV-IL-0wX" eventType="touchUpInside" id="8JK-rN-UcU"/>
+                        </connections>
+                    </button>
                 </subviews>
             </view>
             <viewLayoutGuide key="safeArea" id="ZTg-uK-7eu"/>
             <constraints>
+                <constraint firstItem="ppT-PJ-ijH" firstAttribute="centerY" secondItem="ZTg-uK-7eu" secondAttribute="centerY" id="ECt-qY-ibr"/>
+                <constraint firstItem="ppT-PJ-ijH" firstAttribute="leading" secondItem="ca3-qo-215" secondAttribute="trailing" constant="25" id="I30-gu-nD3"/>
                 <constraint firstItem="ca3-qo-215" firstAttribute="top" secondItem="eiI-9m-Xxg" secondAttribute="bottom" constant="8" id="K2v-FR-MbG"/>
-                <constraint firstItem="eiI-9m-Xxg" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" constant="16" id="KNh-oI-8hI"/>
+                <constraint firstItem="eiI-9m-Xxg" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" constant="10" id="KNh-oI-8hI"/>
+                <constraint firstItem="ppT-PJ-ijH" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="eiI-9m-Xxg" secondAttribute="trailing" constant="16" id="SWt-Lj-JW4"/>
+                <constraint firstAttribute="trailing" secondItem="ppT-PJ-ijH" secondAttribute="trailing" constant="16" id="bdf-q7-8wL"/>
                 <constraint firstItem="ca3-qo-215" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="16" id="rr6-07-b0f"/>
                 <constraint firstItem="eiI-9m-Xxg" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="16" id="vpu-eH-efo"/>
             </constraints>
-            <size key="customSize" width="252" height="132"/>
+            <size key="customSize" width="393" height="116"/>
             <connections>
+                <outlet property="profileButton" destination="ppT-PJ-ijH" id="8e8-tn-isC"/>
                 <outlet property="subtitleLabel" destination="ca3-qo-215" id="xWO-R5-5a9"/>
                 <outlet property="titleLabel" destination="eiI-9m-Xxg" id="RHS-ak-ip0"/>
             </connections>

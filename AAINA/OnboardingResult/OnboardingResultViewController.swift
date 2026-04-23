@@ -29,7 +29,6 @@ class OnboardingResultViewController: UIViewController {
         return defaultDataModel.eveningSteps(for: userID).map { makeAIStep(from: $0) }
     }
 
-        // Converts a static RoutineStep into an AIRoutineStep so the same cell can render both
     private func makeAIStep(from step: RoutineStep) -> AIRoutineStep {
         AIRoutineStep(
             id: step.id,
@@ -61,10 +60,8 @@ class OnboardingResultViewController: UIViewController {
             view.applyAINABackground()
         }
 
-        // MARK: - Setup
-
         private func setupUI() {
-            title = "Your Profile"
+            title = "Recommended Routine"
             view.backgroundColor = .systemGroupedBackground
             OnboardingResultCollectionView.backgroundColor = .clear
         }
@@ -97,8 +94,6 @@ class OnboardingResultViewController: UIViewController {
             OnboardingResultCollectionView.alwaysBounceVertical = true
         }
 
-        // MARK: - Layout
-
         private func generateLayout() -> UICollectionViewLayout {
 
             UICollectionViewCompositionalLayout { [weak self] sectionIndex, _ in
@@ -116,8 +111,7 @@ class OnboardingResultViewController: UIViewController {
                 }
             }
         }
-
-        /// Fixed height — profile card is always 200pt tall
+    
         private func profileSection() -> NSCollectionLayoutSection {
 
             let itemSize = NSCollectionLayoutSize(
@@ -128,7 +122,7 @@ class OnboardingResultViewController: UIViewController {
 
             let groupSize = NSCollectionLayoutSize(
                 widthDimension: .fractionalWidth(1.0),
-                heightDimension: .absolute(200)
+                heightDimension: .absolute(190)
             )
             let group = NSCollectionLayoutGroup.horizontal(
                 layoutSize: groupSize,
@@ -141,7 +135,6 @@ class OnboardingResultViewController: UIViewController {
             return section
         }
 
-        /// Self-sizing — card height grows/shrinks with the number of steps inside
         private func routineSection() -> NSCollectionLayoutSection {
 
             let itemSize = NSCollectionLayoutSize(
@@ -165,7 +158,6 @@ class OnboardingResultViewController: UIViewController {
             return section
         }
 
-        /// Fixed height — CTA button is always 72pt
         private func buttonSection() -> NSCollectionLayoutSection {
 
             let itemSize = NSCollectionLayoutSize(
@@ -203,8 +195,6 @@ class OnboardingResultViewController: UIViewController {
         }
     }
 
-    // MARK: - Supplementary Views
-
     extension OnboardingResultViewController {
 
         func collectionView(_ collectionView: UICollectionView,
@@ -225,8 +215,6 @@ class OnboardingResultViewController: UIViewController {
             return headerView
         }
     }
-
-    // MARK: - UICollectionViewDataSource
 
     extension OnboardingResultViewController: UICollectionViewDataSource {
 
@@ -286,7 +274,5 @@ class OnboardingResultViewController: UIViewController {
             }
         }
     }
-
-    // MARK: - UICollectionViewDelegate
 
     extension OnboardingResultViewController: UICollectionViewDelegate {}

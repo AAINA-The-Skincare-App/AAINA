@@ -366,95 +366,113 @@
     { "id": "P-040", "user_id": "UUID-040", "t_zone_type": "normal", "u_zone_type": "normal", "c_zone_type": "normal", "sensitivity_level": "often", "uv_exposure_level": "moderate", "goals": ["antiAging"] }
   ],
   "routines": [
-    {
-      "id": "routine_001",
-      "user_id": "UUID-001",
-      "isActive": true,
-      "steps": [
-
-        {
-          "id": "m1",
-          "step_order": 1,
-          "step_title": "Gentle Foaming Cleanser",
-          "type": "cleanser",
-          "product_desc": "Removes dirt and oil without stripping skin.",
-          "ingredient_ids": ["glycerin", "niacinamide", "panthenol"],
-          "time_of_day": "morning",
-          "instruction_text": "Massage for 60 seconds and rinse."
-        },
-        {
-          "id": "m2",
-          "step_order": 2,
-          "step_title": "Vitamin C Serum",
-          "type": "serum",
-          "product_desc": "Brightens and protects skin.",
-          "ingredient_ids": ["ascorbic_acid", "ferulic_acid"],
-          "time_of_day": "morning",
-          "instruction_text": "Apply 2-3 drops on clean skin."
-        },
-        {
-          "id": "m3",
-          "step_order": 3,
-          "step_title": "Moisturizer",
-          "type": "moisturizer",
-          "product_desc": "Hydrates and repairs barrier.",
-          "ingredient_ids": ["ceramide_np", "squalane"],
-          "time_of_day": "morning",
-          "instruction_text": "Apply evenly on face."
-        },
-        {
-          "id": "m4",
-          "step_order": 4,
-          "step_title": "Sunscreen SPF 50",
-          "type": "sunscreen",
-          "product_desc": "Protects from UV rays.",
-          "ingredient_ids": ["zinc_oxide"],
-          "time_of_day": "morning",
-          "instruction_text": "Apply generously."
-        },
-        {
-          "id": "e1",
-          "step_order": 1,
-          "step_title": "Gentle Cleanser",
-          "type": "cleanser",
-          "product_desc": "Removes sunscreen and dirt.",
-          "ingredient_ids": ["glycerin", "panthenol"],
-          "time_of_day": "evening",
-          "instruction_text": "Massage for 60 seconds and rinse."
-        },
-        {
-          "id": "e2",
-          "step_order": 2,
-          "step_title": "AHA/BHA Exfoliating Serum",
-          "type": "serum",
-          "product_desc": "Removes dead skin and unclogs pores.",
-          "ingredient_ids": ["glycolic_acid", "salicylic_acid", "lactic_acid"],
-          "time_of_day": "evening",
-          "instruction_text": "Use 2-3 times a week only."
-        },
-        {
-          "id": "e3",
-          "step_order": 3,
-          "step_title": "Retinol 0.2% Serum",
-          "type": "treatment",
-          "product_desc": "Improves texture and fine lines.",
-          "ingredient_ids": ["retinol", "squalane"],
-          "time_of_day": "evening",
-          "instruction_text": "Apply pea-sized amount at night."
-        },
-        {
-          "id": "e4",
-          "step_order": 4,
-          "step_title": "Barrier Repair Night Cream",
-          "type": "moisturizer",
-          "product_desc": "Deeply moisturizes and repairs skin.",
-          "ingredient_ids": ["ceramide_np", "panthenol", "squalane"],
-          "time_of_day": "evening",
-          "instruction_text": "Apply as last step."
-        }
-
-      ]
-    }
+      {
+          "id": "routine_001",
+          "user_id": "UUID-001",
+          "isActive": true,
+          "steps": [
+              {
+                  "id": "m1",
+                  "step_order": 1,
+                  "step_title": "Gentle Hydrating Cleanser",
+                  "type": "Cleanser",
+                  "product_desc": "Removes dirt and oil without stripping skin.",
+                  "ingredient_ids": ["glycerin"],
+                  "time_of_day": "morning",
+                  "instruction_text": "Massage onto damp skin for 60 seconds and rinse with lukewarm water."
+              },
+              {
+                  "id": "m2",
+                  "step_order": 2,
+                  "step_title": "Niacinamide Balancing Toner",
+                  "type": "Toner",
+                  "product_desc": "Controls oil and minimizes pore appearance.",
+                  "ingredient_ids": ["niacinamide"],
+                  "time_of_day": "morning",
+                  "instruction_text": "Apply 2-3 drops to palms and gently press into clean skin."
+              },
+              {
+                  "id": "m3",
+                  "step_order": 3,
+                  "step_title": "AntiOxidant Glow Serum",
+                  "type": "Serum",
+                  "product_desc": "Brightens skin and neutralizes free radicals.",
+                  "ingredient_ids": ["ascorbic_acid", "ferulic_acid"],
+                  "time_of_day": "morning",
+                  "instruction_text": "Apply 3-4 drops to the face and neck after toning."
+              },
+              {
+                  "id": "m4",
+                  "step_order": 4,
+                  "step_title": "Lightweight Hydrating Moisturizer",
+                  "type": "Moisturizer",
+                  "product_desc": "Hydrates and seals in moisture.",
+                  "ingredient_ids": ["squalane", "glycerin"],
+                  "time_of_day": "morning",
+                  "instruction_text": "Apply evenly over the face and neck using upward motions."
+              },
+              {
+                  "id": "m5",
+                  "step_order": 5,
+                  "step_title": "SPF 50+ Mineral Sunscreen",
+                  "type": "Sunscreen",
+                  "product_desc": "Protects skin from damaging UV rays.",
+                  "ingredient_ids": ["zinc_oxide"],
+                  "time_of_day": "morning",
+                  "instruction_text": "Apply generously as the final step of your morning routine."
+              },
+              {
+                  "id": "e1",
+                  "step_order": 6,
+                  "step_title": "Gentle Hydrating Cleanser",
+                  "type": "Cleanser",
+                  "product_desc": "Dissolves sunscreen, grime, and pollution.",
+                  "ingredient_ids": ["glycerin"],
+                  "time_of_day": "evening",
+                  "instruction_text": "Massage onto skin for 60 seconds to ensure all debris is removed, then rinse."
+              },
+              {
+                  "id": "e2",
+                  "step_order": 7,
+                  "step_title": "Niacinamide Balancing Toner",
+                  "type": "Toner",
+                  "product_desc": "Calms skin and preps for treatments.",
+                  "ingredient_ids": ["niacinamide"],
+                  "time_of_day": "evening",
+                  "instruction_text": "Sweep across the face with a cotton pad or pat in with fingers."
+              },
+              {
+                  "id": "e3",
+                  "step_order": 8,
+                  "step_title": "Retinol Night Treatment",
+                  "type": "Treatment",
+                  "product_desc": "Improves texture and reduces fine lines.",
+                  "ingredient_ids": ["retinol"],
+                  "time_of_day": "evening",
+                  "instruction_text": "Apply a pea-sized amount to completely dry skin; avoid the eye area."
+              },
+              {
+                  "id": "e4",
+                  "step_order": 9,
+                  "step_title": "Lightweight Hydrating Moisturizer",
+                  "type": "Moisturizer",
+                  "product_desc": "Repairs and prevents nighttime dryness.",
+                  "ingredient_ids": ["squalane", "glycerin"],
+                  "time_of_day": "evening",
+                  "instruction_text": "Layer over the treatment once it has fully absorbed."
+              },
+              {
+                  "id": "e5",
+                  "step_order": 10,
+                  "step_title": "Ceramide Skin Barrier Cream",
+                  "type": "Repair",
+                  "product_desc": "Strengthens the natural skin barrier.",
+                  "ingredient_ids": ["ceramide NP"],
+                  "time_of_day": "evening",
+                  "instruction_text": "Apply as the final step to seal in moisture and repair the barrier overnight."
+              }
+          ]
+      }
   ],
 
   "journals": [

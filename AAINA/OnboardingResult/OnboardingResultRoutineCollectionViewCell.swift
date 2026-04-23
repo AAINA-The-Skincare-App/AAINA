@@ -9,8 +9,6 @@ import UIKit
 
 class OnboardingResultRoutineCollectionViewCell: UICollectionViewCell {
     
-    // MARK: - IBOutlets
-    
     @IBOutlet weak var cardView: UIView!
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var stackView: UIStackView!
@@ -28,12 +26,9 @@ class OnboardingResultRoutineCollectionViewCell: UICollectionViewCell {
         ).cgPath
     }
     
-    // The system calls this during self-sizing. Returning a preference with the
-    // fitted height tells Compositional Layout to size the cell to its content.
     override func preferredLayoutAttributesFitting(
         _ layoutAttributes: UICollectionViewLayoutAttributes
     ) -> UICollectionViewLayoutAttributes {
-        // Let Auto Layout calculate the height based on the fixed width
         let targetSize = CGSize(width: layoutAttributes.frame.width, height: UIView.layoutFittingCompressedSize.height)
         let fittedSize = contentView.systemLayoutSizeFitting(
             targetSize,
@@ -44,13 +39,11 @@ class OnboardingResultRoutineCollectionViewCell: UICollectionViewCell {
         return layoutAttributes
     }
     
-    // MARK: - Setup UI
     
     private func setupUI() {
         backgroundColor = .clear
         contentView.backgroundColor = .clear
         
-        // Card
         cardView.backgroundColor = .systemBackground
         cardView.layer.cornerRadius = 24
         cardView.layer.cornerCurve = .continuous
@@ -60,11 +53,9 @@ class OnboardingResultRoutineCollectionViewCell: UICollectionViewCell {
         cardView.layer.shadowRadius = 20
         cardView.layer.masksToBounds = false
         
-        // Title
         titleLabel.font = .systemFont(ofSize: 18, weight: .medium)
         titleLabel.textColor = .systemGray
         
-        // Stack spacing
         stackView.spacing = 0
     }
     
@@ -73,7 +64,6 @@ class OnboardingResultRoutineCollectionViewCell: UICollectionViewCell {
     func configure(title: String, steps: [AIRoutineStep]) {
         titleLabel.text = title
         
-        // Clear previous views (important for reuse)
         stackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
         
         for (index, step) in steps.enumerated() {
@@ -86,8 +76,6 @@ class OnboardingResultRoutineCollectionViewCell: UICollectionViewCell {
         }
     }
     
-    // MARK: - Step View
-    
     private func createStepView(step: AIRoutineStep) -> UIView {
         let container = UIView()
         container.translatesAutoresizingMaskIntoConstraints = false
@@ -98,7 +86,6 @@ class OnboardingResultRoutineCollectionViewCell: UICollectionViewCell {
         hStack.alignment = .top
         hStack.translatesAutoresizingMaskIntoConstraints = false
         
-        // Badge
         let badge = UILabel()
         badge.text = "\(step.stepNumber)"
         badge.textAlignment = .center
@@ -115,7 +102,6 @@ class OnboardingResultRoutineCollectionViewCell: UICollectionViewCell {
             badge.heightAnchor.constraint(equalToConstant: 28)
         ])
         
-        // Text stack
         let textStack = UIStackView()
         textStack.axis = .vertical
         textStack.spacing = 4
@@ -132,7 +118,6 @@ class OnboardingResultRoutineCollectionViewCell: UICollectionViewCell {
         ingredientsLabel.font = .systemFont(ofSize: 13)
         ingredientsLabel.textColor = .ainaCoralPink
         ingredientsLabel.numberOfLines = 0
-        // Hide if empty so it doesn't add extra vertical space
         ingredientsLabel.isHidden = step.keyIngredients.isEmpty
         
         let reasonLabel = UILabel()
@@ -160,7 +145,6 @@ class OnboardingResultRoutineCollectionViewCell: UICollectionViewCell {
         return container
     }
     
-    // MARK: - Divider
     
     private func createDivider() -> UIView {
         let view = UIView()
