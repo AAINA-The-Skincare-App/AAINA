@@ -15,6 +15,8 @@
 			</array>
 		</dict>
 	</array>
+	<key>NSCameraUsageDescription</key>
+	<string>AAINA uses the camera to scan product ingredient labels and compare them with your routine.</string>
 	<key>NSUserNotificationUsageDescription</key>
 	<string>App sends notifications to alert you when your reminders are due.</string>
 	<key>UIApplicationSceneManifest</key>

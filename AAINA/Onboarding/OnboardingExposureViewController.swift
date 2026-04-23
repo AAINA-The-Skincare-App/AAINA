@@ -3,7 +3,7 @@ import UIKit
 class OnboardingExposureViewController: UIViewController {
 
     var onboardingData: OnboardingData!
-    var dataModel: DataModel!
+    var dataModel: AppDataModel!
 
     @IBOutlet weak var exposureCardView: UIView!
     @IBOutlet var exposureButtons: [UIButton]!

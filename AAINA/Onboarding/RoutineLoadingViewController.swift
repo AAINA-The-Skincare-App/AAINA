@@ -3,8 +3,7 @@ import UIKit
 class RoutineLoadingViewController: UIViewController {
 
     var onboardingData: OnboardingData!
-    var capturedImage: UIImage?
-    var dataModel: DataModel!
+    var dataModel: AppDataModel!
 
     private let spinner = UIActivityIndicatorView(style: .large)
     private let headlineLabel = UILabel()
@@ -29,12 +28,12 @@ class RoutineLoadingViewController: UIViewController {
         spinner.startAnimating()
         spinner.translatesAutoresizingMaskIntoConstraints = false
 
-        headlineLabel.text = "Analysing your skin…"
+        headlineLabel.text = "Building your routine…"
         headlineLabel.font = .systemFont(ofSize: 22, weight: .semibold)
         headlineLabel.textAlignment = .center
         headlineLabel.translatesAutoresizingMaskIntoConstraints = false
 
-        subLabel.text = "Building your personalised routine"
+        subLabel.text = "Personalising based on your skin profile"
         subLabel.font = .systemFont(ofSize: 15)
         subLabel.textColor = .secondaryLabel
         subLabel.textAlignment = .center
@@ -66,12 +65,11 @@ class RoutineLoadingViewController: UIViewController {
                 let prompt = RoutinePromptBuilder.build(
                     onboardingData: onboardingData,
                     ingredients: dataModel.allIngredients(),
-                    imageProvided: capturedImage != nil
+                    imageProvided: false
                 )
-
                 let output = try await GeminiFreeService().generateRoutine(
                     prompt: prompt,
-                    image: capturedImage
+                    image: nil
                 )
 
                 dataModel.saveAIRoutine(output)
@@ -85,37 +83,34 @@ class RoutineLoadingViewController: UIViewController {
                 await MainActor.run { transitionToMainApp() }
 
             } catch {
-                await MainActor.run { showFailureAlert() }
+                await MainActor.run { self.showFailureAlert() }
             }
         }
     }
 
     // MARK: - Navigation
 
-    private func transitionToMainApp() {
+    private func transitionToOnboardingResult() {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        guard let tabBar = storyboard.instantiateViewController(
-            withIdentifier: "MainTabBarViewController"
-        ) as? MainTabBarViewController else { return }
-
-        tabBar.dataModel = dataModel
-
-        if let sceneDelegate = UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate {
-            sceneDelegate.window?.rootViewController = tabBar
-        }
+        guard let resultVC = storyboard.instantiateViewController(
+            withIdentifier: "OnboardingResultViewController"
+        ) as? OnboardingResultViewController else { return }
+        resultVC.onboardingData = onboardingData
+        resultVC.dataModel = dataModel
+        navigationController?.pushViewController(resultVC, animated: true)
     }
 
     private func showFailureAlert() {
         let alert = UIAlertController(
             title: "Something went wrong",
-            message: "We couldn't analyse your skin right now.",
+            message: "We couldn't build your routine right now.",
             preferredStyle: .alert
         )
         alert.addAction(UIAlertAction(title: "Retry", style: .default) { [weak self] _ in
             self?.startAnalysis()
         })
         alert.addAction(UIAlertAction(title: "Use Default Routine", style: .cancel) { [weak self] _ in
-            self?.transitionToMainApp()
+            DispatchQueue.main.async { self?.transitionToOnboardingResult() }
         })
         present(alert, animated: true)
     }

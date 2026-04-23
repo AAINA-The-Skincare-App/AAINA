@@ -64,4 +64,59 @@ extension UIView {
         gradient.frame = bounds
         layer.insertSublayer(gradient, at: 0)
     }
+
+    func applyAINABlobBackground() {
+        applyAINABackground()
+
+        let topTag = 84001
+        let bottomTag = 84002
+
+        if viewWithTag(topTag) == nil {
+            let topBlob = makeAINABlob(size: 180, color: .ainaCoralPink, alpha: 0.28)
+            topBlob.tag = topTag
+            insertSubview(topBlob, at: 0)
+
+            NSLayoutConstraint.activate([
+                topBlob.topAnchor.constraint(equalTo: topAnchor, constant: 40),
+                topBlob.trailingAnchor.constraint(equalTo: trailingAnchor, constant: 80),
+                topBlob.widthAnchor.constraint(equalToConstant: 180),
+                topBlob.heightAnchor.constraint(equalToConstant: 180)
+            ])
+        }
+
+        if viewWithTag(bottomTag) == nil {
+            let bottomBlob = makeAINABlob(size: 260, color: .ainaRoseLight, alpha: 0.22)
+            bottomBlob.tag = bottomTag
+            insertSubview(bottomBlob, at: 0)
+
+            NSLayoutConstraint.activate([
+                bottomBlob.bottomAnchor.constraint(equalTo: bottomAnchor, constant: 120),
+                bottomBlob.leadingAnchor.constraint(equalTo: leadingAnchor, constant: -100),
+                bottomBlob.widthAnchor.constraint(equalToConstant: 260),
+                bottomBlob.heightAnchor.constraint(equalToConstant: 260)
+            ])
+        }
+    }
+
+    private func makeAINABlob(size: CGFloat, color: UIColor, alpha: CGFloat) -> UIView {
+        let blob = UIView()
+        blob.backgroundColor = color.withAlphaComponent(alpha)
+        blob.layer.cornerRadius = size / 2
+        blob.translatesAutoresizingMaskIntoConstraints = false
+
+        let blur = UIVisualEffectView(effect: UIBlurEffect(style: .systemUltraThinMaterial))
+        blur.translatesAutoresizingMaskIntoConstraints = false
+        blur.layer.cornerRadius = size / 2
+        blur.clipsToBounds = true
+        blob.addSubview(blur)
+
+        NSLayoutConstraint.activate([
+            blur.topAnchor.constraint(equalTo: blob.topAnchor),
+            blur.bottomAnchor.constraint(equalTo: blob.bottomAnchor),
+            blur.leadingAnchor.constraint(equalTo: blob.leadingAnchor),
+            blur.trailingAnchor.constraint(equalTo: blob.trailingAnchor)
+        ])
+
+        return blob
+    }
 }

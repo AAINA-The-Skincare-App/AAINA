@@ -111,7 +111,7 @@ final class LifestyleSectionView: UIView {
         selectedSleep = sender.tag - 300
         for (i, btn) in sleepButtons.enumerated() {
             let isSelected = i == selectedSleep
-            btn.backgroundColor = isSelected ? UIColor.ainaTintedGlassLight : UIColor.ainaTextTertiary.withAlphaComponent(0.2)
+            btn.backgroundColor = isSelected ? UIColor.ainaCoralPink.withAlphaComponent(0.75) : UIColor.ainaTextTertiary.withAlphaComponent(0.2)
             btn.layer.borderWidth = isSelected ? 1.5 : 0
             btn.layer.borderColor = isSelected ? UIColor.ainaDustyRose.cgColor : UIColor.clear.cgColor
         }

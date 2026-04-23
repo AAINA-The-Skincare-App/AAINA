@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="24506" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24504"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="gTV-IL-0wX" customClass="HomeRoutineSectionCollectionViewCell" customModule="AAINA" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="326" height="276"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                <rect key="frame" x="0.0" y="0.0" width="326" height="276"/>
+                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                <subviews>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cpd-t8-kvM">
+                        <rect key="frame" x="16" y="16" width="294" height="244"/>
+                        <subviews>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="49o-ZG-LEy">
+                                <rect key="frame" x="25" y="67" width="244" height="161"/>
+                            </stackView>
+                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="ZTJ-4g-ceQ">
+                                <rect key="frame" x="16" y="16" width="262" height="36"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="35" id="jx4-Ra-b53"/>
+                                </constraints>
+                                <segments>
+                                    <segment title="Morning"/>
+                                    <segment title="Evening"/>
+                                </segments>
+                                <connections>
+                                    <action selector="segmentValueChanged:" destination="gTV-IL-0wX" eventType="valueChanged" id="3Aj-fq-QlN"/>
+                                </connections>
+                            </segmentedControl>
+                        </subviews>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="49o-ZG-LEy" firstAttribute="top" secondItem="ZTJ-4g-ceQ" secondAttribute="bottom" constant="16" id="1M4-wV-H9o"/>
+                            <constraint firstAttribute="trailing" secondItem="ZTJ-4g-ceQ" secondAttribute="trailing" constant="16" id="5Ng-BQ-pm1"/>
+                            <constraint firstItem="ZTJ-4g-ceQ" firstAttribute="top" secondItem="cpd-t8-kvM" secondAttribute="top" constant="16" id="BEu-Er-FJo"/>
+                            <constraint firstItem="49o-ZG-LEy" firstAttribute="leading" secondItem="cpd-t8-kvM" secondAttribute="leading" constant="25" id="Er7-kM-n7p"/>
+                            <constraint firstAttribute="trailing" secondItem="49o-ZG-LEy" secondAttribute="trailing" constant="25" id="RPR-bk-qsD"/>
+                            <constraint firstItem="ZTJ-4g-ceQ" firstAttribute="leading" secondItem="cpd-t8-kvM" secondAttribute="leading" constant="16" id="SF1-Kn-fSj"/>
+                            <constraint firstAttribute="bottom" secondItem="49o-ZG-LEy" secondAttribute="bottom" constant="16" id="wLY-aQ-F8Z"/>
+                        </constraints>
+                    </view>
+                </subviews>
+            </view>
+            <viewLayoutGuide key="safeArea" id="ZTg-uK-7eu"/>
+            <constraints>
+                <constraint firstAttribute="bottom" secondItem="cpd-t8-kvM" secondAttribute="bottom" constant="16" id="5IE-vI-DEu"/>
+                <constraint firstAttribute="trailing" secondItem="cpd-t8-kvM" secondAttribute="trailing" constant="16" id="htM-oy-6Cv"/>
+                <constraint firstItem="cpd-t8-kvM" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="16" id="n6S-aC-8ri"/>
+                <constraint firstItem="cpd-t8-kvM" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" constant="16" id="xNj-Dr-FIc"/>
+            </constraints>
+            <size key="customSize" width="326" height="276"/>
+            <connections>
+                <outlet property="containerView" destination="cpd-t8-kvM" id="lQz-Gi-KBP"/>
+                <outlet property="listStackView" destination="49o-ZG-LEy" id="8Kd-YA-NTz"/>
+                <outlet property="segmentControl" destination="ZTJ-4g-ceQ" id="T0I-BM-LQj"/>
+            </connections>
+            <point key="canvasLocation" x="454.96183206106866" y="60.563380281690144"/>
+        </collectionViewCell>
+    </objects>
+    <resources>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
+</document>
