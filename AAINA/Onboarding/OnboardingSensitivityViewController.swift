@@ -4,7 +4,9 @@ class OnboardingSensitivityViewController: UIViewController {
 
     var onboardingData: OnboardingData!
     var dataModel: DataModel!
+    var isEditingProfile: Bool = false
     
+    @IBOutlet weak var stepLabel: UILabel!
     @IBOutlet weak var sensitivityCardView: UIView!
     @IBOutlet var sensitivityButtons: [UIButton]!
     @IBOutlet weak var nextButton: UIButton!
@@ -27,6 +29,19 @@ class OnboardingSensitivityViewController: UIViewController {
 
         setupButtons()
         setupNextButton()
+        if isEditingProfile {
+            nextButton.setTitle("Save", for: .normal)
+            nextButton.isEnabled = true
+            nextButton.alpha = 1.0
+            progressview.isHidden = true
+            view.subviews.forEach { subview in
+                if let label = subview as? UILabel,
+                   label.text?.contains("Step") == true {
+                    label.isHidden = true
+                }
+            }
+            preselectSavedSensitivity()
+        }
     }
 
     // MARK: - Actions
@@ -41,8 +56,56 @@ class OnboardingSensitivityViewController: UIViewController {
     }
 
     @IBAction func nextTapped(_ sender: UIButton) {
-        guard onboardingData.sensitivity != nil else { return }
-//        performSegue(withIdentifier: "SensitivityToGoal", sender: self)
+        guard let sensitivity = onboardingData.sensitivity else { return }
+
+        if isEditingProfile {
+            var od = OnboardingData()
+            if let existing = UserDefaults.standard.data(forKey: "onboardingData"),
+               let decoded = try? JSONDecoder().decode(OnboardingData.self, from: existing) {
+                od = decoded
+            }
+            od.sensitivity = sensitivity
+            if let encoded = try? JSONEncoder().encode(od) {
+                UserDefaults.standard.set(encoded, forKey: "onboardingData")
+                UserDefaults.standard.synchronize()
+            }
+            if var updated = AppDataModel.shared.userProfile {
+                updated.sensitivity = sensitivity
+                AppDataModel.shared.saveProfile(updated)
+            }
+            navigationController?.popViewController(animated: true)
+            return
+        }
+
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        if let vc = storyboard.instantiateViewController(
+            withIdentifier: "OnboardingGoalsViewController"
+        ) as? OnboardingGoalsViewController {
+            vc.onboardingData = onboardingData
+            vc.dataModel = dataModel
+            navigationController?.pushViewController(vc, animated: true)
+        }
+    }
+    private func preselectSavedSensitivity() {
+        if let data = UserDefaults.standard.data(forKey: "onboardingData"),
+           let od = try? JSONDecoder().decode(OnboardingData.self, from: data),
+           let sensitivity = od.sensitivity {
+            onboardingData.sensitivity = sensitivity
+            let tag = tagFrom(sensitivity)
+            if let btn = sensitivityButtons.first(where: { $0.tag == tag }) {
+                updateSelection(selected: btn)
+            }
+            enableNextButton()
+        }
+    }
+
+    private func tagFrom(_ level: SensitivityLevel) -> Int {
+        switch level {
+        case .hardlyEver: return 0
+        case .sometimes:  return 1
+        case .often:      return 2
+        case .veryEasily: return 3
+        }
     }
 
     // MARK: - UI Setup
