@@ -14,31 +14,18 @@
             <autoresizingMask key="autoresizingMask"/>
             <subviews>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uI8-o2-jiD">
-                    <rect key="frame" x="16" y="15" width="42" height="20"/>
+                    <rect key="frame" x="25" y="15" width="42" height="20"/>
                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                     <nil key="textColor"/>
                     <nil key="highlightedColor"/>
                 </label>
-                <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="PG1-FH-51V">
-                    <rect key="frame" x="154" y="9.6666666666666643" width="150" height="32"/>
-                    <constraints>
-                        <constraint firstAttribute="width" constant="150" id="7C8-jD-3yG"/>
-                    </constraints>
-                    <segments>
-                        <segment title="First"/>
-                        <segment title="Second"/>
-                    </segments>
-                </segmentedControl>
             </subviews>
             <viewLayoutGuide key="safeArea" id="VXr-Tz-HHm"/>
             <constraints>
                 <constraint firstItem="uI8-o2-jiD" firstAttribute="centerY" secondItem="U6b-Vx-4bR" secondAttribute="centerY" id="13T-oa-VdN"/>
-                <constraint firstItem="uI8-o2-jiD" firstAttribute="leading" secondItem="VXr-Tz-HHm" secondAttribute="leading" constant="16" id="DDt-nB-pZa"/>
-                <constraint firstItem="VXr-Tz-HHm" firstAttribute="trailing" secondItem="PG1-FH-51V" secondAttribute="trailing" constant="16" id="Q6K-31-XLD"/>
-                <constraint firstItem="uI8-o2-jiD" firstAttribute="centerY" secondItem="PG1-FH-51V" secondAttribute="centerY" id="jIu-Bf-WX9"/>
+                <constraint firstItem="uI8-o2-jiD" firstAttribute="leading" secondItem="VXr-Tz-HHm" secondAttribute="leading" constant="25" id="DDt-nB-pZa"/>
             </constraints>
             <connections>
-                <outlet property="segmentControl" destination="PG1-FH-51V" id="XYm-cD-qQg"/>
                 <outlet property="titleLabel" destination="uI8-o2-jiD" id="kjp-Hp-okq"/>
             </connections>
             <point key="canvasLocation" x="139" y="154"/>
