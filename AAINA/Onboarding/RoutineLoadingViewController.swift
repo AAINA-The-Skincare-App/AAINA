@@ -72,7 +72,7 @@ class RoutineLoadingViewController: UIViewController {
                     image: nil
                 )
 
-                dataModel.saveAIRoutine(output)
+                dataModel.saveAIRoutine(output.routine)
 
                 // Build and persist UserProfile with the real login name
                 let loginName = UserDefaults.standard.string(forKey: "userName") ?? "User"
@@ -89,6 +89,19 @@ class RoutineLoadingViewController: UIViewController {
     }
 
     // MARK: - Navigation
+
+    private func transitionToMainApp() {
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        guard let tabBarVC = storyboard.instantiateViewController(
+            withIdentifier: "MainTabBarViewController"
+        ) as? MainTabBarViewController else { return }
+        tabBarVC.dataModel = dataModel
+        if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+           let sceneDelegate = windowScene.delegate as? SceneDelegate {
+            sceneDelegate.window?.rootViewController = tabBarVC
+            sceneDelegate.window?.makeKeyAndVisible()
+        }
+    }
 
     private func transitionToOnboardingResult() {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)

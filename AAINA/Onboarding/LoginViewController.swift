@@ -92,14 +92,24 @@ class LoginViewController: UIViewController {
     }
 
     // MARK: - Apple Login
+    // Sign In with Apple requires a paid Apple Developer Program membership.
+    // The capability has been disabled until the app is enrolled in the program.
     @IBAction func appleTapped(_ sender: UIButton) {
-        let request = ASAuthorizationAppleIDProvider().createRequest()
-        request.requestedScopes = [.fullName, .email]
+        let alert = UIAlertController(
+            title: "Coming Soon",
+            message: "Sign In with Apple will be available in a future release. Please use Google Sign-In or continue as a guest.",
+            preferredStyle: .alert
+        )
+        alert.addAction(UIAlertAction(title: "OK", style: .default))
+        present(alert, animated: true)
 
-        let controller = ASAuthorizationController(authorizationRequests: [request])
-        controller.delegate = self
-        controller.presentationContextProvider = self
-        controller.performRequests()
+        // --- Requires Apple Developer Program enrollment ($99/year) ---
+        // let request = ASAuthorizationAppleIDProvider().createRequest()
+        // request.requestedScopes = [.fullName, .email]
+        // let controller = ASAuthorizationController(authorizationRequests: [request])
+        // controller.delegate = self
+        // controller.presentationContextProvider = self
+        // controller.performRequests()
     }
 
     // MARK: - Guest Login
@@ -133,7 +143,7 @@ class LoginViewController: UIViewController {
             return
         }
 
-        dobVC.dataModel = DataModel()
+        dobVC.dataModel = AppDataModel.shared
 
         let nav = UINavigationController(rootViewController: dobVC)
 
@@ -146,37 +156,35 @@ class LoginViewController: UIViewController {
 }
 
 // MARK: - Apple Sign In Delegate
-extension LoginViewController: ASAuthorizationControllerDelegate,
-                                ASAuthorizationControllerPresentationContextProviding {
-
-    func presentationAnchor(for controller: ASAuthorizationController) -> ASPresentationAnchor {
-        return view.window!
-    }
-
-    func authorizationController(
-        controller: ASAuthorizationController,
-        didCompleteWithAuthorization authorization: ASAuthorization
-    ) {
-        if let credential = authorization.credential as? ASAuthorizationAppleIDCredential {
-
-            // apple only gives full name on very first sign in
-            // after that it comes back empty so we preserve whatever was saved before
-            let given  = credential.fullName?.givenName ?? ""
-            let family = credential.fullName?.familyName ?? ""
-            let fullName = [given, family].filter { !$0.isEmpty }.joined(separator: " ")
-
-            let existing = UserDefaults.standard.string(forKey: "userName") ?? ""
-            let name = fullName.isEmpty ? (existing.isEmpty ? "User" : existing) : fullName
-
-            saveLogin(name: name)
-            goToOnboarding()
-        }
-    }
-
-    func authorizationController(
-        controller: ASAuthorizationController,
-        didCompleteWithError error: Error
-    ) {
-        print("apple sign in failed:", error.localizedDescription)
-    }
-}
+// Disabled — requires Apple Developer Program enrollment.
+// Re-enable by restoring the delegate conformance and uncommenting appleTapped().
+//
+// extension LoginViewController: ASAuthorizationControllerDelegate,
+//                                 ASAuthorizationControllerPresentationContextProviding {
+//
+//     func presentationAnchor(for controller: ASAuthorizationController) -> ASPresentationAnchor {
+//         return view.window!
+//     }
+//
+//     func authorizationController(
+//         controller: ASAuthorizationController,
+//         didCompleteWithAuthorization authorization: ASAuthorization
+//     ) {
+//         if let credential = authorization.credential as? ASAuthorizationAppleIDCredential {
+//             let given  = credential.fullName?.givenName ?? ""
+//             let family = credential.fullName?.familyName ?? ""
+//             let fullName = [given, family].filter { !$0.isEmpty }.joined(separator: " ")
+//             let existing = UserDefaults.standard.string(forKey: "userName") ?? ""
+//             let name = fullName.isEmpty ? (existing.isEmpty ? "User" : existing) : fullName
+//             saveLogin(name: name)
+//             goToOnboarding()
+//         }
+//     }
+//
+//     func authorizationController(
+//         controller: ASAuthorizationController,
+//         didCompleteWithError error: Error
+//     ) {
+//         print("apple sign in failed:", error.localizedDescription)
+//     }
+// }

@@ -133,7 +133,7 @@ class LanguagePickerViewController: UIViewController, UITableViewDelegate, UITab
             guard let tabBar = storyboard.instantiateViewController(
                 withIdentifier: "MainTabBarViewController"
             ) as? MainTabBarViewController else { return }
-            tabBar.dataModel = DataModel()
+            tabBar.dataModel = AppDataModel.shared
             newRoot = tabBar
         } else {
             guard let nav = storyboard.instantiateInitialViewController() else { return }
