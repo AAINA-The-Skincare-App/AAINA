@@ -173,11 +173,11 @@
 				CODE_SIGN_ENTITLEMENTS = AAINA/AAINA.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 2DAR5QUPS7;
+				DEVELOPMENT_TEAM = 97K2S3QK62;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = AAINA/Info.plist;
 				INFOPLIST_KEY_NSCalendarsUsageDescription = "App needs calendar access to create reminders.";
-				INFOPLIST_KEY_NSCameraUsageDescription = "App uses the camera to scan your skin and personalise your routine.";
+				INFOPLIST_KEY_NSCameraUsageDescription = "AAINA uses the camera to scan product ingredient labels and compare them with your routine.";
 				INFOPLIST_KEY_NSRemindersUsageDescription = "App needs reminders access to create reminders.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
@@ -189,7 +189,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.abc.yogamabar;
+				PRODUCT_BUNDLE_IDENTIFIER = com.AAINA.app;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
@@ -209,11 +209,11 @@
 				CODE_SIGN_ENTITLEMENTS = AAINA/AAINA.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 2DAR5QUPS7;
+				DEVELOPMENT_TEAM = 97K2S3QK62;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = AAINA/Info.plist;
 				INFOPLIST_KEY_NSCalendarsUsageDescription = "App needs calendar access to create reminders.";
-				INFOPLIST_KEY_NSCameraUsageDescription = "App uses the camera to scan your skin and personalise your routine.";
+				INFOPLIST_KEY_NSCameraUsageDescription = "AAINA uses the camera to scan product ingredient labels and compare them with your routine.";
 				INFOPLIST_KEY_NSRemindersUsageDescription = "App needs reminders access to create reminders.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
@@ -225,7 +225,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.geu.Aaina;
+				PRODUCT_BUNDLE_IDENTIFIER = com.AAINA.app;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;

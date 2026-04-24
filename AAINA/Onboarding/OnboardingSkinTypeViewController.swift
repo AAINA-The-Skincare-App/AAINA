@@ -3,7 +3,7 @@ import UIKit
 class OnboardingSkinTypeViewController: UIViewController {
 
     var onboardingData: OnboardingData!
-    var dataModel: DataModel!
+    var dataModel: AppDataModel!
     var isEditingProfile: Bool = false
 
     @IBOutlet var tZoneButtons: [UIButton]!
