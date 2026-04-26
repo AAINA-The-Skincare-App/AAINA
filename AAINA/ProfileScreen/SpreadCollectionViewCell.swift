@@ -24,7 +24,13 @@ class SpreadCollectionViewCell: UICollectionViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        
+
+        // Hide row1 and eliminate the spacing gap it leaves behind
+        row1Stack.isHidden = true
+        if let outerStack = row1Stack.superview as? UIStackView {
+            outerStack.setCustomSpacing(0, after: row1Stack)
+        }
+
         configureIcons()
         setupUI()
         setupTapGestures()

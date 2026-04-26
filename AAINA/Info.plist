@@ -2,14 +2,21 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>NSCameraUsageDescription</key>
-	<string>App uses the camera to scan your skin and personalise your routine.</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLName</key>
+			<string>google</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>com.googleusercontent.apps.205433583227-6bi51k8v04f7i7vv49da4qc1bhogbg9l</string>
+			</array>
+		</dict>
+	</array>
 	<key>NSUserNotificationUsageDescription</key>
 	<string>App sends notifications to alert you when your reminders are due.</string>
-	<key>NSRemindersUsageDescription</key>
-	<string>App needs reminders access to create reminders.</string>
-	<key>NSCalendarsUsageDescription</key>
-	<string>App needs calendar access to create reminders.</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>

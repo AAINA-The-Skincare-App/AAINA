@@ -13,8 +13,9 @@ class JournalViewController: UIViewController {
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var buttonStack: UIStackView!
-    @IBOutlet weak var journalEntryButton: UIButton!
+    @IBOutlet weak var skinLogButton: UIButton!
     @IBOutlet weak var reminderButton: UIButton!
+    @IBOutlet weak var myNotesButton: UIButton!
 
     // MARK: - Reminder store
     let eventStore = EKEventStore()
@@ -32,10 +33,15 @@ class JournalViewController: UIViewController {
     private var allJournalEntries: [JournalEntry] = []
     var journalEntries: [JournalEntry] = []
 
+    // MARK: - Skin log entries
+    private var allSkinLogEntries: [SkinLogEntry] = []
+    var skinLogEntries: [SkinLogEntry] = []
+
     // MARK: - See More / See Less state
     private let maxVisibleRows = 2
     private var remindersExpanded = false
     private var entriesExpanded = false
+    private var skinLogExpanded = false
 
     // MARK: - Lifecycle
     override func viewDidLoad() {
@@ -56,6 +62,7 @@ class JournalViewController: UIViewController {
         super.viewWillAppear(animated)
         filterRemindersForSelectedDate()
         filterEntriesForSelectedDate()
+        filterSkinLogForSelectedDate()
         tableView.reloadData()
     }
 
@@ -67,8 +74,9 @@ class JournalViewController: UIViewController {
 
     // MARK: - Buttons
     private func setupButtons() {
-        applyGlassConfig(to: journalEntryButton, title: " Journal Entry", icon: "plus")
+        applyGlassConfig(to: skinLogButton, title: " Skin Log", icon: "plus")
         applyGlassConfig(to: reminderButton, title: " Reminder", icon: "plus")
+        applyGlassConfig(to: myNotesButton, title: " My Notes", icon: "note.text")
     }
 
     private func applyGlassConfig(to button: UIButton, title: String, icon: String) {
@@ -140,24 +148,32 @@ class JournalViewController: UIViewController {
         scrollTimelineToSelected(animated: true)
         filterRemindersForSelectedDate()
         filterEntriesForSelectedDate()
+        filterSkinLogForSelectedDate()
         tableView.reloadData()
     }
 
     // MARK: - Actions
-    // Block the storyboard segue — we push the VC programmatically below.
-    override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
-        if identifier == "JournalEntryViewController" { return false }
-        return super.shouldPerformSegue(withIdentifier: identifier, sender: sender)
+
+    @IBAction func addSkinLogTapped(_ sender: Any) {
+        let vc = SkinLogViewController()
+        vc.onSave = { [weak self] entry in
+            guard let self else { return }
+            self.allSkinLogEntries.insert(entry, at: 0)
+            self.saveSkinLogEntries()
+            self.filterSkinLogForSelectedDate()
+            self.tableView.reloadSections(IndexSet(integer: 0), with: .automatic)
+        }
+        navigationController?.pushViewController(vc, animated: true)
     }
 
-    @IBAction func addJournalEntryTapped(_ sender: Any) {
+    @IBAction func addMyNotesTapped(_ sender: Any) {
         let vc = JournalEntryViewController()
         vc.onSave = { [weak self] entry in
             guard let self else { return }
             self.allJournalEntries.insert(entry, at: 0)
             self.saveEntries()
             self.filterEntriesForSelectedDate()
-            self.tableView.reloadSections(IndexSet(integer: 1), with: .automatic)
+            self.tableView.reloadSections(IndexSet(integer: 2), with: .automatic)
         }
         navigationController?.pushViewController(vc, animated: true)
     }
@@ -188,7 +204,7 @@ class JournalViewController: UIViewController {
             self.allReminders.append(event)
             self.saveReminders()
             self.filterRemindersForSelectedDate()
-            self.tableView.reloadSections(IndexSet(integer: 0), with: .automatic)
+            self.tableView.reloadSections(IndexSet(integer: 1), with: .automatic)
         }
 
         let nav = UINavigationController(rootViewController: addVC)
@@ -212,6 +228,18 @@ class JournalViewController: UIViewController {
             calendar.isDate($0.date, inSameDayAs: selectedDate)
         }
         entriesExpanded = false
+    }
+
+    private func filterSkinLogForSelectedDate() {
+        guard let selectedDate = date(forIndex: selectedIndex) else {
+            skinLogEntries = allSkinLogEntries
+            return
+        }
+        let calendar = Calendar.current
+        skinLogEntries = allSkinLogEntries.filter {
+            calendar.isDate($0.date, inSameDayAs: selectedDate)
+        }
+        skinLogExpanded = false
     }
 
     private func filterRemindersForSelectedDate() {
@@ -319,23 +347,29 @@ class JournalViewController: UIViewController {
     }
 
     // MARK: - See More / See Less helpers
+    // Section mapping: 0 = Skin Log, 1 = Reminders, 2 = My Notes
     private func visibleCount(for section: Int) -> Int {
-        let total = section == 0 ? reminders.count : journalEntries.count
-        let expanded = section == 0 ? remindersExpanded : entriesExpanded
-        return expanded ? total : min(total, maxVisibleRows)
+        switch section {
+        case 0:  return skinLogExpanded    ? skinLogEntries.count  : min(skinLogEntries.count, maxVisibleRows)
+        case 1:  return remindersExpanded  ? reminders.count       : min(reminders.count, maxVisibleRows)
+        default: return entriesExpanded    ? journalEntries.count  : min(journalEntries.count, maxVisibleRows)
+        }
     }
 
     private func needsToggleButton(for section: Int) -> Bool {
-        let total = section == 0 ? reminders.count : journalEntries.count
-        return total > maxVisibleRows
+        switch section {
+        case 0:  return skinLogEntries.count > maxVisibleRows
+        case 1:  return reminders.count > maxVisibleRows
+        default: return journalEntries.count > maxVisibleRows
+        }
     }
 
     @objc private func seeMoreTapped(_ sender: UIButton) {
         let section = sender.tag
-        if section == 0 {
-            remindersExpanded.toggle()
-        } else {
-            entriesExpanded.toggle()
+        switch section {
+        case 0:  skinLogExpanded.toggle()
+        case 1:  remindersExpanded.toggle()
+        default: entriesExpanded.toggle()
         }
         tableView.reloadSections(IndexSet(integer: section), with: .automatic)
     }
@@ -380,6 +414,7 @@ extension JournalViewController: UICollectionViewDataSource, UICollectionViewDel
         scrollTimelineToSelected(animated: true)
         filterRemindersForSelectedDate()
         filterEntriesForSelectedDate()
+        filterSkinLogForSelectedDate()
         tableView.reloadData()
     }
 }
@@ -387,7 +422,7 @@ extension JournalViewController: UICollectionViewDataSource, UICollectionViewDel
 // MARK: - Table View (reminders + entries)
 extension JournalViewController: UITableViewDataSource, UITableViewDelegate {
 
-    func numberOfSections(in tableView: UITableView) -> Int { 2 }
+    func numberOfSections(in tableView: UITableView) -> Int { 3 }
 
     func tableView(_ tableView: UITableView,
                    numberOfRowsInSection section: Int) -> Int {
@@ -396,17 +431,25 @@ extension JournalViewController: UITableViewDataSource, UITableViewDelegate {
 
     func tableView(_ tableView: UITableView,
                    cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if indexPath.section == 1 {
+        // Section 0 = Skin Log, 1 = Reminders, 2 = My Notes
+        switch indexPath.section {
+        case 0:
             let cell = tableView.dequeueReusableCell(
                 withIdentifier: "EntryCollectionViewCell", for: indexPath
             ) as! EntryCollectionViewCell
-            cell.configure(entry: journalEntries[indexPath.row])
+            cell.configure(skinLog: skinLogEntries[indexPath.row])
             return cell
-        } else {
+        case 1:
             let cell = tableView.dequeueReusableCell(
                 withIdentifier: "ReminderTableViewCell", for: indexPath
             ) as! ReminderTableViewCell
             cell.configure(with: reminders[indexPath.row])
+            return cell
+        default:
+            let cell = tableView.dequeueReusableCell(
+                withIdentifier: "EntryCollectionViewCell", for: indexPath
+            ) as! EntryCollectionViewCell
+            cell.configure(entry: journalEntries[indexPath.row])
             return cell
         }
     }
@@ -414,10 +457,10 @@ extension JournalViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView,
                    viewForHeaderInSection section: Int) -> UIView? {
         let header = Bundle.main.loadNibNamed("SectionHeaderView", owner: nil)?.first as! SectionHeaderView
-        if section == 0 {
-            header.configure(title: "Reminders", subtitle: remindersHeaderSubtitle())
-        } else {
-            header.configure(title: "My Entries", subtitle: selectedDateLabel())
+        switch section {
+        case 0: header.configure(title: "Skin Log", subtitle: selectedDateLabel())
+        case 1: header.configure(title: "Reminders", subtitle: remindersHeaderSubtitle())
+        default: header.configure(title: "My Notes", subtitle: selectedDateLabel())
         }
         return header
     }
@@ -452,7 +495,12 @@ extension JournalViewController: UITableViewDataSource, UITableViewDelegate {
                    viewForFooterInSection section: Int) -> UIView? {
         guard needsToggleButton(for: section) else { return nil }
 
-        let expanded = section == 0 ? remindersExpanded : entriesExpanded
+        let expanded: Bool
+        switch section {
+        case 0: expanded = skinLogExpanded
+        case 1: expanded = remindersExpanded
+        default: expanded = entriesExpanded
+        }
 
         let footer = UIView()
         footer.backgroundColor = .clear
@@ -482,7 +530,7 @@ extension JournalViewController: UITableViewDataSource, UITableViewDelegate {
 
     func tableView(_ tableView: UITableView,
                    heightForRowAt indexPath: IndexPath) -> CGFloat {
-        indexPath.section == 1 ? 100 : 88
+        indexPath.section == 1 ? 88 : 100  // Reminders are shorter
     }
 
     // Swipe left → Delete
@@ -490,21 +538,24 @@ extension JournalViewController: UITableViewDataSource, UITableViewDelegate {
                    trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         let action = UIContextualAction(style: .destructive, title: "Delete") { [weak self] _, _, done in
             guard let self else { return done(false) }
-            if indexPath.section == 0 {
+            // Section 0 = Skin Log, 1 = Reminders, 2 = My Notes
+            switch indexPath.section {
+            case 0:
+                let removed = self.skinLogEntries.remove(at: indexPath.row)
+                self.allSkinLogEntries.removeAll { $0.id == removed.id }
+                self.saveSkinLogEntries()
+                if self.skinLogEntries.count <= self.maxVisibleRows { self.skinLogExpanded = false }
+            case 1:
                 let removed = self.reminders.remove(at: indexPath.row)
                 self.cancelNotification(for: removed)
                 self.allReminders.removeAll { $0 === removed }
                 self.saveReminders()
-                if self.reminders.count <= self.maxVisibleRows {
-                    self.remindersExpanded = false
-                }
-            } else {
+                if self.reminders.count <= self.maxVisibleRows { self.remindersExpanded = false }
+            default:
                 let removed = self.journalEntries.remove(at: indexPath.row)
                 self.allJournalEntries.removeAll { $0.id == removed.id }
                 self.saveEntries()
-                if self.journalEntries.count <= self.maxVisibleRows {
-                    self.entriesExpanded = false
-                }
+                if self.journalEntries.count <= self.maxVisibleRows { self.entriesExpanded = false }
             }
             tableView.performBatchUpdates({
                 tableView.deleteRows(at: [indexPath], with: .automatic)
@@ -518,13 +569,30 @@ extension JournalViewController: UITableViewDataSource, UITableViewDelegate {
         return UISwipeActionsConfiguration(actions: [action])
     }
 
-    // Tap entry → show notes
+    // Tap entry → show notes / export skin log
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        guard indexPath.section == 1 else { return }
-        let entry = journalEntries[indexPath.row]
-        let vc = NotesEditorViewController()
-        vc.initialText = entry.note
-        navigationController?.pushViewController(vc, animated: true)
+        if indexPath.section == 0 {
+            // Skin log: offer PDF export
+            let entry = skinLogEntries[indexPath.row]
+            exportSkinLogAsPDF(entry)
+        } else if indexPath.section == 2 {
+            let entry = journalEntries[indexPath.row]
+            let vc = NotesEditorViewController()
+            vc.initialText = entry.note
+            navigationController?.pushViewController(vc, animated: true)
+        }
+    }
+
+    private func exportSkinLogAsPDF(_ entry: SkinLogEntry) {
+        let sheet = UIAlertController(title: "Skin Log", message: nil, preferredStyle: .actionSheet)
+        sheet.addAction(UIAlertAction(title: "Export as PDF", style: .default) { [weak self] _ in
+            guard let self else { return }
+            let pdf = SkinLogPDFExporter.generate(from: entry)
+            let av  = UIActivityViewController(activityItems: [pdf], applicationActivities: nil)
+            self.present(av, animated: true)
+        })
+        sheet.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+        present(sheet, animated: true)
     }
 
 }
@@ -620,11 +688,23 @@ extension JournalViewController {
         modelDirectory.appendingPathComponent("journal_reminders.json")
     }
 
+    private static var skinLogFileURL: URL {
+        modelDirectory.appendingPathComponent("skin_log_entries.json")
+    }
+
     func saveEntries() {
         let encoder = JSONEncoder()
         encoder.dateEncodingStrategy = .iso8601
         if let data = try? encoder.encode(allJournalEntries) {
             try? data.write(to: Self.entriesFileURL)
+        }
+    }
+
+    func saveSkinLogEntries() {
+        let encoder = JSONEncoder()
+        encoder.dateEncodingStrategy = .iso8601
+        if let data = try? encoder.encode(allSkinLogEntries) {
+            try? data.write(to: Self.skinLogFileURL)
         }
     }
 
@@ -648,6 +728,12 @@ extension JournalViewController {
         if let data = try? Data(contentsOf: Self.entriesFileURL),
            let entries = try? decoder.decode([JournalEntry].self, from: data) {
             allJournalEntries = entries
+        }
+
+        // Load skin log entries
+        if let data = try? Data(contentsOf: Self.skinLogFileURL),
+           let entries = try? decoder.decode([SkinLogEntry].self, from: data) {
+            allSkinLogEntries = entries
         }
 
         // Load reminders — reconstruct EKEvent objects from stored data

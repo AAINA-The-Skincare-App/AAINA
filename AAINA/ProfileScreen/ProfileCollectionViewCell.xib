@@ -37,7 +37,7 @@
                                 </constraints>
                                 <color key="tintColor" name="primarypink"/>
                                 <state key="normal" title="Button"/>
-                                <buttonConfiguration key="configuration" style="plain" image="pencil" catalog="system"/>
+                                <buttonConfiguration key="configuration" style="plain" image="camera.fill" catalog="system"/>
                             </button>
                             <stackView opaque="NO" contentMode="scaleToFill" alignment="center" spacing="16" translatesAutoresizingMaskIntoConstraints="NO" id="rUT-4R-e9H">
                                 <rect key="frame" x="114" y="16" width="423" height="81.666666666666671"/>
@@ -110,7 +110,7 @@
     </objects>
     <resources>
         <image name="background" width="1302" height="1600"/>
-        <image name="pencil" catalog="system" width="128" height="113"/>
+        <image name="camera.fill" catalog="system" width="128" height="93"/>
         <namedColor name="primarypink">
             <color red="0.85098039215686272" green="0.44313725490196076" blue="0.50980392156862742" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>

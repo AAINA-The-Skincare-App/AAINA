@@ -22,10 +22,26 @@ class ReachCollectionViewCell: UICollectionViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        
+
         setupUI()
         configureIcons()
         setupTapGestures()
+        hideEmailSubtitle()
+    }
+
+    // Remove the "mailto:..." subtitle so both rows are the same height
+    private func hideEmailSubtitle() {
+        func hideMailto(in view: UIView) {
+            for sub in view.subviews {
+                if let label = sub as? UILabel,
+                   label.text?.lowercased().contains("mailto") == true {
+                    label.isHidden = true
+                    label.text = nil
+                }
+                hideMailto(in: sub)
+            }
+        }
+        hideMailto(in: containerView)
     }
     
     
