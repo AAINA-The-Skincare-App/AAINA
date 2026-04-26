@@ -1,36 +1,30 @@
 import UIKit
 
+//
+//  CalendarDateCell.swift
+//  AAINA
+//
+//  Created by GEU on 27/03/26.
+//
+
+import UIKit
+
 final class CalendarDateCell: UICollectionViewCell {
 
     private let label = UILabel()
-    private let circleView = UIView()
 
     override init(frame: CGRect) {
         super.init(frame: frame)
 
-        // Circle View
-        circleView.translatesAutoresizingMaskIntoConstraints = false
-        circleView.layer.cornerRadius = 17       // 🔥 half of 34 — set once here, not in layoutSubviews
-        circleView.layer.cornerCurve = .circular
-        circleView.layer.masksToBounds = true
-        contentView.addSubview(circleView)
-
-        NSLayoutConstraint.activate([
-            circleView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-            circleView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
-            circleView.widthAnchor.constraint(equalToConstant: 34),
-            circleView.heightAnchor.constraint(equalToConstant: 34)
-        ])
-
-        // Label
-        label.translatesAutoresizingMaskIntoConstraints = false
         label.textAlignment = .center
         label.font = .systemFont(ofSize: 16, weight: .medium)
+        label.translatesAutoresizingMaskIntoConstraints = false
+
         contentView.addSubview(label)
 
         NSLayoutConstraint.activate([
-            label.centerXAnchor.constraint(equalTo: circleView.centerXAnchor),
-            label.centerYAnchor.constraint(equalTo: circleView.centerYAnchor)
+            label.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            label.centerYAnchor.constraint(equalTo: contentView.centerYAnchor)
         ])
     }
 
@@ -38,27 +32,15 @@ final class CalendarDateCell: UICollectionViewCell {
         fatalError()
     }
 
-    // layoutSubviews no longer needed for corner radius
-
-    func configure(text: String, selected: Bool, isToday: Bool) {
+    func configure(text: String, selected: Bool) {
         label.text = text
 
-        if text.isEmpty {
-            circleView.backgroundColor = .clear
-            label.textColor = .clear
-            return
-        }
-
         if selected {
-            circleView.backgroundColor = UIColor.ainaCoralPink
+            contentView.backgroundColor = .ainaCoralPink.withAlphaComponent(0.75)
+            contentView.layer.cornerRadius = 22
             label.textColor = .white
-
-        } else if isToday {
-            circleView.backgroundColor = UIColor.ainaCoralPink.withAlphaComponent(0.2)
-            label.textColor = UIColor.ainaCoralPink
-
         } else {
-            circleView.backgroundColor = .clear
+            contentView.backgroundColor = .clear
             label.textColor = .label
         }
     }
