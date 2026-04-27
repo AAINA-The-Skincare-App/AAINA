@@ -30,6 +30,17 @@ class EntryCollectionViewCell: UITableViewCell {
         let f = DateFormatter(); f.timeStyle = .short; return f
     }()
 
+    func configure(skinLog: SkinLogEntry) {
+        let prefix = skinLog.isFlareUp ? "🔴 " : "✅ "
+        entryLabel.text = skinLog.note.isEmpty ? "\(prefix)Skin log" : "\(prefix)\(skinLog.note)"
+        timeLabel.text  = Self.timeFmt.string(from: skinLog.date)
+        tagsStack.arrangedSubviews.forEach { $0.removeFromSuperview() }
+        for tag in skinLog.flareUps { tagsStack.addArrangedSubview(makeTagView(tag)) }
+        if !skinLog.photoFileNames.isEmpty {
+            tagsStack.addArrangedSubview(makePhotoChip(count: skinLog.photoFileNames.count))
+        }
+    }
+
     func configure(entry: JournalEntry) {
         entryLabel.text = entry.note.isEmpty ? "No notes" : entry.note
         timeLabel.text  = Self.timeFmt.string(from: entry.date)

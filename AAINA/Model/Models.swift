@@ -248,6 +248,31 @@ struct JournalEntry: Codable {
     }
 }
 
+// MARK: - Skin Log Entry
+
+struct SkinLogEntry: Codable {
+    let id: String
+    let date: Date
+    let isFlareUp: Bool
+    let flareUps: [String]    // skin concerns (Acne, Redness, etc.)
+    let note: String
+    let photoFileNames: [String]
+
+    init(id: String = String(Date().timeIntervalSince1970),
+         date: Date = Date(),
+         isFlareUp: Bool,
+         flareUps: [String],
+         note: String,
+         photoFileNames: [String] = []) {
+        self.id = id
+        self.date = date
+        self.isFlareUp = isFlareUp
+        self.flareUps = flareUps
+        self.note = note
+        self.photoFileNames = photoFileNames
+    }
+}
+
 // MARK: - Weekly Progress
 
 struct WeeklyProgress: Codable {

@@ -22,9 +22,14 @@ class IngredientCardView: UIView {
     private func setup(iconView: UIView?) {
 
         // MARK: - Card Styling
-        backgroundColor = .systemGray6
+        backgroundColor = UIColor.white.withAlphaComponent(0.78)
         layer.cornerRadius = 20
-        clipsToBounds = true
+        layer.cornerCurve = .continuous
+        layer.shadowColor = UIColor.ainaCardShadowColor.cgColor
+        layer.shadowOpacity = 0.08
+        layer.shadowRadius = 14
+        layer.shadowOffset = CGSize(width: 0, height: 5)
+        clipsToBounds = false
 
         // MARK: - Main Stack (HORIZONTAL)
         mainStack.axis = .horizontal
@@ -69,7 +74,7 @@ class IngredientCardView: UIView {
 
         // MARK: - Add Views
         stack.addArrangedSubview(titleLabel)
-        stack.setCustomSpacing(8, after: titleLabel) 
+        stack.setCustomSpacing(8, after: titleLabel)
         stack.addArrangedSubview(textLabel)
     }
 

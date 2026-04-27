@@ -57,14 +57,30 @@ struct RoutinePromptBuilder {
         All productType values must be lowercase exactly as shown above.
         "reason" and "usage" must each be 2-3 sentences max.
 
+        \(imageProvided ? "Also analyse the attached face image and fill the scanResult field." : "No image — infer scanResult from the user profile.")
+        scanResult.skinType: one of Oily, Dry, Combination, Normal
+        scanResult.skinTone: one of Fair, Medium, Olive, Deep, Rich
+        scanResult.concerns: list up to 4 visible concerns, each with name, severity (mild/moderate/notable), area
+        scanResult.summary: 1–2 sentences plain English about the skin
+
         Return this exact JSON structure, nothing else:
         {
-          "morning": [
-            { "id": "uuid-string", "stepNumber": 1, "productType": "cleanser", "productName": "", "keyIngredients": [], "reason": "", "usage": "", "isUserAdded": false }
-          ],
-          "evening": [
-            { "id": "uuid-string", "stepNumber": 1, "productType": "cleanser", "productName": "", "keyIngredients": [], "reason": "", "usage": "", "isUserAdded": false }
-          ]
+          "routine": {
+            "morning": [
+              { "id": "uuid-string", "stepNumber": 1, "productType": "cleanser", "productName": "", "keyIngredients": [], "reason": "", "usage": "", "isUserAdded": false }
+            ],
+            "evening": [
+              { "id": "uuid-string", "stepNumber": 1, "productType": "cleanser", "productName": "", "keyIngredients": [], "reason": "", "usage": "", "isUserAdded": false }
+            ]
+          },
+          "scanResult": {
+            "skinType": "",
+            "skinTone": "",
+            "concerns": [
+              { "name": "", "severity": "", "area": "" }
+            ],
+            "summary": ""
+          }
         }
         """
     }

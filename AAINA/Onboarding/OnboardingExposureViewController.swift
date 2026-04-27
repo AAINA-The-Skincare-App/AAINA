@@ -3,49 +3,66 @@ import UIKit
 class OnboardingExposureViewController: UIViewController {
 
     var onboardingData: OnboardingData!
-    var dataModel: DataModel!
+    var dataModel: AppDataModel!
 
     @IBOutlet weak var exposureCardView: UIView!
     @IBOutlet var exposureButtons: [UIButton]!
-    @IBOutlet weak var nextButton: UIButton!   // Connect this
+    @IBOutlet weak var nextButton: UIButton!
+    @IBOutlet weak var progressView: UIProgressView!
 
     // MARK: - Lifecycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        setupButtons()
+        view.applyAINABackground()
+
         setupCard()
+
+        progressView.progressTintColor = .ainaCoralPink
+        progressView.trackTintColor = UIColor.ainaRoseLight.withAlphaComponent(0.3)
+
+        setupButtons()
         setupNextButton()
     }
 
     // MARK: - UI Setup
 
     private func setupCard() {
-        exposureCardView.layer.cornerRadius = 22
-        exposureCardView.layer.cornerCurve = .continuous
+        exposureCardView.backgroundColor = .clear
 
-        exposureCardView.backgroundColor = .white   // ✅ match others
+      
+        exposureCardView.applyGlass(cornerRadius: 24)
 
-        exposureCardView.layer.shadowColor = UIColor.black.cgColor
-        exposureCardView.layer.shadowOpacity = 0.06
-        exposureCardView.layer.shadowOffset = CGSize(width: 0, height: 6)   // ✅ same as others
-        exposureCardView.layer.shadowRadius = 12
+        exposureCardView.layer.shadowColor = UIColor.ainaCardShadowColor.cgColor
+        exposureCardView.layer.shadowOpacity = 0.10
+        exposureCardView.layer.shadowOffset = CGSize(width: 0, height: 8)
+        exposureCardView.layer.shadowRadius = 20
+        exposureCardView.layer.masksToBounds = false
 
-        exposureCardView.layer.masksToBounds = false   // ✅ IMPORTANT for shadow
+        exposureCardView.layer.borderWidth = 1
+        exposureCardView.layer.borderColor = UIColor.white.withAlphaComponent(0.2).cgColor
     }
 
     private func setupButtons() {
         exposureButtons.forEach {
+
             $0.layer.cornerRadius = 22
+
+            // MATCH OTHER SCREENS
+            $0.backgroundColor = UIColor.white.withAlphaComponent(0.25)
+
             $0.layer.borderWidth = 1
-            $0.layer.borderColor = UIColor.systemGray4.cgColor
-            $0.backgroundColor = .systemBackground
-            $0.setTitleColor(.label, for: .normal)
+            $0.layer.borderColor = UIColor.ainaTextTertiary.withAlphaComponent(0.25).cgColor
+
+            $0.setTitleColor(.ainaTextPrimary, for: .normal)
         }
     }
 
     private func setupNextButton() {
+        nextButton.layer.cornerRadius = 20
+        nextButton.backgroundColor = .ainaCoralPink
+        nextButton.setTitleColor(.white, for: .normal)
         nextButton.isEnabled = false
         nextButton.alpha = 0.5
     }
@@ -69,10 +86,7 @@ class OnboardingExposureViewController: UIViewController {
 
     @IBAction func finishTapped(_ sender: UIButton) {
 
-        guard onboardingData.uvExposure != nil else {
-            print("No UV exposure selected")
-            return
-        }
+        guard onboardingData.uvExposure != nil else { return }
 
         saveToUserDefaults(onboardingData)
 
@@ -90,12 +104,13 @@ class OnboardingExposureViewController: UIViewController {
 
             if button == selected {
 
-                button.backgroundColor = UIColor.systemBlue.withAlphaComponent(0.15)
-                button.setTitleColor(.systemBlue, for: .normal)
-                button.layer.borderColor = UIColor.systemBlue.cgColor
-                button.layer.borderWidth = 1.5
+                // MATCH SELECTED STYLE
+                button.backgroundColor = UIColor.ainaCoralPink.withAlphaComponent(0.15)
+                button.layer.borderColor = UIColor.ainaCoralPink.cgColor
+                button.layer.borderWidth = 1
 
-                // subtle animation
+                button.setTitleColor(.ainaCoralPink, for: .normal)
+
                 UIView.animate(withDuration: 0.15,
                                animations: {
                     button.transform = CGAffineTransform(scaleX: 0.96, y: 0.96)
@@ -107,10 +122,12 @@ class OnboardingExposureViewController: UIViewController {
 
             } else {
 
-                button.backgroundColor = .systemBackground
-                button.setTitleColor(.label, for: .normal)
-                button.layer.borderColor = UIColor.systemGray4.cgColor
+                // MATCH UNSELECTED STYLE
+                button.backgroundColor = UIColor.white.withAlphaComponent(0.25)
+                button.layer.borderColor = UIColor.ainaTextTertiary.withAlphaComponent(0.25).cgColor
                 button.layer.borderWidth = 1
+
+                button.setTitleColor(.ainaTextPrimary, for: .normal)
             }
         }
     }

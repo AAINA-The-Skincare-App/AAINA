@@ -50,41 +50,58 @@ class SkinProfileCollectionViewCell: UICollectionViewCell {
     
     // MARK: - UI Setup
     private func setupUI() {
-        containerView.layer.cornerRadius = 16
-        containerView.layer.shadowColor = UIColor.black.cgColor
-        containerView.layer.shadowOpacity = 0.05
+        containerView.backgroundColor = .ainaGlassSurface
+
+        containerView.layer.cornerRadius = 20
+        containerView.layer.borderWidth = 1
+        containerView.layer.borderColor = UIColor.white.withAlphaComponent(0.25).cgColor
+
+        containerView.layer.shadowColor = UIColor.ainaCardShadowColor.cgColor
+        containerView.layer.shadowOpacity = 0.08
         containerView.layer.shadowOffset = CGSize(width: 0, height: 8)
-        containerView.layer.shadowRadius = 10
-        containerView.layer.masksToBounds = false
-        
-        contentView.backgroundColor = .clear
-        backgroundColor = .clear
+        containerView.layer.shadowRadius = 16
     }
     
     // MARK: - Data Setup
     private func setupData() {
-        
+        UserDefaults.standard.synchronize()
         icon1.image = UIImage(systemName: "drop.fill")
         title1.text = "Skin Type"
-        subtitle1.text = "Combination"
-        
+
+        var skinTypeText = "Not set"
+        if let data = UserDefaults.standard.data(forKey: "onboardingData"),
+           let od = try? JSONDecoder().decode(OnboardingData.self, from: data),
+           let t = od.tZone, let u = od.uZone, let c = od.cZone {
+            let zones = [t, u, c]
+            let counts = Dictionary(grouping: zones) { $0 }.mapValues { $0.count }
+            let dominant = counts.max(by: { $0.value < $1.value })?.key ?? .normal
+            skinTypeText = dominant.rawValue.capitalized
+        } else if let profile = AppDataModel.shared.userProfile {
+            skinTypeText = profile.dominantSkinType.rawValue.capitalized
+        }
+        subtitle1.text = skinTypeText
+
         icon2.image = UIImage(systemName: "exclamationmark.circle")
         title2.text = "Skin Concerns"
         subtitle2.text = "4 Concerns"
-        
+
         icon3.image = UIImage(systemName: "waveform.path.ecg")
         title3.text = "Skin Sensitivity"
         subtitle3.text = "Normal"
-        
+
         icon4.image = UIImage(systemName: "target")
         title4.text = "Skin Goals"
-        subtitle4.text = "3 Goals"
-        
+        if let data = UserDefaults.standard.data(forKey: "onboardingData"),
+           let od = try? JSONDecoder().decode(OnboardingData.self, from: data) {
+            subtitle4.text = od.goals.isEmpty ? "None" : "\(od.goals.count) Goals"
+        } else if let profile = AppDataModel.shared.userProfile {
+            subtitle4.text = profile.goals.isEmpty ? "None" : "\(profile.goals.count) Goals"
+        }
+
         icon5.image = UIImage(systemName: "bookmark")
         title5.text = "Saved Routines"
         subtitle5.text = ""
     }
-    
     // MARK: - Gestures
     private func setupGestures() {
         setupTap(for: row1Stack, index: 0)
@@ -119,4 +136,20 @@ class SkinProfileCollectionViewCell: UICollectionViewCell {
             }
         }
     }
+    func refreshData() {
+        setupData()
+    }
+    func updateSkinType(_ text: String) {
+        subtitle1.text = text
+    }
+    func updateGoals(_ text: String) {
+        subtitle4.text = text
+    }
+    func updateSensitivity(_ text: String) {
+        subtitle3.text = text
+    }
+    func updateConcerns(_ text: String) {
+        subtitle2.text = text
+    }
 }
+ 

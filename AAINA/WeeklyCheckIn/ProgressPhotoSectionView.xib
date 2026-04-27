@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="24506" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24504"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="pps-root" customClass="ProgressPhotoSectionView" customModule="AAINA" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <stackView contentMode="scaleToFill" axis="vertical" spacing="12" translatesAutoresizingMaskIntoConstraints="NO" id="pps-outer">
+                    <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                    <subviews>
+                        <label opaque="NO" contentMode="scaleToFill" text="PROGRESS PHOTO" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pps-hdr">
+                            <rect key="frame" x="0.0" y="0.0" width="393" height="660"/>
+                            <fontDescription key="fontDescription" type="boldSystem" pointSize="12"/>
+                            <color key="textColor" red="0.78000000000000003" green="0.47999999999999998" blue="0.60999999999999999" alpha="1" colorSpace="calibratedRGB"/>
+                        </label>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="pps-container">
+                            <rect key="frame" x="0.0" y="672" width="393" height="180"/>
+                            <subviews>
+                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="pps-iconbg">
+                                    <rect key="frame" x="166.66666666666666" y="30" width="60" height="60"/>
+                                    <subviews>
+                                        <imageView contentMode="scaleAspectFit" image="photo" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="pps-icon">
+                                            <rect key="frame" x="15.666666666666684" y="19.666666666666664" width="28.333333333333329" height="21.000000000000007"/>
+                                            <color key="tintColor" red="0.7275390625" green="0.3813476562" blue="0.4782714844" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                        </imageView>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstAttribute="height" constant="60" id="pps-ibh"/>
+                                        <constraint firstAttribute="width" constant="60" id="pps-ibw"/>
+                                        <constraint firstItem="pps-icon" firstAttribute="centerX" secondItem="pps-iconbg" secondAttribute="centerX" id="pps-ic1"/>
+                                        <constraint firstItem="pps-icon" firstAttribute="centerY" secondItem="pps-iconbg" secondAttribute="centerY" id="pps-ic2"/>
+                                        <constraint firstItem="pps-icon" firstAttribute="width" secondItem="pps-iconbg" secondAttribute="width" multiplier="0.467" id="pps-ic3"/>
+                                        <constraint firstItem="pps-icon" firstAttribute="height" secondItem="pps-iconbg" secondAttribute="height" multiplier="0.4" id="pps-ic4"/>
+                                    </constraints>
+                                </view>
+                                <label opaque="NO" contentMode="scaleToFill" text="Add this week's photo" textAlignment="center" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pps-lbl1">
+                                    <rect key="frame" x="110.66666666666669" y="102" width="172" height="19.333333333333329"/>
+                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="16"/>
+                                    <color key="textColor" red="0.16500000000000001" green="0.16500000000000001" blue="0.16500000000000001" alpha="1" colorSpace="calibratedRGB"/>
+                                </label>
+                                <label opaque="NO" contentMode="scaleToFill" text="Track your skin's progress visually" textAlignment="center" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pps-lbl2">
+                                    <rect key="frame" x="92.666666666666671" y="125.33333333333339" width="207.66666666666663" height="15.666666666666671"/>
+                                    <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                    <color key="textColor" red="0.54100000000000004" green="0.54100000000000004" blue="0.54100000000000004" alpha="1" colorSpace="calibratedRGB"/>
+                                </label>
+                                <imageView hidden="YES" contentMode="scaleAspectFill" translatesAutoresizingMaskIntoConstraints="NO" id="pps-photo">
+                                    <rect key="frame" x="0.0" y="0.0" width="393" height="180"/>
+                                </imageView>
+                            </subviews>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="180" id="pps-h"/>
+                                <constraint firstItem="pps-iconbg" firstAttribute="top" secondItem="pps-container" secondAttribute="top" constant="30" id="pps-pc1"/>
+                                <constraint firstItem="pps-photo" firstAttribute="bottom" secondItem="pps-container" secondAttribute="bottom" id="pps-pc10"/>
+                                <constraint firstItem="pps-iconbg" firstAttribute="centerX" secondItem="pps-container" secondAttribute="centerX" id="pps-pc2"/>
+                                <constraint firstItem="pps-lbl1" firstAttribute="top" secondItem="pps-iconbg" secondAttribute="bottom" constant="12" id="pps-pc3"/>
+                                <constraint firstItem="pps-lbl1" firstAttribute="centerX" secondItem="pps-container" secondAttribute="centerX" id="pps-pc4"/>
+                                <constraint firstItem="pps-lbl2" firstAttribute="top" secondItem="pps-lbl1" secondAttribute="bottom" constant="4" id="pps-pc5"/>
+                                <constraint firstItem="pps-lbl2" firstAttribute="centerX" secondItem="pps-container" secondAttribute="centerX" id="pps-pc6"/>
+                                <constraint firstItem="pps-photo" firstAttribute="top" secondItem="pps-container" secondAttribute="top" id="pps-pc7"/>
+                                <constraint firstItem="pps-photo" firstAttribute="leading" secondItem="pps-container" secondAttribute="leading" id="pps-pc8"/>
+                                <constraint firstItem="pps-photo" firstAttribute="trailing" secondItem="pps-container" secondAttribute="trailing" id="pps-pc9"/>
+                            </constraints>
+                        </view>
+                    </subviews>
+                </stackView>
+            </subviews>
+            <constraints>
+                <constraint firstItem="pps-outer" firstAttribute="top" secondItem="pps-root" secondAttribute="top" id="pps-r1"/>
+                <constraint firstItem="pps-outer" firstAttribute="leading" secondItem="pps-root" secondAttribute="leading" id="pps-r2"/>
+                <constraint firstItem="pps-outer" firstAttribute="trailing" secondItem="pps-root" secondAttribute="trailing" id="pps-r3"/>
+                <constraint firstItem="pps-outer" firstAttribute="bottom" secondItem="pps-root" secondAttribute="bottom" id="pps-r4"/>
+            </constraints>
+            <connections>
+                <outlet property="addPhotoLabel" destination="pps-lbl1" id="pps-o3"/>
+                <outlet property="addPhotoSubLabel" destination="pps-lbl2" id="pps-o4"/>
+                <outlet property="iconBackground" destination="pps-iconbg" id="pps-o5"/>
+                <outlet property="photoContainerView" destination="pps-container" id="pps-o1"/>
+                <outlet property="photoImageView" destination="pps-photo" id="pps-o2"/>
+            </connections>
+            <point key="canvasLocation" x="138" y="129"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="photo" catalog="system" width="128" height="93"/>
+    </resources>
+</document>

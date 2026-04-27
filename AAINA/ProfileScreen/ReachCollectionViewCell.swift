@@ -5,7 +5,6 @@ class ReachCollectionViewCell: UICollectionViewCell {
     // MARK: - Outlets
     
     @IBOutlet weak var containerView: UIView!
-    
     @IBOutlet weak var row1Stack: UIStackView!
     @IBOutlet weak var row2Stack: UIStackView!
     
@@ -23,10 +22,26 @@ class ReachCollectionViewCell: UICollectionViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        
+
         setupUI()
         configureIcons()
         setupTapGestures()
+        hideEmailSubtitle()
+    }
+
+    // Remove the "mailto:..." subtitle so both rows are the same height
+    private func hideEmailSubtitle() {
+        func hideMailto(in view: UIView) {
+            for sub in view.subviews {
+                if let label = sub as? UILabel,
+                   label.text?.lowercased().contains("mailto") == true {
+                    label.isHidden = true
+                    label.text = nil
+                }
+                hideMailto(in: sub)
+            }
+        }
+        hideMailto(in: containerView)
     }
     
     
@@ -34,15 +49,16 @@ class ReachCollectionViewCell: UICollectionViewCell {
     
     private func setupUI() {
         
-        // Card styling
-        containerView.layer.cornerRadius = 16
-        containerView.backgroundColor = .systemBackground
-        
-        // Light shadow
-        containerView.layer.shadowColor = UIColor.black.cgColor
-        containerView.layer.shadowOpacity = 0.05
-        containerView.layer.shadowOffset = CGSize(width: 0, height: 5)
-        containerView.layer.shadowRadius = 10
+        containerView.backgroundColor = .ainaGlassSurface
+
+        containerView.layer.cornerRadius = 20
+        containerView.layer.borderWidth = 1
+        containerView.layer.borderColor = UIColor.white.withAlphaComponent(0.25).cgColor
+
+        containerView.layer.shadowColor = UIColor.ainaCardShadowColor.cgColor
+        containerView.layer.shadowOpacity = 0.08
+        containerView.layer.shadowOffset = CGSize(width: 0, height: 8)
+        containerView.layer.shadowRadius = 16
     }
     
     
@@ -58,7 +74,6 @@ class ReachCollectionViewCell: UICollectionViewCell {
         let icons = [icon1, icon2,icon3,icon4]
         
         icons.forEach {
-            $0?.tintColor = .systemGray
             $0?.contentMode = .scaleAspectFit
         }
     }

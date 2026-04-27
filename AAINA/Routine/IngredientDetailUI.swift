@@ -8,21 +8,30 @@ class IngredientDetailUI {
 
     func build(in view: UIView, ingredient: Ingredient) {
 
-        // MARK: - Stack config
-        stack.axis = .vertical
-        stack.spacing = 24
-        stack.translatesAutoresizingMaskIntoConstraints = false
+            //  Background
+            view.backgroundColor = .clear
+            view.applyAINABackground()
 
-        // MARK: - ScrollView config
-        scrollView.translatesAutoresizingMaskIntoConstraints = false
-        scrollView.alwaysBounceVertical = true
-        scrollView.showsVerticalScrollIndicator = false
+            // MARK: Stack
+            stack.axis = .vertical
+            stack.spacing = 24
+            stack.translatesAutoresizingMaskIntoConstraints = false
+            stack.backgroundColor = .clear
 
-        // MARK: - Hierarchy
-        view.addSubview(scrollView)
-        scrollView.addSubview(stack)
-        scrollView.contentInsetAdjustmentBehavior = .automatic
+            // MARK: ScrollView
+            scrollView.translatesAutoresizingMaskIntoConstraints = false
+            scrollView.alwaysBounceVertical = true
+            scrollView.showsVerticalScrollIndicator = false
+            scrollView.backgroundColor = .clear
 
+            // MARK: Hierarchy
+            view.addSubview(scrollView)
+            scrollView.addSubview(stack)
+
+            //  ADD BLOBS (correct layering)
+            addBlobs(to: view)
+
+            scrollView.contentInsetAdjustmentBehavior = .automatic
         // MARK: - Constraints (FIXED )
         NSLayoutConstraint.activate([
 
@@ -41,7 +50,7 @@ class IngredientDetailUI {
             stack.widthAnchor.constraint(equalTo: scrollView.frameLayoutGuide.widthAnchor, constant: -40)
         ])
 
-        // MARK: - Build Sections
+       
         buildHeader(ingredient)
         buildTags(ingredient)
         buildDescription(ingredient)
@@ -60,48 +69,113 @@ class IngredientDetailUI {
 
 
 
+
+extension IngredientDetailUI {
+
+    private func addBlobs(to view: UIView) {
+
+        let topRight = makeBlob(size: 260, color: .ainaCoralPink,  alpha: 0.38)
+        let midLeft  = makeBlob(size: 220, color: .ainaDustyRose,  alpha: 0.28)
+        let bottomR  = makeBlob(size: 300, color: .ainaLightBlush, alpha: 0.45)
+
+        for blob in [bottomR, midLeft, topRight] {
+            view.insertSubview(blob, belowSubview: scrollView)
+        }
+
+        NSLayoutConstraint.activate([
+            topRight.topAnchor.constraint(equalTo: view.topAnchor, constant: -40),
+            topRight.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 80),
+            topRight.widthAnchor.constraint(equalToConstant: 260),
+            topRight.heightAnchor.constraint(equalToConstant: 260),
+
+            midLeft.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: -40),
+            midLeft.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: -80),
+            midLeft.widthAnchor.constraint(equalToConstant: 220),
+            midLeft.heightAnchor.constraint(equalToConstant: 220),
+
+            bottomR.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 100),
+            bottomR.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 60),
+            bottomR.widthAnchor.constraint(equalToConstant: 300),
+            bottomR.heightAnchor.constraint(equalToConstant: 300),
+        ])
+    }
+}
+// MARK: - BLOB VIEW
+
+private func makeBlob(size: CGFloat, color: UIColor, alpha: CGFloat) -> UIView {
+
+    let blob = UIView()
+    blob.backgroundColor = color.withAlphaComponent(alpha)
+    blob.layer.cornerRadius = size / 2
+    blob.translatesAutoresizingMaskIntoConstraints = false
+
+    let blur = UIVisualEffectView(effect: UIBlurEffect(style: .systemUltraThinMaterial))
+    blur.translatesAutoresizingMaskIntoConstraints = false
+    blur.layer.cornerRadius = size / 2
+    blur.clipsToBounds = true
+
+    blob.addSubview(blur)
+
+    NSLayoutConstraint.activate([
+        blur.topAnchor.constraint(equalTo: blob.topAnchor),
+        blur.bottomAnchor.constraint(equalTo: blob.bottomAnchor),
+        blur.leadingAnchor.constraint(equalTo: blob.leadingAnchor),
+        blur.trailingAnchor.constraint(equalTo: blob.trailingAnchor)
+    ])
+
+    return blob
+}
+
 extension IngredientDetailUI {
 
     private func buildHeader(_ ingredient: Ingredient) {
 
+        // ── Close button (top-right, small) ───────────────────────────
+        let btnSize: CGFloat = 28
+        closeButton.setImage(
+            UIImage(systemName: "xmark")?
+                .withConfiguration(UIImage.SymbolConfiguration(pointSize: 10, weight: .semibold)),
+            for: .normal
+        )
+        closeButton.backgroundColor = UIColor.ainaGlassElevated
+        closeButton.tintColor = .ainaTextPrimary
+        closeButton.layer.cornerRadius = btnSize / 2
+        closeButton.layer.masksToBounds = true
+        closeButton.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            closeButton.widthAnchor.constraint(equalToConstant: btnSize),
+            closeButton.heightAnchor.constraint(equalToConstant: btnSize)
+        ])
+
+        // ── Title (large, bold, centered) ────────────────────────────
         let title = UILabel()
         title.text = ingredient.name
         title.font = .systemFont(ofSize: 34, weight: .bold)
+        title.textColor = .ainaTextPrimary
+        title.textAlignment = .left
+        title.numberOfLines = 0
 
+        // ── Scientific name (italic, left, muted) ─────────────────────
         let scientific = UILabel()
         scientific.text = ingredient.scientificName
         scientific.font = .italicSystemFont(ofSize: 16)
         scientific.textColor = .tertiaryLabel
+        scientific.textAlignment = .left
 
-        closeButton.setImage(UIImage(systemName: "xmark"), for: .normal)
-        closeButton.backgroundColor = .systemGray6
-        closeButton.layer.cornerRadius = 18
-        closeButton.tintColor = .label
-
-        let container = UIView()
-
-        container.addSubview(title)
-        container.addSubview(scientific)
-        container.addSubview(closeButton)
-
-        title.translatesAutoresizingMaskIntoConstraints = false
-        scientific.translatesAutoresizingMaskIntoConstraints = false
-        closeButton.translatesAutoresizingMaskIntoConstraints = false
-
+        // ── Close button row (right-aligned) ──────────────────────────
+        let btnRow = UIView()
+        btnRow.addSubview(closeButton)
         NSLayoutConstraint.activate([
-
-            title.topAnchor.constraint(equalTo: container.topAnchor),
-            title.leadingAnchor.constraint(equalTo: container.leadingAnchor),
-
-            scientific.topAnchor.constraint(equalTo: title.bottomAnchor, constant: 6),
-            scientific.leadingAnchor.constraint(equalTo: container.leadingAnchor),
-            scientific.bottomAnchor.constraint(equalTo: container.bottomAnchor),
-
-            closeButton.trailingAnchor.constraint(equalTo: container.trailingAnchor),
-            closeButton.topAnchor.constraint(equalTo: container.topAnchor),
-            closeButton.widthAnchor.constraint(equalToConstant: 36),
-            closeButton.heightAnchor.constraint(equalToConstant: 36)
+            closeButton.trailingAnchor.constraint(equalTo: btnRow.trailingAnchor),
+            closeButton.topAnchor.constraint(equalTo: btnRow.topAnchor),
+            closeButton.bottomAnchor.constraint(equalTo: btnRow.bottomAnchor)
         ])
+
+        // ── Vertical stack: close row / title / scientific ────────────
+        let container = UIStackView(arrangedSubviews: [btnRow, title, scientific])
+        container.axis = .vertical
+        container.spacing = 6
+        container.setCustomSpacing(12, after: btnRow)
 
         stack.addArrangedSubview(container)
     }
@@ -111,52 +185,54 @@ extension IngredientDetailUI {
 
 extension IngredientDetailUI {
     private func buildTags(_ ingredient: Ingredient) {
-        
+
         guard let tags = ingredient.tags else { return }
-        
-        // MARK: ScrollView (NEW)
+
+     
         let scroll = UIScrollView()
         scroll.showsHorizontalScrollIndicator = false
         scroll.alwaysBounceHorizontal = true
         scroll.translatesAutoresizingMaskIntoConstraints = false
-        
-        // MARK: Stack
+
+    
         let tagStack = UIStackView()
         tagStack.axis = .horizontal
         tagStack.spacing = 10
         tagStack.translatesAutoresizingMaskIntoConstraints = false
-        
+
         scroll.addSubview(tagStack)
-        
+
         NSLayoutConstraint.activate([
             tagStack.topAnchor.constraint(equalTo: scroll.contentLayoutGuide.topAnchor),
             tagStack.bottomAnchor.constraint(equalTo: scroll.contentLayoutGuide.bottomAnchor),
             tagStack.leadingAnchor.constraint(equalTo: scroll.contentLayoutGuide.leadingAnchor),
             tagStack.trailingAnchor.constraint(equalTo: scroll.contentLayoutGuide.trailingAnchor),
-            
+
             tagStack.heightAnchor.constraint(equalTo: scroll.frameLayoutGuide.heightAnchor)
         ])
-        
+
         // MARK: Pills
         for tag in tags {
-            
+
             let pill = PaddingLabel()
             pill.text = tag.capitalized
             pill.font = .systemFont(ofSize: 13, weight: .medium)
             pill.textAlignment = .center   // IMPROVED
-            
-            pill.backgroundColor = .systemGray6
+
+            pill.backgroundColor = UIColor.ainaDustyRose.withAlphaComponent(0.12)
+            pill.textColor = UIColor.ainaDustyRose
             pill.layer.cornerRadius = 16
             pill.layer.masksToBounds = true
-            
+            pill.layer.borderWidth = 1.2
+            pill.layer.borderColor = UIColor.ainaDustyRose.withAlphaComponent(0.30).cgColor
+
             pill.padding = UIEdgeInsets(top: 8, left: 14, bottom: 8, right: 14)
-            
+
             tagStack.addArrangedSubview(pill)
         }
-        
+
         stack.addArrangedSubview(scroll)
-        
-        // MARK: Height constraint (IMPORTANT)
+
         scroll.heightAnchor.constraint(equalToConstant: 34).isActive = true
     }
 }
@@ -170,8 +246,7 @@ extension IngredientDetailUI {
         label.text = ingredient.shortDescription
         label.numberOfLines = 0
         label.font = .systemFont(ofSize: 16)
-        label.textColor = .secondaryLabel
-
+        label.textColor = .ainaTextSecondary
         stack.addArrangedSubview(label)
     }
 }
@@ -192,8 +267,9 @@ extension IngredientDetailUI {
             let row = UIStackView()
             row.axis = .horizontal
             row.spacing = 12
+            row.alignment = .center
 
-            let icon = makeIcon("checkmark.circle.fill", color: .systemGreen)
+            let icon = makeIcon("checkmark.circle.fill", color: .ainaCoralPink)
 
             let label = UILabel()
             label.text = item
@@ -223,42 +299,66 @@ extension IngredientDetailUI {
 
         let container = UIStackView()
         container.axis = .vertical
-        container.spacing = 10
+        container.spacing = 12
 
         var row: UIStackView?
 
-        for (index,item) in list.enumerated() {
+        for (index, item) in list.enumerated() {
 
             if index % 2 == 0 {
-
                 row = UIStackView()
                 row?.axis = .horizontal
                 row?.spacing = 10
+                row?.alignment = .fill
                 row?.distribution = .fillEqually
-
                 container.addArrangedSubview(row!)
             }
+
+            // Shadow wrapper (masksToBounds=false so shadow is visible)
+            let shadow = UIView()
+            shadow.backgroundColor = .clear
+            shadow.layer.shadowColor = UIColor.ainaDustyRose.withAlphaComponent(0.22).cgColor
+            shadow.layer.shadowOpacity = 1
+            shadow.layer.shadowRadius = 6
+            shadow.layer.shadowOffset = CGSize(width: 0, height: 2)
+
+            // Pill inside wrapper (masksToBounds=true clips corners properly)
             let pill = PaddingLabel()
             pill.text = item
             pill.font = .systemFont(ofSize: 15, weight: .medium)
-            pill.textAlignment = .center   // THIS LINE FIXES IT
-
-            pill.backgroundColor = .systemGray6
-            pill.layer.cornerRadius = 16
+            pill.textAlignment = .center
+            pill.numberOfLines = 0
+            pill.textColor = UIColor.ainaDustyRose
+            pill.backgroundColor = UIColor.ainaDustyRose.withAlphaComponent(0.12)
+            pill.layer.cornerRadius = 20
+            pill.layer.cornerCurve = .continuous
             pill.layer.masksToBounds = true
-            pill.padding = UIEdgeInsets(top: 10, left: 14, bottom: 10, right: 14)
+            pill.layer.borderWidth = 1.2
+            pill.layer.borderColor = UIColor.ainaDustyRose.withAlphaComponent(0.30).cgColor
+            pill.translatesAutoresizingMaskIntoConstraints = false
+            pill.padding = UIEdgeInsets(top: 11, left: 18, bottom: 11, right: 18)
 
-            row?.addArrangedSubview(pill)
+            shadow.addSubview(pill)
+            NSLayoutConstraint.activate([
+                pill.topAnchor.constraint(equalTo: shadow.topAnchor),
+                pill.bottomAnchor.constraint(equalTo: shadow.bottomAnchor),
+                pill.leadingAnchor.constraint(equalTo: shadow.leadingAnchor),
+                pill.trailingAnchor.constraint(equalTo: shadow.trailingAnchor),
+            ])
+
+            row?.addArrangedSubview(shadow)
         }
 
-        if list.count % 2 != 0 {
+        // Balance last row if odd number of pills
+        if list.count % 2 != 0, let lastRow = container.arrangedSubviews.last as? UIStackView {
             let spacer = UIView()
-            row?.addArrangedSubview(spacer)
+            spacer.backgroundColor = .clear
+            lastRow.addArrangedSubview(spacer)
         }
 
         let section = UIStackView(arrangedSubviews: [title, container])
         section.axis = .vertical
-        section.spacing = 10
+        section.spacing = 14
 
         stack.addArrangedSubview(section)
     }
@@ -274,7 +374,7 @@ extension IngredientDetailUI {
 
         if let when = ingredient.whenToUse {
 
-            let icon = makeIcon("clock", color: .systemBlue)
+            let icon = makeIcon("clock", color: .ainaCoralPink)
             let card = IngredientCardView(iconView: icon)
 
             card.setTitle("When to Use")
@@ -286,7 +386,7 @@ extension IngredientDetailUI {
         if let min = ingredient.minConcentration,
            let max = ingredient.maxConcentration {
 
-            let icon = makeIcon("flask", color: .systemBlue)
+            let icon = makeIcon("flask", color: .ainaCoralPink)
             let card = IngredientCardView(iconView: icon)
 
             card.setTitle("Concentration")
@@ -305,25 +405,24 @@ extension IngredientDetailUI {
 
         guard let list = ingredient.combinesWith, !list.isEmpty else { return }
 
-        let icon = makeIcon("checkmark.circle", color: .systemGreen)
+        let icon = makeIcon("checkmark.circle", color: .ainaCoralPink)
         let card = IngredientCardView(iconView: icon)
 
         card.setTitle("Combines Well With")
 
         for item in list {
-            
+
             let row = UIStackView()
             row.axis = .horizontal
             row.spacing = 10
-            row.alignment = .top   // IMPORTANT (not baseline)
+            row.alignment = .top
 
-            // MARK: Dot Container (FIX)
             let dotContainer = UIView()
             dotContainer.translatesAutoresizingMaskIntoConstraints = false
             dotContainer.widthAnchor.constraint(equalToConstant: 16).isActive = true
 
             let dot = UIView()
-            dot.backgroundColor = .systemGreen
+            dot.backgroundColor = UIColor.ainaCoralPink
             dot.layer.cornerRadius = 4
             dot.translatesAutoresizingMaskIntoConstraints = false
 
@@ -336,7 +435,7 @@ extension IngredientDetailUI {
 
                 dot.centerXAnchor.constraint(equalTo: dotContainer.centerXAnchor),
 
-                
+
                 dot.topAnchor.constraint(equalTo: dotContainer.topAnchor, constant: 6)
             ])
 
@@ -364,7 +463,7 @@ extension IngredientDetailUI {
 
         guard let list = ingredient.avoidWith else { return }
 
-        let icon = makeIcon("exclamationmark.triangle", color: .systemRed)
+        let icon = makeIcon("exclamationmark.triangle", color: .ainaSoftRed)
         let card = IngredientCardView(iconView: icon)
 
         card.setTitle("Avoid Combining With")
@@ -410,7 +509,7 @@ extension IngredientDetailUI {
         return container
     }
 
-    // TIME FORMATTER
+   
     private func formatTimeText(_ text: String) -> String {
         return text
             .replacingOccurrences(of: "AM", with: "Morning")

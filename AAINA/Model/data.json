@@ -321,46 +321,7 @@
 
 
   "users": [
-    { "id": "UUID-001", "username": "Sarah", "email": "sarah@email.com", "created_at": "2026-02-01T09:00:00Z" },
-    { "id": "UUID-002", "username": "Alex", "email": "alex@web.com", "created_at": "2026-02-01T10:00:00Z" },
-    { "id": "UUID-003", "username": "Jordan", "email": "jordan@cloud.com", "created_at": "2026-02-01T11:00:00Z" },
-    { "id": "UUID-004", "username": "Mina", "email": "mina@glow.com", "created_at": "2026-02-01T12:00:00Z" },
-    { "id": "UUID-005", "username": "Liam", "email": "liam@tech.com", "created_at": "2026-02-01T13:00:00Z" },
-    { "id": "UUID-006", "username": "Chloe", "email": "chloe@style.com", "created_at": "2026-02-01T14:00:00Z" },
-    { "id": "UUID-007", "username": "Ethan", "email": "ethan@dev.com", "created_at": "2026-02-01T15:00:00Z" },
-    { "id": "UUID-008", "username": "Sophia", "email": "sophia@life.com", "created_at": "2026-02-01T16:00:00Z" },
-    { "id": "UUID-009", "username": "Noah", "email": "noah@mail.com", "created_at": "2026-02-01T17:00:00Z" },
-    { "id": "UUID-010", "username": "Ava", "email": "ava@beauty.com", "created_at": "2026-02-01T18:00:00Z" },
-    { "id": "UUID-011", "username": "Mason", "email": "mason@work.com", "created_at": "2026-02-01T19:00:00Z" },
-    { "id": "UUID-012", "username": "Isabella", "email": "bella@social.com", "created_at": "2026-02-01T20:00:00Z" },
-    { "id": "UUID-013", "username": "Logan", "email": "logan@fit.com", "created_at": "2026-02-01T21:00:00Z" },
-    { "id": "UUID-014", "username": "Mia", "email": "mia@design.com", "created_at": "2026-02-01T22:00:00Z" },
-    { "id": "UUID-015", "username": "James", "email": "james@legal.com", "created_at": "2026-02-02T08:00:00Z" },
-    { "id": "UUID-016", "username": "Harper", "email": "harper@art.com", "created_at": "2026-02-02T09:00:00Z" },
-    { "id": "UUID-017", "username": "Benjamin", "email": "ben@finance.com", "created_at": "2026-02-02T10:00:00Z" },
-    { "id": "UUID-018", "username": "Evelyn", "email": "eve@care.com", "created_at": "2026-02-02T11:00:00Z" },
-    { "id": "UUID-019", "username": "Lucas", "email": "lucas@build.com", "created_at": "2026-02-02T12:00:00Z" },
-    { "id": "UUID-020", "username": "Amelia", "email": "amelia@web.com", "created_at": "2026-02-02T13:00:00Z" },
-    { "id": "UUID-021", "username": "Henry", "email": "henry@shop.com", "created_at": "2026-02-02T14:00:00Z" },
-    { "id": "UUID-022", "username": "Abigail", "email": "abby@write.com", "created_at": "2026-02-02T15:00:00Z" },
-    { "id": "UUID-023", "username": "Alexander", "email": "alexander@uni.com", "created_at": "2026-02-02T16:00:00Z" },
-    { "id": "UUID-024", "username": "Emily", "email": "emily@photo.com", "created_at": "2026-02-02T17:00:00Z" },
-    { "id": "UUID-025", "username": "Daniel", "email": "dan@music.com", "created_at": "2026-02-02T18:00:00Z" },
-    { "id": "UUID-026", "username": "Elizabeth", "email": "liz@history.com", "created_at": "2026-02-02T19:00:00Z" },
-    { "id": "UUID-027", "username": "Jacob", "email": "jacob@math.com", "created_at": "2026-02-02T20:00:00Z" },
-    { "id": "UUID-028", "username": "Sofia", "email": "sofia@dance.com", "created_at": "2026-02-02T21:00:00Z" },
-    { "id": "UUID-029", "username": "Michael", "email": "mike@sport.com", "created_at": "2026-02-02T22:00:00Z" },
-    { "id": "UUID-030", "username": "Avery", "email": "avery@news.com", "created_at": "2026-02-03T08:00:00Z" },
-    { "id": "UUID-031", "username": "Elijah", "email": "elijah@church.com", "created_at": "2026-02-03T09:00:00Z" },
-    { "id": "UUID-032", "username": "Scarlett", "email": "scarlett@red.com", "created_at": "2026-02-03T10:00:00Z" },
-    { "id": "UUID-033", "username": "Matthew", "email": "matt@books.com", "created_at": "2026-02-03T11:00:00Z" },
-    { "id": "UUID-034", "username": "Madison", "email": "madi@vlog.com", "created_at": "2026-02-03T12:00:00Z" },
-    { "id": "UUID-035", "username": "Jackson", "email": "jack@trade.com", "created_at": "2026-02-03T13:00:00Z" },
-    { "id": "UUID-036", "username": "Layla", "email": "layla@song.com", "created_at": "2026-02-03T14:00:00Z" },
-    { "id": "UUID-037", "username": "Samuel", "email": "sam@sail.com", "created_at": "2026-02-03T15:00:00Z" },
-    { "id": "UUID-038", "username": "Victoria", "email": "vic@crown.com", "created_at": "2026-02-03T16:00:00Z" },
-    { "id": "UUID-039", "username": "David", "email": "david@king.com", "created_at": "2026-02-03T17:00:00Z" },
-    { "id": "UUID-040", "username": "Luna", "email": "luna@star.com", "created_at": "2026-02-03T18:00:00Z" }
+    { "id": "UUID-001", "username": "Sarah", "email": "sarah@email.com", "created_at": "2026-02-01T09:00:00Z" }
   ],
   "profiles": [
     { "id": "P-001", "user_id": "UUID-001", "t_zone_type": "oily", "u_zone_type": "normal", "c_zone_type": "dry", "sensitivity_level": "sometimes", "uv_exposure_level": "high", "goals": ["oilControl", "glow"] },
@@ -405,95 +366,113 @@
     { "id": "P-040", "user_id": "UUID-040", "t_zone_type": "normal", "u_zone_type": "normal", "c_zone_type": "normal", "sensitivity_level": "often", "uv_exposure_level": "moderate", "goals": ["antiAging"] }
   ],
   "routines": [
-    {
-      "id": "routine_001",
-      "user_id": "UUID-001",
-      "isActive": true,
-      "steps": [
-
-        {
-          "id": "m1",
-          "step_order": 1,
-          "step_title": "Gentle Foaming Cleanser",
-          "type": "cleanser",
-          "product_desc": "Removes dirt and oil without stripping skin.",
-          "ingredient_ids": ["glycerin", "niacinamide", "panthenol"],
-          "time_of_day": "morning",
-          "instruction_text": "Massage for 60 seconds and rinse."
-        },
-        {
-          "id": "m2",
-          "step_order": 2,
-          "step_title": "Vitamin C Serum",
-          "type": "serum",
-          "product_desc": "Brightens and protects skin.",
-          "ingredient_ids": ["ascorbic_acid", "ferulic_acid"],
-          "time_of_day": "morning",
-          "instruction_text": "Apply 2-3 drops on clean skin."
-        },
-        {
-          "id": "m3",
-          "step_order": 3,
-          "step_title": "Moisturizer",
-          "type": "moisturizer",
-          "product_desc": "Hydrates and repairs barrier.",
-          "ingredient_ids": ["ceramide_np", "squalane"],
-          "time_of_day": "morning",
-          "instruction_text": "Apply evenly on face."
-        },
-        {
-          "id": "m4",
-          "step_order": 4,
-          "step_title": "Sunscreen SPF 50",
-          "type": "sunscreen",
-          "product_desc": "Protects from UV rays.",
-          "ingredient_ids": ["zinc_oxide"],
-          "time_of_day": "morning",
-          "instruction_text": "Apply generously."
-        },
-        {
-          "id": "e1",
-          "step_order": 1,
-          "step_title": "Gentle Cleanser",
-          "type": "cleanser",
-          "product_desc": "Removes sunscreen and dirt.",
-          "ingredient_ids": ["glycerin", "panthenol"],
-          "time_of_day": "evening",
-          "instruction_text": "Massage for 60 seconds and rinse."
-        },
-        {
-          "id": "e2",
-          "step_order": 2,
-          "step_title": "AHA/BHA Exfoliating Serum",
-          "type": "serum",
-          "product_desc": "Removes dead skin and unclogs pores.",
-          "ingredient_ids": ["glycolic_acid", "salicylic_acid", "lactic_acid"],
-          "time_of_day": "evening",
-          "instruction_text": "Use 2-3 times a week only."
-        },
-        {
-          "id": "e3",
-          "step_order": 3,
-          "step_title": "Retinol 0.2% Serum",
-          "type": "treatment",
-          "product_desc": "Improves texture and fine lines.",
-          "ingredient_ids": ["retinol", "squalane"],
-          "time_of_day": "evening",
-          "instruction_text": "Apply pea-sized amount at night."
-        },
-        {
-          "id": "e4",
-          "step_order": 4,
-          "step_title": "Barrier Repair Night Cream",
-          "type": "moisturizer",
-          "product_desc": "Deeply moisturizes and repairs skin.",
-          "ingredient_ids": ["ceramide_np", "panthenol", "squalane"],
-          "time_of_day": "evening",
-          "instruction_text": "Apply as last step."
-        }
-
-      ]
-    }
+      {
+          "id": "routine_001",
+          "user_id": "UUID-001",
+          "isActive": true,
+          "steps": [
+              {
+                  "id": "m1",
+                  "step_order": 1,
+                  "step_title": "Gentle Hydrating Cleanser",
+                  "type": "Cleanser",
+                  "product_desc": "Removes dirt and oil without stripping skin.",
+                  "ingredient_ids": ["glycerin"],
+                  "time_of_day": "morning",
+                  "instruction_text": "Massage onto damp skin for 60 seconds and rinse with lukewarm water."
+              },
+              {
+                  "id": "m2",
+                  "step_order": 2,
+                  "step_title": "Niacinamide Balancing Toner",
+                  "type": "Toner",
+                  "product_desc": "Controls oil and minimizes pore appearance.",
+                  "ingredient_ids": ["niacinamide"],
+                  "time_of_day": "morning",
+                  "instruction_text": "Apply 2-3 drops to palms and gently press into clean skin."
+              },
+              {
+                  "id": "m3",
+                  "step_order": 3,
+                  "step_title": "AntiOxidant Glow Serum",
+                  "type": "Serum",
+                  "product_desc": "Brightens skin and neutralizes free radicals.",
+                  "ingredient_ids": ["ascorbic_acid", "ferulic_acid"],
+                  "time_of_day": "morning",
+                  "instruction_text": "Apply 3-4 drops to the face and neck after toning."
+              },
+              {
+                  "id": "m4",
+                  "step_order": 4,
+                  "step_title": "Lightweight Hydrating Moisturizer",
+                  "type": "Moisturizer",
+                  "product_desc": "Hydrates and seals in moisture.",
+                  "ingredient_ids": ["squalane", "glycerin"],
+                  "time_of_day": "morning",
+                  "instruction_text": "Apply evenly over the face and neck using upward motions."
+              },
+              {
+                  "id": "m5",
+                  "step_order": 5,
+                  "step_title": "SPF 50+ Mineral Sunscreen",
+                  "type": "Sunscreen",
+                  "product_desc": "Protects skin from damaging UV rays.",
+                  "ingredient_ids": ["zinc_oxide"],
+                  "time_of_day": "morning",
+                  "instruction_text": "Apply generously as the final step of your morning routine."
+              },
+              {
+                  "id": "e1",
+                  "step_order": 6,
+                  "step_title": "Gentle Hydrating Cleanser",
+                  "type": "Cleanser",
+                  "product_desc": "Dissolves sunscreen, grime, and pollution.",
+                  "ingredient_ids": ["glycerin"],
+                  "time_of_day": "evening",
+                  "instruction_text": "Massage onto skin for 60 seconds to ensure all debris is removed, then rinse."
+              },
+              {
+                  "id": "e2",
+                  "step_order": 7,
+                  "step_title": "Niacinamide Balancing Toner",
+                  "type": "Toner",
+                  "product_desc": "Calms skin and preps for treatments.",
+                  "ingredient_ids": ["niacinamide"],
+                  "time_of_day": "evening",
+                  "instruction_text": "Sweep across the face with a cotton pad or pat in with fingers."
+              },
+              {
+                  "id": "e3",
+                  "step_order": 8,
+                  "step_title": "Retinol Night Treatment",
+                  "type": "Treatment",
+                  "product_desc": "Improves texture and reduces fine lines.",
+                  "ingredient_ids": ["retinol"],
+                  "time_of_day": "evening",
+                  "instruction_text": "Apply a pea-sized amount to completely dry skin; avoid the eye area."
+              },
+              {
+                  "id": "e4",
+                  "step_order": 9,
+                  "step_title": "Lightweight Hydrating Moisturizer",
+                  "type": "Moisturizer",
+                  "product_desc": "Repairs and prevents nighttime dryness.",
+                  "ingredient_ids": ["squalane", "glycerin"],
+                  "time_of_day": "evening",
+                  "instruction_text": "Layer over the treatment once it has fully absorbed."
+              },
+              {
+                  "id": "e5",
+                  "step_order": 10,
+                  "step_title": "Ceramide Skin Barrier Cream",
+                  "type": "Repair",
+                  "product_desc": "Strengthens the natural skin barrier.",
+                  "ingredient_ids": ["ceramide NP"],
+                  "time_of_day": "evening",
+                  "instruction_text": "Apply as the final step to seal in moisture and repair the barrier overnight."
+              }
+          ]
+      }
   ],
 
   "journals": [
@@ -596,10 +575,12 @@
   
   
   "skin_insights": [
-    { "id": "SI-001", "icon": "sun.max.fill", "title": "UV Protection", "percent": 85 },
-    { "id": "SI-002", "icon": "drop.fill", "title": "Hydration", "percent": 72 },
-    { "id": "SI-003", "icon": "sparkles", "title": "Glow", "percent": 64 },
-    { "id": "SI-004", "icon": "shield.fill", "title": "Skin Barrier", "percent": 78 }
+    { "id": "SI-001", "icon": "shield.fill", "title": "Forehead Bumps", "percent": 85 },
+    { "id": "SI-002", "icon": "drop.fill", "title": "Acne", "percent": 72 },
+    { "id": "SI-003", "icon": "sparkles", "title": "Wrinkles", "percent": 64 },
+    { "id": "SI-004", "icon": "bolt.fill", "title": "Dark Circles", "percent": 78 },
+    { "id": "SI-005", "icon": "sparkles", "title": "Pigmentation", "percent": 56 },
+    { "id": "SI-006", "icon": "sun.max.fill", "title": "Blackheads", "percent": 89 }
   ],
 
   "affirmations": [

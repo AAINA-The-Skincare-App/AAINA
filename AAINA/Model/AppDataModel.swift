@@ -222,10 +222,14 @@ extension AppDataModel {
         let selectedIDs = Set(selected.map { $0.id })
         return selected.contains { !Set($0.conflictingWith).isDisjoint(with: selectedIDs) }
     }
+    
+    func allIngredients() -> [Ingredient] {
+        return ingredients
+    }
 }
 
 // MARK: - Affirmations
-
+// remove 
 extension AppDataModel {
 
     func nextAffirmation() -> Affirmation? {

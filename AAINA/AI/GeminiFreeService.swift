@@ -3,7 +3,73 @@ import UIKit
 
 final class GeminiFreeService {
 
-    func generateRoutine(prompt: String, image: UIImage?) async throws -> AIRoutineOutput {
+    func analyzeFace(image: UIImage) async throws -> FaceScanResult {
+        guard let data = image.jpegData(compressionQuality: 0.5) else {
+            throw NSError(domain: "Gemini", code: -1)
+        }
+
+        let prompt = """
+        Analyse the face in this image.
+        Return ONLY a valid JSON object — no markdown, no explanation.
+
+        {
+          "skinType": "one of: Oily, Dry, Combination, Normal",
+          "skinTone": "one of: Fair, Medium, Olive, Deep, Rich",
+          "concerns": [
+            { "name": "e.g. Dark circles", "severity": "mild | moderate | notable", "area": "e.g. under-eye area" }
+          ],
+          "summary": "1-2 sentences plain English about the skin"
+        }
+
+        List up to 4 visible concerns. Base everything only on what is visually observable in the image.
+        """
+
+        let body: [String: Any] = [
+            "contents": [[
+                "parts": [
+                    ["inline_data": ["mime_type": "image/jpeg", "data": data.base64EncodedString()]],
+                    ["text": prompt]
+                ]
+            ]],
+            "generationConfig": [
+                "temperature": 0.2,
+                "maxOutputTokens": 512,
+                "responseMimeType": "application/json",
+                "thinkingConfig": ["thinkingBudget": 0]
+            ]
+        ]
+
+        guard let url = URL(string: "\(Config.geminiEndpoint)?key=\(Config.geminiAPIKey)") else {
+            throw NSError(domain: "Gemini", code: -1)
+        }
+
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.timeoutInterval = 60
+        request.httpBody = try JSONSerialization.data(withJSONObject: body)
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+
+        let (responseData, response) = try await retryRequest(request)
+        let statusCode = (response as? HTTPURLResponse)?.statusCode ?? -1
+
+        guard (200...299).contains(statusCode) else {
+            throw NSError(domain: "Gemini", code: statusCode)
+        }
+
+        if let success = try? JSONDecoder().decode(GeminiRawResponse.self, from: responseData),
+           let text = success.candidates.first?.content?.parts.first(where: { $0.thought != true })?.text {
+            let cleaned = cleanJSON(text)
+            guard let jsonData = cleaned.data(using: .utf8) else {
+                throw NSError(domain: "Gemini", code: -2)
+            }
+            return try JSONDecoder().decode(FaceScanResult.self, from: jsonData)
+        }
+
+        throw NSError(domain: "Gemini", code: -3,
+                      userInfo: [NSLocalizedDescriptionKey: "No valid content in face scan response"])
+    }
+
+    func generateRoutine(prompt: String, image: UIImage?) async throws -> FullAnalysisOutput {
 
         var parts: [[String: Any]] = []
 
@@ -67,15 +133,15 @@ final class GeminiFreeService {
         if let success = try? JSONDecoder().decode(GeminiRawResponse.self, from: data),
            let text = success.candidates.first?.content?.parts.first(where: { $0.thought != true })?.text {
 
-            print("✅ Gemini text extracted, decoding AIRoutineOutput…")
+            print("✅ Gemini text extracted, decoding FullAnalysisOutput…")
             let cleaned = cleanJSON(text)
             guard let jsonData = cleaned.data(using: .utf8) else {
                 throw NSError(domain: "Gemini", code: -2)
             }
             do {
-                return try JSONDecoder().decode(AIRoutineOutput.self, from: jsonData)
+                return try JSONDecoder().decode(FullAnalysisOutput.self, from: jsonData)
             } catch {
-                print("❌ AIRoutineOutput decode failed: \(error)")
+                print("❌ FullAnalysisOutput decode failed: \(error)")
                 print("📄 Text from Gemini: \(cleaned.prefix(500))")
                 throw error
             }
@@ -88,6 +154,7 @@ final class GeminiFreeService {
             print("🔄 Retrying without image…")
             return try await generateRoutine(prompt: prompt, image: nil)
         }
+
 
         throw NSError(domain: "Gemini", code: -3,
                       userInfo: [NSLocalizedDescriptionKey: "No valid content in response"])

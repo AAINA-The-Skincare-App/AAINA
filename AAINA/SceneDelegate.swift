@@ -6,11 +6,12 @@
 //
 
 import UIKit
+import GoogleSignIn
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
-    var dataModel: DataModel!
+    var dataModel: AppDataModel!
 
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
@@ -20,20 +21,29 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         //guard let _ = (scene as? UIWindowScene) else { return }
         guard let windowScene = scene as? UIWindowScene else { return }
 
-                dataModel = DataModel()
+        dataModel = AppDataModel.shared
 
                 let window = UIWindow(windowScene: windowScene)
                 self.window = window
 
                 let storyboard = UIStoryboard(name: "Main", bundle: nil)
 
-                guard let nav = storyboard.instantiateInitialViewController() as? UINavigationController else { return }
-
-                if let dobVC = nav.viewControllers.first as? OnboardingDOBViewController {
-                    dobVC.dataModel = dataModel
+                if UserProfile.load() != nil {
+                    // User already completed onboarding — go straight to the main app
+                    guard let tabBar = storyboard.instantiateViewController(
+                        withIdentifier: "MainTabBarViewController"
+                    ) as? MainTabBarViewController else { return }
+                    tabBar.dataModel = dataModel
+                    window.rootViewController = tabBar
+                } else {
+                    // First launch — start onboarding
+                    guard let nav = storyboard.instantiateInitialViewController() as? UINavigationController else { return }
+                    if let dobVC = nav.viewControllers.first as? OnboardingDOBViewController {
+                        dobVC.dataModel = dataModel
+                    }
+                    window.rootViewController = nav
                 }
 
-                window.rootViewController = nav
                 window.makeKeyAndVisible()
     }
 
@@ -63,6 +73,13 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // Called as the scene transitions from the foreground to the background.
         // Use this method to save data, release shared resources, and store enough scene-specific state information
         // to restore the scene back to its current state.
+    }
+    //ADD THIS FUNCTION
+    func scene(_ scene: UIScene,
+               openURLContexts URLContexts: Set<UIOpenURLContext>) {
+
+        guard let url = URLContexts.first?.url else { return }
+        GIDSignIn.sharedInstance.handle(url)
     }
 
 
