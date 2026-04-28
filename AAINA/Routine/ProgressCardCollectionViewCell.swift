@@ -4,7 +4,7 @@ final class ProgressCardCollectionViewCell: UICollectionViewCell {
 
     static let identifier = "ProgressCardCollectionViewCell"
 
-    // MARK: - UI
+  
 
     private let container = UIView()
 
@@ -16,7 +16,7 @@ final class ProgressCardCollectionViewCell: UICollectionViewCell {
     private let progressLayer = CAShapeLayer()
     private let trackLayer = CAShapeLayer()
 
-    // MARK: - Init
+ 
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -28,7 +28,7 @@ final class ProgressCardCollectionViewCell: UICollectionViewCell {
         setupUI()
     }
 
-    // MARK: - Setup UI
+    
 
     private func setupUI() {
 
@@ -119,7 +119,7 @@ final class ProgressCardCollectionViewCell: UICollectionViewCell {
         ])
     }
 
-    // MARK: - Layout
+   
 
     override func layoutSubviews() {
         super.layoutSubviews()
@@ -197,7 +197,7 @@ final class ProgressCardCollectionViewCell: UICollectionViewCell {
 
             case 5:
                 titleLabel.text = "Five steps to go!"
-                subtitleLabel.text = "Let’s build that glow routine 🌿"
+                subtitleLabel.text = "Let’s build that glow routine 🌸"
 
             default:
                 titleLabel.text = "\(remaining) steps left"
