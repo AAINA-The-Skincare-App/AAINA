@@ -177,19 +177,19 @@ class OnboardingSkinTypeViewController: UIViewController {
             infoTitleLabel.text = "T-Zone"
             infoSubtitleLabel.text = "Forehead, Nose & Chin"
             infoDescriptionLabel.text = "This area usually produces more oil compared to other parts of your face."
-            infoImageView.image = UIImage(named: "tzone")
+            infoImageView.image = UIImage(named: "z")
 
         case 1:
             infoTitleLabel.text = "U-Zone"
             infoSubtitleLabel.text = "Cheeks & Jawline"
             infoDescriptionLabel.text = "This area is typically normal to dry and needs hydration."
-            infoImageView.image = UIImage(named: "zones")
+            infoImageView.image = UIImage(named: "czone")
 
         case 2:
             infoTitleLabel.text = "C-Zone"
             infoSubtitleLabel.text = "Around Mouth"
             infoDescriptionLabel.text = "This area is prone to dryness and sensitivity."
-            infoImageView.image = UIImage(named: "zones")
+            infoImageView.image = UIImage(named: "uzone")
         default:
             break
         }
@@ -291,29 +291,25 @@ class OnboardingSkinTypeViewController: UIViewController {
     }
     private func setupNotSureUI() {
 
-        // Clean white card matching the Privacy card style
-        notSureView.backgroundColor = .white
+        notSureView.backgroundColor = UIColor(red: 0.992, green: 0.910, blue: 0.933, alpha: 1.0)
         notSureView.layer.cornerRadius = 14
         notSureView.layer.masksToBounds = false
-        notSureView.layer.borderWidth = 0
+        notSureView.layer.borderWidth = 1
+        notSureView.layer.borderColor = UIColor(red: 0.961, green: 0.753, blue: 0.816, alpha: 1.0).cgColor
 
-        // Soft shadow
-        notSureView.layer.shadowColor = UIColor.black.cgColor
-        notSureView.layer.shadowOpacity = 0.07
-        notSureView.layer.shadowOffset = CGSize(width: 0, height: 4)
-        notSureView.layer.shadowRadius = 12
+        notSureView.layer.shadowColor = UIColor.ainaCardShadowColor.cgColor
+        notSureView.layer.shadowOpacity = 0.10
+        notSureView.layer.shadowOffset = CGSize(width: 0, height: 5)
+        notSureView.layer.shadowRadius = 14
 
-        // Icon
-        notSureIcon.tintColor = .ainaCoralPink
+        notSureIcon.tintColor = UIColor(red: 0.875, green: 0.439, blue: 0.541, alpha: 1.0)
         notSureIcon.image = UIImage(systemName: "sparkles")
 
-        // Text style
         notSureLabel.font = UIFont.systemFont(ofSize: 13, weight: .regular)
-        notSureLabel.textColor = UIColor(red: 0.35, green: 0.35, blue: 0.35, alpha: 1)
+        notSureLabel.textColor = UIColor(red: 0.478, green: 0.157, blue: 0.251, alpha: 1.0)
         notSureLabel.numberOfLines = 0
         notSureLabel.lineBreakMode = .byWordWrapping
     }
-
     private func setupButtons(_ buttons: [UIButton]) {
         buttons.forEach {
             $0.layer.cornerRadius = 20
@@ -436,4 +432,3 @@ class OnboardingSkinTypeViewController: UIViewController {
         }
     }
 }
-

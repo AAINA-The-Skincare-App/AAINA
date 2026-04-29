@@ -1935,7 +1935,7 @@
                                         </constraints>
                                     </stackView>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="i5V-kX-PED">
-                                        <rect key="frame" x="16" y="587.33333333333337" width="316" height="62.333333333333371"/>
+                                        <rect key="frame" x="16" y="563.33333333333337" width="316" height="74.333333333333371"/>
                                         <subviews>
                                             <stackView opaque="NO" contentMode="scaleToFill" alignment="top" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="pqP-aU-jlw">
                                                 <rect key="frame" x="12" y="12.000000000000004" width="292" height="50.333333333333343"/>
@@ -1948,7 +1948,7 @@
                                                             <constraint firstAttribute="width" constant="20" id="c2O-Es-B5z"/>
                                                         </constraints>
                                                     </imageView>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Not sure? Touch your face gently. Oily areas feel slick, dry areas feel tight, and normal areas feel smooth." textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qQW-I0-CFv">
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Not sure? Touch your face gently. Oily areas feel slick, dry areas feel tight, and normal areas feel smooth." textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qQW-I0-CFv">
                                                         <rect key="frame" x="28" y="0.0" width="264" height="50.333333333333336"/>
                                                         <color key="tintColor" name="SecondaryText"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
@@ -1961,7 +1961,7 @@
                                         <constraints>
                                             <constraint firstAttribute="trailing" secondItem="pqP-aU-jlw" secondAttribute="trailing" constant="12" id="863-Ze-xYf"/>
                                             <constraint firstItem="pqP-aU-jlw" firstAttribute="top" secondItem="i5V-kX-PED" secondAttribute="top" constant="12" id="b14-LU-AYv"/>
-                                            <constraint firstAttribute="bottom" secondItem="pqP-aU-jlw" secondAttribute="bottom" id="cnW-YM-gGW"/>
+                                            <constraint firstAttribute="bottom" secondItem="pqP-aU-jlw" secondAttribute="bottom" constant="12" id="cnW-YM-gGW"/>
                                             <constraint firstItem="pqP-aU-jlw" firstAttribute="leading" secondItem="i5V-kX-PED" secondAttribute="leading" constant="12" id="eBr-nd-Jqz"/>
                                         </constraints>
                                     </view>
@@ -1981,7 +1981,7 @@
                                     <constraint firstItem="FpP-bm-bbS" firstAttribute="top" secondItem="iqk-34-Vt4" secondAttribute="bottom" constant="8" id="XZQ-RB-u8b"/>
                                     <constraint firstItem="1aA-sD-cSz" firstAttribute="leading" secondItem="oge-tX-XOm" secondAttribute="leading" constant="16" id="crS-A1-eTt"/>
                                     <constraint firstAttribute="trailing" secondItem="1aA-sD-cSz" secondAttribute="trailing" constant="16" id="kZB-0N-pu0"/>
-                                    <constraint firstItem="i5V-kX-PED" firstAttribute="top" secondItem="1aA-sD-cSz" secondAttribute="bottom" constant="60" id="lWl-r9-BD6"/>
+                                    <constraint firstItem="i5V-kX-PED" firstAttribute="top" secondItem="1aA-sD-cSz" secondAttribute="bottom" constant="36" id="lWl-r9-BD6"/>
                                     <constraint firstItem="iqk-34-Vt4" firstAttribute="top" secondItem="oge-tX-XOm" secondAttribute="top" constant="16" id="pxB-DN-3Ln"/>
                                     <constraint firstItem="n1T-j8-R7C" firstAttribute="leading" secondItem="oge-tX-XOm" secondAttribute="leading" constant="24" id="swQ-VA-7S9"/>
                                     <constraint firstItem="1aA-sD-cSz" firstAttribute="top" secondItem="n1T-j8-R7C" secondAttribute="bottom" constant="16" id="weD-Nj-Xx7"/>

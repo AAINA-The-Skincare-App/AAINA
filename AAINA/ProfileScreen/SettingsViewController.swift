@@ -3,6 +3,8 @@ import StoreKit
 import MessageUI
 import UserNotifications
 import SafariServices
+import FirebaseAuth
+import GoogleSignIn
 
 class SettingsViewController: UIViewController,
 UICollectionViewDelegate,
@@ -380,25 +382,30 @@ extension SettingsViewController {
         )
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
         alert.addAction(UIAlertAction(title: "Log Out", style: .destructive) { _ in
-            // Clear all user data
-            UserProfile.clear()
+            try? Auth.auth().signOut()
+            GIDSignIn.sharedInstance.signOut()
+
+            AppDataModel.shared.clearUserDataForLogout()
             UserDefaults.standard.removeObject(forKey: "isLoggedIn")
             UserDefaults.standard.removeObject(forKey: "userName")
             UserDefaults.standard.removeObject(forKey: "onboardingData")
             UserDefaults.standard.removeObject(forKey: "saved_concerns")
+            UserDefaults.standard.removeObject(forKey: "weeklyCheckIn_lastShownWeek")
             UserDefaults.standard.synchronize()
 
-            // Navigate to Login screen
-            let loginVC = LoginViewController()
+            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+            let loginRoot = storyboard.instantiateInitialViewController()
+                ?? UINavigationController(rootViewController: storyboard.instantiateViewController(withIdentifier: "LoginViewController"))
+
             if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
-               let window = windowScene.windows.first {
-                let nav = UINavigationController(rootViewController: loginVC)
-                nav.isNavigationBarHidden = true
+               let sceneDelegate = windowScene.delegate as? SceneDelegate,
+               let window = sceneDelegate.window ?? windowScene.windows.first {
                 UIView.transition(with: window,
                                   duration: 0.4,
                                   options: .transitionCrossDissolve) {
-                    window.rootViewController = nav
+                    window.rootViewController = loginRoot
                 }
+                window.makeKeyAndVisible()
             }
         })
         present(alert, animated: true)

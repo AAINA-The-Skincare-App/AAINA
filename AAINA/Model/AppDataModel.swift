@@ -125,6 +125,35 @@ struct SavedRoutine: Codable {
     }
 }
 
+// MARK: - Routine History
+
+struct RoutineHistoryEntry: Codable {
+    let id: String
+    let title: String
+    let changedAt: Date
+    let summary: String
+    let detail: String?
+    let previousRoutine: AIRoutineOutput?
+    let newRoutine: AIRoutineOutput?
+
+    init(
+        title: String,
+        summary: String,
+        detail: String? = nil,
+        changedAt: Date = Date(),
+        previousRoutine: AIRoutineOutput? = nil,
+        newRoutine: AIRoutineOutput? = nil
+    ) {
+        self.id = UUID().uuidString
+        self.title = title
+        self.changedAt = changedAt
+        self.summary = summary
+        self.detail = detail
+        self.previousRoutine = previousRoutine
+        self.newRoutine = newRoutine
+    }
+}
+
 // MARK: - AppDataModel
 
 final class AppDataModel {
@@ -136,7 +165,9 @@ final class AppDataModel {
         userProfile = UserProfile.load()
         loadJournalEntries()
         loadSavedRoutines()
+        loadRoutineHistory()
         aiRoutine = loadAIRoutineFromDisk()
+        seedRoutineHistoryIfNeeded()
     }
 
     // MARK: Static (JSON-backed, read-only)
@@ -153,6 +184,7 @@ final class AppDataModel {
     private(set) var userProfile: UserProfile?
     private(set) var journalEntries: [JournalEntry] = []
     private(set) var savedRoutines: [SavedRoutine] = []
+    private(set) var routineHistory: [RoutineHistoryEntry] = []
     private(set) var aiRoutine: AIRoutineOutput?
 
     // MARK: Session (in-memory)
@@ -273,15 +305,31 @@ extension AppDataModel {
 
 extension AppDataModel {
 
-    func saveAIRoutine(_ output: AIRoutineOutput) {
+    func saveAIRoutine(_ output: AIRoutineOutput, reason: String? = nil) {
+        let previousRoutine = aiRoutine ?? loadAIRoutineFromDisk()
+        let hadRoutine = previousRoutine != nil
         guard let data = try? JSONEncoder().encode(output) else { return }
         try? data.write(to: aiRoutineURL)
         aiRoutine = output
+
+        let stepCount = output.morning.count + output.evening.count
+        recordRoutineHistory(
+            title: hadRoutine ? "Routine Updated" : "Routine Created",
+            summary: "\(output.morning.count) morning and \(output.evening.count) evening steps",
+            detail: reason ?? "Personalized routine saved with \(stepCount) total steps.",
+            previousRoutine: previousRoutine,
+            newRoutine: output
+        )
     }
 
     func clearAIRoutine() {
         try? FileManager.default.removeItem(at: aiRoutineURL)
         aiRoutine = nil
+        recordRoutineHistory(
+            title: "Routine Cleared",
+            summary: "Active AI routine was removed",
+            detail: nil
+        )
     }
 
     private func loadAIRoutineFromDisk() -> AIRoutineOutput? {
@@ -330,9 +378,88 @@ extension AppDataModel {
     }
 }
 
+// MARK: - Routine History
+
+extension AppDataModel {
+
+    func recordRoutineHistory(
+        title: String,
+        summary: String,
+        detail: String? = nil,
+        previousRoutine: AIRoutineOutput? = nil,
+        newRoutine: AIRoutineOutput? = nil
+    ) {
+        routineHistory.insert(
+            RoutineHistoryEntry(
+                title: title,
+                summary: summary,
+                detail: detail,
+                previousRoutine: previousRoutine,
+                newRoutine: newRoutine
+            ),
+            at: 0
+        )
+        persistRoutineHistory()
+    }
+
+    private func persistRoutineHistory() {
+        let encoder = JSONEncoder()
+        encoder.dateEncodingStrategy = .iso8601
+        guard let data = try? encoder.encode(routineHistory) else { return }
+        try? data.write(to: routineHistoryURL)
+    }
+
+    private func loadRoutineHistory() {
+        let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .iso8601
+        guard
+            let data = try? Data(contentsOf: routineHistoryURL),
+            let history = try? decoder.decode([RoutineHistoryEntry].self, from: data)
+        else { return }
+        routineHistory = history.sorted { $0.changedAt > $1.changedAt }
+    }
+
+    private var routineHistoryURL: URL {
+        documentsDirectory.appendingPathComponent("routine_history.json")
+    }
+
+    private func seedRoutineHistoryIfNeeded() {
+        guard routineHistory.isEmpty, let aiRoutine else { return }
+        let stepCount = aiRoutine.morning.count + aiRoutine.evening.count
+        routineHistory = [
+            RoutineHistoryEntry(
+                title: "Current Routine",
+                summary: "\(aiRoutine.morning.count) morning and \(aiRoutine.evening.count) evening steps",
+                detail: "This routine was already active before history tracking was added. \(stepCount) total steps are available.",
+                newRoutine: aiRoutine
+            )
+        ]
+        persistRoutineHistory()
+    }
+}
+
 // MARK: - Journal Entries
 
 extension AppDataModel {
+
+    func clearUserDataForLogout() {
+        UserProfile.clear()
+        userProfile = nil
+        journalEntries = []
+        savedRoutines = []
+        routineHistory = []
+        aiRoutine = nil
+        routineCompletion = [:]
+
+        [
+            journalEntriesURL,
+            savedRoutinesURL,
+            routineHistoryURL,
+            aiRoutineURL
+        ].forEach {
+            try? FileManager.default.removeItem(at: $0)
+        }
+    }
 
     func addJournalEntry(_ entry: JournalEntry) {
         journalEntries.insert(entry, at: 0)

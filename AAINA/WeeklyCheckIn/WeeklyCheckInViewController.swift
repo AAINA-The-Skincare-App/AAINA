@@ -18,12 +18,13 @@ class WeeklyCheckInViewController: UIViewController {
     private let changeRoutineSection = ChangeRoutineSectionView.create()
 
     // MARK: - Layout
-    private let titleLabel     = UILabel()
-    private let weekPill       = UILabel()
-    private let subtitleLabel  = UILabel()
-    private let scrollView     = UIScrollView()
-    private let contentStack   = UIStackView()
-    private let saveButton     = UIButton(type: .custom)
+    private let titleLabel    = UILabel()
+    private let subtitleLabel = UILabel()
+    private let scrollView    = UIScrollView()
+    private let contentStack  = UIStackView()
+    private let saveButton    = UIButton(type: .custom)
+    private var wantsRoutineChange = false
+    private var routineChangeReason = ""
 
     // MARK: - Lifecycle
 
@@ -44,6 +45,11 @@ class WeeklyCheckInViewController: UIViewController {
         skinConditionSection.onConcernsChanged = { [weak self] concerns in
             guard let self else { return }
             self.changeRoutineSection.skinContext.concerns = Array(concerns)
+        productChangesSection.presentingViewController = self
+        progressPhotoSection.presentingViewController  = self
+        changeRoutineSection.onChangeDecision = { [weak self] wantsChange, reason in
+            self?.wantsRoutineChange = wantsChange
+            self?.routineChangeReason = reason.trimmingCharacters(in: .whitespacesAndNewlines)
         }
     }
 
@@ -214,6 +220,18 @@ class WeeklyCheckInViewController: UIViewController {
         data.routineChangeReason   = changeRoutineSection.reason
 
         WeeklyCheckInManager.save(data)
+        if wantsRoutineChange {
+            let detail = routineChangeReason.isEmpty
+                ? "No reason added."
+                : routineChangeReason
+            AppDataModel.shared.recordRoutineHistory(
+                title: "Change Requested",
+                summary: "Weekly check-in marked the routine for review",
+                detail: detail,
+                previousRoutine: AppDataModel.shared.aiRoutine,
+                newRoutine: nil
+            )
+        }
         WeeklyCheckInManager.markCompletedThisWeek()
         onDismiss?()
         dismiss(animated: true)
