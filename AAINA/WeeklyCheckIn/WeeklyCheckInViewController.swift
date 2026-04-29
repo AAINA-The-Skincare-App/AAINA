@@ -25,6 +25,8 @@ class WeeklyCheckInViewController: UIViewController {
     private let scrollView    = UIScrollView()
     private let contentStack  = UIStackView()
     private let saveButton    = UIButton(type: .custom)
+    private var wantsRoutineChange = false
+    private var routineChangeReason = ""
 
     // MARK: - Lifecycle
 
@@ -38,6 +40,10 @@ class WeeklyCheckInViewController: UIViewController {
 
         productChangesSection.presentingViewController = self
         progressPhotoSection.presentingViewController  = self
+        changeRoutineSection.onChangeDecision = { [weak self] wantsChange, reason in
+            self?.wantsRoutineChange = wantsChange
+            self?.routineChangeReason = reason.trimmingCharacters(in: .whitespacesAndNewlines)
+        }
     }
 
     override func viewDidLayoutSubviews() {
@@ -169,6 +175,18 @@ class WeeklyCheckInViewController: UIViewController {
     // MARK: - Actions
 
     @objc private func saveTapped() {
+        if wantsRoutineChange {
+            let detail = routineChangeReason.isEmpty
+                ? "No reason added."
+                : routineChangeReason
+            AppDataModel.shared.recordRoutineHistory(
+                title: "Change Requested",
+                summary: "Weekly check-in marked the routine for review",
+                detail: detail,
+                previousRoutine: AppDataModel.shared.aiRoutine,
+                newRoutine: nil
+            )
+        }
         WeeklyCheckInManager.markCompletedThisWeek()
         onDismiss?()
         dismiss(animated: true)

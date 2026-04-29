@@ -100,7 +100,13 @@ class SkinProfileCollectionViewCell: UICollectionViewCell {
 
         icon5.image = UIImage(systemName: "bookmark")
         title5.text = "Saved Routines"
-        subtitle5.text = ""
+        let savedCount = AppDataModel.shared.savedRoutines.count
+        let historyCount = AppDataModel.shared.routineHistory.count
+        if savedCount == 0 && historyCount == 0 {
+            subtitle5.text = "Bookmarks & history"
+        } else {
+            subtitle5.text = "\(savedCount) Bookmarks / \(historyCount) Changes"
+        }
     }
     // MARK: - Gestures
     private func setupGestures() {
