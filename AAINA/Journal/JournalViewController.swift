@@ -649,7 +649,6 @@ extension JournalViewController: UITableViewDataSource, UITableViewDelegate {
                    viewForFooterInSection section: Int) -> UIView? {
         switch section {
         case 0:
-            guard allSkinLogEntries.count > maxVisibleRows else { return nil }
             return makeFooter(title: "See all logs", chevron: true,
                               action: #selector(seeAllSkinLogTapped))
         case 1:
@@ -658,7 +657,6 @@ extension JournalViewController: UITableViewDataSource, UITableViewDelegate {
             return makeFooter(title: title, chevron: false,
                               action: #selector(seeMoreTapped(_:)), tag: section)
         default:
-            guard allJournalEntries.count > 0 else { return nil }
             return makeFooter(title: "See all notes", chevron: true,
                               action: #selector(seeAllNotesTapped))
         }
@@ -667,9 +665,9 @@ extension JournalViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView,
                    heightForFooterInSection section: Int) -> CGFloat {
         switch section {
-        case 0:  return allSkinLogEntries.count > maxVisibleRows ? 44 : 0
+        case 0:  return 44
         case 1:  return needsToggleButton(for: section) ? 44 : 0
-        default: return allJournalEntries.count > 0 ? 44 : 0
+        default: return 44
         }
     }
 

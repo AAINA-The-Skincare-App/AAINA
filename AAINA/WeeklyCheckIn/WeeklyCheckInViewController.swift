@@ -19,6 +19,7 @@ class WeeklyCheckInViewController: UIViewController {
 
     // MARK: - Layout
     private let titleLabel    = UILabel()
+    private let weekPill      = UILabel()
     private let subtitleLabel = UILabel()
     private let scrollView    = UIScrollView()
     private let contentStack  = UIStackView()
@@ -45,8 +46,7 @@ class WeeklyCheckInViewController: UIViewController {
         skinConditionSection.onConcernsChanged = { [weak self] concerns in
             guard let self else { return }
             self.changeRoutineSection.skinContext.concerns = Array(concerns)
-        productChangesSection.presentingViewController = self
-        progressPhotoSection.presentingViewController  = self
+        }
         changeRoutineSection.onChangeDecision = { [weak self] wantsChange, reason in
             self?.wantsRoutineChange = wantsChange
             self?.routineChangeReason = reason.trimmingCharacters(in: .whitespacesAndNewlines)
