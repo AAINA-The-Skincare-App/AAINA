@@ -27,12 +27,33 @@ class ReminderTableViewCell: UITableViewCell {
     }()
 
     private static let dateFmt: DateFormatter = {
-        let f = DateFormatter(); f.dateFormat = "EEEE, dd/MM/yy"; return f
+        let f = DateFormatter(); f.dateFormat = "EEE, d MMM"; return f
     }()
 
     func configure(with event: EKEvent) {
-        titleLabel.text = event.title ?? "Untitled"
-        timeLabel.text  = event.startDate.map { Self.timeFmt.string(from: $0) } ?? ""
-        dateLabel.text  = event.startDate.map { Self.dateFmt.string(from: $0) } ?? ""
+        titleLabel.text          = event.title ?? "Untitled"
+        titleLabel.font          = .systemFont(ofSize: 15, weight: .semibold)
+        titleLabel.numberOfLines = 1
+        titleLabel.lineBreakMode = .byTruncatingTail
+
+        guard let date = event.startDate else {
+            timeLabel.text = ""; dateLabel.text = ""; return
+        }
+
+        timeLabel.text      = Self.timeFmt.string(from: date)
+        timeLabel.isHidden  = false
+        timeLabel.font      = .systemFont(ofSize: 13)
+        timeLabel.textColor = .secondaryLabel
+
+        let cal = Calendar.current
+        if cal.isDateInToday(date) {
+            dateLabel.text = "Today"
+        } else if cal.isDateInTomorrow(date) {
+            dateLabel.text = "Tomorrow"
+        } else {
+            dateLabel.text = Self.dateFmt.string(from: date)
+        }
+        dateLabel.font      = .systemFont(ofSize: 13)
+        dateLabel.textColor = .tertiaryLabel
     }
 }

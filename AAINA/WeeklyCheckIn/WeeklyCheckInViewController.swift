@@ -11,20 +11,19 @@ class WeeklyCheckInViewController: UIViewController {
     var onDismiss: (() -> Void)?
 
     // MARK: - Section views
-    private let skinConditionSection   = SkinConditionSectionView.create()
-    private let consistencySection     = RoutineConsistencySectionView.create()
-    private let lifestyleSection       = LifestyleSectionView.create()
-    private let productChangesSection  = ProductChangesSectionView.create()
-    private let progressPhotoSection   = ProgressPhotoSectionView.create()
-    private let notesSection           = NotesSectionView.create()
-    private let changeRoutineSection   = ChangeRoutineSectionView.create()
+    private let skinConditionSection = SkinConditionSectionView.create()
+    private let lifestyleSection     = LifestyleSectionView.create()
+    private let progressPhotoSection = ProgressPhotoSectionView.create()
+    private let notesSection         = NotesSectionView.create()
+    private let changeRoutineSection = ChangeRoutineSectionView.create()
 
     // MARK: - Layout
-    private let titleLabel    = UILabel()
-    private let subtitleLabel = UILabel()
-    private let scrollView    = UIScrollView()
-    private let contentStack  = UIStackView()
-    private let saveButton    = UIButton(type: .custom)
+    private let titleLabel     = UILabel()
+    private let weekPill       = UILabel()
+    private let subtitleLabel  = UILabel()
+    private let scrollView     = UIScrollView()
+    private let contentStack   = UIStackView()
+    private let saveButton     = UIButton(type: .custom)
 
     // MARK: - Lifecycle
 
@@ -35,9 +34,17 @@ class WeeklyCheckInViewController: UIViewController {
         setupScrollView()
         addSections()
         setupKeyboard()
+        progressPhotoSection.presentingViewController = self
 
-        productChangesSection.presentingViewController = self
-        progressPhotoSection.presentingViewController  = self
+        // Pass skin context to AI suggestion so it can personalise the response
+        skinConditionSection.onConditionSelected = { [weak self] condition in
+            guard let self else { return }
+            self.changeRoutineSection.skinContext.condition = condition
+        }
+        skinConditionSection.onConcernsChanged = { [weak self] concerns in
+            guard let self else { return }
+            self.changeRoutineSection.skinContext.concerns = Array(concerns)
+        }
     }
 
     override func viewDidLayoutSubviews() {
@@ -50,29 +57,49 @@ class WeeklyCheckInViewController: UIViewController {
     // MARK: - Header
 
     private func setupHeader() {
+        let range = WeeklyCheckInManager.weekRange()
+
         titleLabel.text      = "Weekly Check-In"
         titleLabel.font      = .systemFont(ofSize: 22, weight: .bold)
         titleLabel.textColor = .ainaTextPrimary
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
 
+        // Week pill  e.g. "Apr 21 – Apr 27"
+        let fmt = DateFormatter(); fmt.dateFormat = "d MMM"
+        weekPill.text            = "\(fmt.string(from: range.start))  –  \(fmt.string(from: range.end))"
+        weekPill.font            = .systemFont(ofSize: 12, weight: .medium)
+        weekPill.textColor       = .ainaDustyRose
+        weekPill.textAlignment   = .center
+        weekPill.backgroundColor = UIColor.ainaCoralPink.withAlphaComponent(0.10)
+        weekPill.layer.cornerRadius = 12
+        weekPill.clipsToBounds   = true
+        weekPill.translatesAutoresizingMaskIntoConstraints = false
+
         subtitleLabel.text          = "How has your skin been this week?"
-        subtitleLabel.font          = .systemFont(ofSize: 15)
+        subtitleLabel.font          = .systemFont(ofSize: 14)
         subtitleLabel.textColor     = .ainaTextSecondary
         subtitleLabel.numberOfLines = 0
         subtitleLabel.translatesAutoresizingMaskIntoConstraints = false
 
-        view.addSubview(titleLabel)
-        view.addSubview(subtitleLabel)
+        [titleLabel, weekPill, subtitleLabel].forEach { view.addSubview($0) }
 
         NSLayoutConstraint.activate([
             titleLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 28),
             titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 24),
-            titleLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -24),
 
-            subtitleLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 6),
+            weekPill.centerYAnchor.constraint(equalTo: titleLabel.centerYAnchor),
+            weekPill.leadingAnchor.constraint(equalTo: titleLabel.trailingAnchor, constant: 10),
+            weekPill.trailingAnchor.constraint(lessThanOrEqualTo: view.trailingAnchor, constant: -24),
+            weekPill.heightAnchor.constraint(equalToConstant: 26),
+            weekPill.widthAnchor.constraint(greaterThanOrEqualToConstant: 100),
+
+            subtitleLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 4),
             subtitleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 24),
             subtitleLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -24)
         ])
+
+        // Add insets to weekPill text
+        weekPill.layoutMargins = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
     }
 
     // MARK: - Scroll view
@@ -89,7 +116,7 @@ class WeeklyCheckInViewController: UIViewController {
         scrollView.addSubview(contentStack)
 
         NSLayoutConstraint.activate([
-            scrollView.topAnchor.constraint(equalTo: subtitleLabel.bottomAnchor, constant: 20),
+            scrollView.topAnchor.constraint(equalTo: subtitleLabel.bottomAnchor, constant: 16),
             scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
@@ -106,9 +133,7 @@ class WeeklyCheckInViewController: UIViewController {
 
     private func addSections() {
         contentStack.addArrangedSubview(skinConditionSection)
-        contentStack.addArrangedSubview(consistencySection)
         contentStack.addArrangedSubview(lifestyleSection)
-        contentStack.addArrangedSubview(productChangesSection)
         contentStack.addArrangedSubview(progressPhotoSection)
         contentStack.addArrangedSubview(notesSection)
         contentStack.addArrangedSubview(changeRoutineSection)
@@ -166,9 +191,29 @@ class WeeklyCheckInViewController: UIViewController {
         }
     }
 
-    // MARK: - Actions
+    // MARK: - Save
 
     @objc private func saveTapped() {
+        let range = WeeklyCheckInManager.weekRange()
+
+        let photoFileNames = progressPhotoSection.selectedImages
+            .compactMap { JournalPhotoStore.save($0) }
+
+        var data = WeeklyCheckInData()
+        data.weekKey               = range.key
+        data.weekStart             = range.start
+        data.weekEnd               = range.end
+        data.skinCondition         = skinConditionSection.selectedCondition
+        data.concerns              = Array(skinConditionSection.selectedConcerns)
+        data.sleepQuality          = lifestyleSection.selectedSleep
+        data.stressLevel           = lifestyleSection.stressLevel
+        data.waterIntake           = lifestyleSection.waterGlasses
+        data.progressPhotoFileNames = photoFileNames
+        data.additionalNotes       = notesSection.notes
+        data.wantsRoutineChange    = changeRoutineSection.wantsChange
+        data.routineChangeReason   = changeRoutineSection.reason
+
+        WeeklyCheckInManager.save(data)
         WeeklyCheckInManager.markCompletedThisWeek()
         onDismiss?()
         dismiss(animated: true)
@@ -178,26 +223,67 @@ class WeeklyCheckInViewController: UIViewController {
 // MARK: - WeeklyCheckInManager
 
 enum WeeklyCheckInManager {
-    private static let key = "weeklyCheckIn_lastShownWeek"
+    private static let shownKey = "weeklyCheckIn_lastShownWeek"
+
+    // MARK: - Week range
+
+    static func weekRange(for date: Date = Date()) -> (start: Date, end: Date, key: String) {
+        let cal     = Calendar.current
+        let weekday = cal.component(.weekday, from: date)
+        let sunday  = cal.date(byAdding: .day, value: -(weekday - 1),
+                               to: cal.startOfDay(for: date))!
+        let saturday = cal.date(byAdding: .day, value: 6, to: sunday)!
+        let week     = cal.component(.weekOfYear, from: date)
+        let year     = cal.component(.year, from: date)
+        return (sunday, saturday, "\(year)-W\(String(format: "%02d", week))")
+    }
+
+    // MARK: - Persistence
+
+    private static var fileURL: URL {
+        #if DEBUG
+        return URL(fileURLWithPath: #file)
+            .deletingLastPathComponent()
+            .deletingLastPathComponent()
+            .appendingPathComponent("Model")
+            .appendingPathComponent("weekly_checkins.json")
+        #else
+        return FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+            .appendingPathComponent("weekly_checkins.json")
+        #endif
+    }
+
+    static func save(_ data: WeeklyCheckInData) {
+        var all = loadAll()
+        all.removeAll { $0.weekKey == data.weekKey }
+        all.append(data)
+        let enc = JSONEncoder(); enc.dateEncodingStrategy = .iso8601
+        if let d = try? enc.encode(all) { try? d.write(to: fileURL) }
+    }
+
+    static func loadAll() -> [WeeklyCheckInData] {
+        let dec = JSONDecoder(); dec.dateDecodingStrategy = .iso8601
+        guard let d   = try? Data(contentsOf: fileURL),
+              let all = try? dec.decode([WeeklyCheckInData].self, from: d)
+        else { return [] }
+        return all.sorted { $0.weekStart > $1.weekStart }
+    }
+
+    static func load(for weekKey: String) -> WeeklyCheckInData? {
+        loadAll().first { $0.weekKey == weekKey }
+    }
+
+    // MARK: - Show logic
 
     static func shouldShow() -> Bool {
-        let stored = UserDefaults.standard.string(forKey: key) ?? ""
-        return stored != currentWeekKey()
+        (UserDefaults.standard.string(forKey: shownKey) ?? "") != weekRange().key
     }
 
     static func markCompletedThisWeek() {
-        UserDefaults.standard.set(currentWeekKey(), forKey: key)
+        UserDefaults.standard.set(weekRange().key, forKey: shownKey)
     }
 
     static func markShownThisWeek() {
-        UserDefaults.standard.set(currentWeekKey(), forKey: key)
-    }
-
-    private static func currentWeekKey() -> String {
-        let cal  = Calendar.current
-        let now  = Date()
-        let week = cal.component(.weekOfYear, from: now)
-        let year = cal.component(.year, from: now)
-        return "\(year)-W\(week)"
+        UserDefaults.standard.set(weekRange().key, forKey: shownKey)
     }
 }

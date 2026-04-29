@@ -8,8 +8,13 @@ import UserNotifications
 
 class AddReminderViewController: UIViewController {
 
-    // MARK: - Callback
+    // MARK: - Callbacks
     var onSave: ((String, Date) -> Void)?
+    var onUpdate: ((String, Date) -> Void)?
+
+    // MARK: - Editing
+    var existingTitle: String?
+    var existingDate: Date?
 
     // MARK: - Views
     private let scrollView   = UIScrollView()
@@ -34,6 +39,19 @@ class AddReminderViewController: UIViewController {
         setupTitleCard()
         setupDateCard()
         setupSaveButton()
+        populateIfEditing()
+    }
+
+    private func populateIfEditing() {
+        guard let existingTitle else { return }
+        title = "Edit Reminder"
+        saveButton.setTitle("Update Reminder", for: .normal)
+        titleField.text = existingTitle
+        titleChanged()
+        if let existingDate {
+            datePicker.date = existingDate
+            datePicker.minimumDate = nil  // allow the existing date even if in the past
+        }
     }
 
     override func viewDidLayoutSubviews() {
@@ -314,7 +332,11 @@ class AddReminderViewController: UIViewController {
             return
         }
         UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound]) { _, _ in }
-        onSave?(title, datePicker.date)
+        if onUpdate != nil {
+            onUpdate?(title, datePicker.date)
+        } else {
+            onSave?(title, datePicker.date)
+        }
         dismiss(animated: true)
     }
 }

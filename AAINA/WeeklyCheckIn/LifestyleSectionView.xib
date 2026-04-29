@@ -16,14 +16,14 @@
                     <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                     <subviews>
                         <label opaque="NO" contentMode="scaleToFill" text="LIFESTYLE FACTORS" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lss-hdr">
-                            <rect key="frame" x="0.0" y="0.0" width="393" height="0.0"/>
+                            <rect key="frame" x="0.0" y="0.0" width="393" height="34.333333333333336"/>
                             <fontDescription key="fontDescription" type="boldSystem" pointSize="12"/>
                             <color key="textColor" red="0.78000000000000003" green="0.47999999999999998" blue="0.60999999999999999" alpha="1" colorSpace="calibratedRGB"/>
                         </label>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lss-sleepcard">
-                            <rect key="frame" x="0.0" y="12" width="393" height="595.66666666666663"/>
+                            <rect key="frame" x="0.0" y="46.333333333333314" width="393" height="595.66666666666674"/>
                             <subviews>
-                                <label opaque="NO" contentMode="scaleToFill" text="Sleep quality" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lss-sleeptitle">
+                                <label opaque="NO" contentMode="scaleToFill" text="Average sleep quality" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lss-sleeptitle">
                                     <rect key="frame" x="16" y="16" width="361" height="18"/>
                                     <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
                                     <color key="textColor" red="0.16500000000000001" green="0.16500000000000001" blue="0.16500000000000001" alpha="1" colorSpace="calibratedRGB"/>
@@ -58,10 +58,10 @@
                             </constraints>
                         </view>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lss-stresscard">
-                            <rect key="frame" x="0.0" y="619.66666666666663" width="393" height="96"/>
+                            <rect key="frame" x="0.0" y="654" width="393" height="96"/>
                             <subviews>
-                                <label opaque="NO" contentMode="scaleToFill" text="Stress level" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lss-stresstitle">
-                                    <rect key="frame" x="16" y="16" width="84.666666666666671" height="18"/>
+                                <label opaque="NO" contentMode="scaleToFill" text="Average stress level" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lss-stresstitle">
+                                    <rect key="frame" x="16" y="16" width="146.66666666666666" height="18"/>
                                     <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
                                     <color key="textColor" red="0.16500000000000001" green="0.16500000000000001" blue="0.16500000000000001" alpha="1" colorSpace="calibratedRGB"/>
                                 </label>
@@ -94,65 +94,37 @@
                             </constraints>
                         </view>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lss-watercard">
-                            <rect key="frame" x="0.0" y="727.66666666666663" width="393" height="124.33333333333337"/>
+                            <rect key="frame" x="0.0" y="762" width="393" height="90"/>
                             <subviews>
-                                <label opaque="NO" contentMode="scaleToFill" text="Water intake" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lss-watertitle">
-                                    <rect key="frame" x="16" y="16" width="92.333333333333329" height="18"/>
+                                <label opaque="NO" contentMode="scaleToFill" text="Average water intake" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lss-watertitle">
+                                    <rect key="frame" x="16" y="16" width="154" height="18"/>
                                     <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
                                     <color key="textColor" red="0.16500000000000001" green="0.16500000000000001" blue="0.16500000000000001" alpha="1" colorSpace="calibratedRGB"/>
                                 </label>
-                                <label opaque="NO" contentMode="scaleToFill" text="0 glasses/day avg" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lss-wcnt">
-                                    <rect key="frame" x="254" y="16.666666666666742" width="123" height="17"/>
+                                <label opaque="NO" contentMode="scaleToFill" text="0 / 8 glasses" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lss-wcnt">
+                                    <rect key="frame" x="290.33333333333331" y="16.666666666666629" width="86.666666666666686" height="17"/>
                                     <fontDescription key="fontDescription" type="boldSystem" pointSize="14"/>
                                     <color key="textColor" red="0.78000000000000003" green="0.47999999999999998" blue="0.60999999999999999" alpha="1" colorSpace="calibratedRGB"/>
                                 </label>
                                 <stackView contentMode="scaleToFill" distribution="fillEqually" spacing="4" translatesAutoresizingMaskIntoConstraints="NO" id="lss-wsegs">
-                                    <rect key="frame" x="16" y="44" width="361" height="0.0"/>
+                                    <rect key="frame" x="16" y="44" width="361" height="14.666666666666664"/>
                                 </stackView>
-                                <label opaque="NO" contentMode="scaleToFill" text="Goal: 8 glasses" textAlignment="right" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lss-wgoal">
-                                    <rect key="frame" x="290.66666666666669" y="48" width="86.333333333333314" height="14.333333333333336"/>
-                                    <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                <label opaque="NO" contentMode="scaleToFill" text="Tap a drop to log  ·  Goal: 8" textAlignment="right" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lss-wgoal">
+                                    <rect key="frame" x="235" y="64.666666666666629" width="142" height="13.333333333333329"/>
+                                    <fontDescription key="fontDescription" type="system" pointSize="11"/>
                                     <color key="textColor" red="0.54100000000000004" green="0.54100000000000004" blue="0.54100000000000004" alpha="1" colorSpace="calibratedRGB"/>
                                 </label>
-                                <stackView contentMode="scaleToFill" spacing="12" translatesAutoresizingMaskIntoConstraints="NO" id="lss-wstep">
-                                    <rect key="frame" x="154.66666666666666" y="72.333333333333371" width="84" height="36"/>
-                                    <subviews>
-                                        <button contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lss-wminus">
-                                            <rect key="frame" x="0.0" y="0.0" width="36" height="36"/>
-                                            <constraints>
-                                                <constraint firstAttribute="height" constant="36" id="lss-wm-h"/>
-                                                <constraint firstAttribute="width" constant="36" id="lss-wm-w"/>
-                                            </constraints>
-                                            <fontDescription key="fontDescription" type="system" pointSize="22"/>
-                                            <state key="normal" title="-">
-                                                <color key="titleColor" red="0.54100000000000004" green="0.54100000000000004" blue="0.54100000000000004" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
-                                            </state>
-                                        </button>
-                                        <button contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lss-wplus">
-                                            <rect key="frame" x="48" y="0.0" width="36" height="36"/>
-                                            <constraints>
-                                                <constraint firstAttribute="height" constant="36" id="lss-wp-h"/>
-                                                <constraint firstAttribute="width" constant="36" id="lss-wp-w"/>
-                                            </constraints>
-                                            <state key="normal" title="+">
-                                                <color key="titleColor" red="0.54100000000000004" green="0.54100000000000004" blue="0.54100000000000004" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
-                                            </state>
-                                        </button>
-                                    </subviews>
-                                </stackView>
                             </subviews>
                             <constraints>
                                 <constraint firstItem="lss-watertitle" firstAttribute="top" secondItem="lss-watercard" secondAttribute="top" constant="16" id="lss-w1"/>
-                                <constraint firstItem="lss-wstep" firstAttribute="top" secondItem="lss-wgoal" secondAttribute="bottom" constant="10" id="lss-w10"/>
-                                <constraint firstItem="lss-wstep" firstAttribute="centerX" secondItem="lss-watercard" secondAttribute="centerX" id="lss-w11"/>
-                                <constraint firstItem="lss-wstep" firstAttribute="bottom" secondItem="lss-watercard" secondAttribute="bottom" constant="-16" id="lss-w12"/>
+                                <constraint firstItem="lss-wgoal" firstAttribute="bottom" secondItem="lss-watercard" secondAttribute="bottom" constant="-12" id="lss-w13"/>
                                 <constraint firstItem="lss-watertitle" firstAttribute="leading" secondItem="lss-watercard" secondAttribute="leading" constant="16" id="lss-w2"/>
                                 <constraint firstItem="lss-wcnt" firstAttribute="trailing" secondItem="lss-watercard" secondAttribute="trailing" constant="-16" id="lss-w3"/>
                                 <constraint firstItem="lss-wcnt" firstAttribute="centerY" secondItem="lss-watertitle" secondAttribute="centerY" id="lss-w4"/>
                                 <constraint firstItem="lss-wsegs" firstAttribute="top" secondItem="lss-watertitle" secondAttribute="bottom" constant="10" id="lss-w5"/>
                                 <constraint firstItem="lss-wsegs" firstAttribute="leading" secondItem="lss-watercard" secondAttribute="leading" constant="16" id="lss-w6"/>
                                 <constraint firstItem="lss-wsegs" firstAttribute="trailing" secondItem="lss-watercard" secondAttribute="trailing" constant="-16" id="lss-w7"/>
-                                <constraint firstItem="lss-wgoal" firstAttribute="top" secondItem="lss-wsegs" secondAttribute="bottom" constant="4" id="lss-w8"/>
+                                <constraint firstItem="lss-wgoal" firstAttribute="top" secondItem="lss-wsegs" secondAttribute="bottom" constant="6" id="lss-w8"/>
                                 <constraint firstItem="lss-wgoal" firstAttribute="trailing" secondItem="lss-watercard" secondAttribute="trailing" constant="-16" id="lss-w9"/>
                             </constraints>
                         </view>
@@ -172,8 +144,6 @@
                 <outlet property="stressSlider" destination="lss-slider" id="lss-o2"/>
                 <outlet property="waterCard" destination="lss-watercard" id="lss-o9"/>
                 <outlet property="waterCountLabel" destination="lss-wcnt" id="lss-o3"/>
-                <outlet property="waterMinusButton" destination="lss-wminus" id="lss-o5"/>
-                <outlet property="waterPlusButton" destination="lss-wplus" id="lss-o6"/>
                 <outlet property="waterSegmentStack" destination="lss-wsegs" id="lss-o4"/>
             </connections>
             <point key="canvasLocation" x="138" y="129"/>

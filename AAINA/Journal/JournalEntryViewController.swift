@@ -23,6 +23,7 @@ class JournalEntryViewController: UIViewController {
 
     // Notes card
     private let notesCard        = UIView()
+    private let titleField       = UITextField()
     private let notesTextView    = UITextView()
     private let notesPlaceholder = UILabel()
     private let notesSep         = UIView()
@@ -143,6 +144,14 @@ class JournalEntryViewController: UIViewController {
         let badge  = makeIconBadge(systemName: "note.text")
         let header = makeSectionLabel("NOTE")
 
+        titleField.placeholder       = "Title"
+        titleField.font              = .systemFont(ofSize: 20, weight: .semibold)
+        titleField.textColor         = .ainaTextPrimary
+        titleField.tintColor         = .ainaCoralPink
+        titleField.returnKeyType     = .next
+        titleField.borderStyle       = .none
+        titleField.translatesAutoresizingMaskIntoConstraints = false
+
         notesTextView.backgroundColor        = .clear
         notesTextView.font                   = .systemFont(ofSize: 15)
         notesTextView.textColor              = .ainaTextPrimary
@@ -161,7 +170,7 @@ class JournalEntryViewController: UIViewController {
         notesSep.backgroundColor = UIColor.ainaCoralPink.withAlphaComponent(0.15)
         notesSep.translatesAutoresizingMaskIntoConstraints = false
 
-        [badge, header, notesSep, notesPlaceholder, notesTextView].forEach { notesCard.addSubview($0) }
+        [badge, header, titleField, notesSep, notesPlaceholder, notesTextView].forEach { notesCard.addSubview($0) }
 
         NSLayoutConstraint.activate([
             notesCard.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 16),
@@ -174,7 +183,11 @@ class JournalEntryViewController: UIViewController {
             header.centerYAnchor.constraint(equalTo: badge.centerYAnchor),
             header.leadingAnchor.constraint(equalTo: badge.trailingAnchor, constant: 12),
 
-            notesSep.topAnchor.constraint(equalTo: badge.bottomAnchor, constant: 12),
+            titleField.topAnchor.constraint(equalTo: badge.bottomAnchor, constant: 12),
+            titleField.leadingAnchor.constraint(equalTo: notesCard.leadingAnchor, constant: 20),
+            titleField.trailingAnchor.constraint(equalTo: notesCard.trailingAnchor, constant: -20),
+
+            notesSep.topAnchor.constraint(equalTo: titleField.bottomAnchor, constant: 8),
             notesSep.leadingAnchor.constraint(equalTo: notesCard.leadingAnchor, constant: 20),
             notesSep.trailingAnchor.constraint(equalTo: notesCard.trailingAnchor, constant: -20),
             notesSep.heightAnchor.constraint(equalToConstant: 1),
@@ -182,7 +195,7 @@ class JournalEntryViewController: UIViewController {
             notesTextView.topAnchor.constraint(equalTo: notesSep.bottomAnchor, constant: 12),
             notesTextView.leadingAnchor.constraint(equalTo: notesCard.leadingAnchor, constant: 16),
             notesTextView.trailingAnchor.constraint(equalTo: notesCard.trailingAnchor, constant: -16),
-            notesTextView.heightAnchor.constraint(greaterThanOrEqualToConstant: 110),
+            notesTextView.heightAnchor.constraint(greaterThanOrEqualToConstant: 100),
             notesTextView.bottomAnchor.constraint(equalTo: notesCard.bottomAnchor, constant: -16),
 
             notesPlaceholder.topAnchor.constraint(equalTo: notesTextView.topAnchor),
@@ -581,14 +594,22 @@ class JournalEntryViewController: UIViewController {
     }
 
     @objc private func saveTapped() {
+        // Commit any tag the user typed but didn't press Return on
+        if let pending = tagField.text {
+            addTag(pending)
+            tagField.text = nil
+        }
+
+        let title     = titleField.text?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
         let text      = notesTextView.text.trimmingCharacters(in: .whitespacesAndNewlines)
         let fileNames = selectedPhotos.compactMap { JournalPhotoStore.save($0) }
         let now       = Date()
         let entry = JournalEntry(
             id:             String(now.timeIntervalSince1970),
             userID:         "",
+            title:          title,
             note:           text,
-            flareUps:       userTags,      // stored in flareUps field as custom tags
+            flareUps:       userTags,
             date:           now,
             photoFileNames: fileNames
         )

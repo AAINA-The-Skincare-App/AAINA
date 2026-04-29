@@ -214,23 +214,26 @@ struct JournalEntry: Codable {
 
     let id: String
     let userID: String
-    let note: String
-    let flareUps: [String]
+    var title: String
+    var note: String
+    var flareUps: [String]
     let date: Date
-    let photoFileNames: [String]
+    var photoFileNames: [String]
 
     enum CodingKeys: String, CodingKey {
         case id
         case userID = "user_id"
+        case title
         case note
         case flareUps
         case date
         case photoFileNames
     }
 
-    init(id: String, userID: String, note: String, flareUps: [String], date: Date = Date(), photoFileNames: [String] = []) {
+    init(id: String, userID: String, title: String = "", note: String, flareUps: [String], date: Date = Date(), photoFileNames: [String] = []) {
         self.id = id
         self.userID = userID
+        self.title = title
         self.note = note
         self.flareUps = flareUps
         self.date = date
@@ -241,6 +244,7 @@ struct JournalEntry: Codable {
         let c = try decoder.container(keyedBy: CodingKeys.self)
         id = try c.decode(String.self, forKey: .id)
         userID = try c.decode(String.self, forKey: .userID)
+        title = (try? c.decode(String.self, forKey: .title)) ?? ""
         note = try c.decode(String.self, forKey: .note)
         flareUps = try c.decode([String].self, forKey: .flareUps)
         date = (try? c.decode(Date.self, forKey: .date)) ?? Date()
@@ -256,6 +260,7 @@ struct SkinLogEntry: Codable {
     let isFlareUp: Bool
     let flareUps: [String]    // skin concerns (Acne, Redness, etc.)
     let note: String
+    let title: String
     let photoFileNames: [String]
 
     init(id: String = String(Date().timeIntervalSince1970),
@@ -263,13 +268,26 @@ struct SkinLogEntry: Codable {
          isFlareUp: Bool,
          flareUps: [String],
          note: String,
+         title: String = "",
          photoFileNames: [String] = []) {
         self.id = id
         self.date = date
         self.isFlareUp = isFlareUp
         self.flareUps = flareUps
         self.note = note
+        self.title = title
         self.photoFileNames = photoFileNames
+    }
+
+    init(from decoder: Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        id = try c.decode(String.self, forKey: .id)
+        date = (try? c.decode(Date.self, forKey: .date)) ?? Date()
+        isFlareUp = (try? c.decode(Bool.self, forKey: .isFlareUp)) ?? false
+        flareUps = (try? c.decode([String].self, forKey: .flareUps)) ?? []
+        note = (try? c.decode(String.self, forKey: .note)) ?? ""
+        title = (try? c.decode(String.self, forKey: .title)) ?? ""
+        photoFileNames = (try? c.decode([String].self, forKey: .photoFileNames)) ?? []
     }
 }
 

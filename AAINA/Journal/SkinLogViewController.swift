@@ -8,14 +8,19 @@ import PhotosUI
 
 class SkinLogViewController: UIViewController {
 
-    // MARK: - Callback
+    // MARK: - Callbacks
     var onSave: ((SkinLogEntry) -> Void)?
+    var onUpdate: ((SkinLogEntry) -> Void)?
+
+    // MARK: - Editing
+    var existingEntry: SkinLogEntry?
 
     // MARK: - State
-    private var isFlareUp      = false
-    private var selectedTags   = Set<String>()
-    private var selectedPhotos = [UIImage]()
-    private let tagOptions     = ["Acne", "Redness", "Dryness", "Sensitivity", "Breakout", "Texture"]
+    private var isFlareUp              = false
+    private var selectedTags           = Set<String>()
+    private var existingPhotoFileNames = [String]()   // already saved to disk
+    private var selectedPhotos         = [UIImage]()  // newly picked, not yet saved
+    private let tagOptions             = ["Acne", "Redness", "Dryness", "Sensitivity", "Breakout", "Texture"]
 
     // MARK: - Root layout
     private let scrollView   = UIScrollView()
@@ -25,6 +30,7 @@ class SkinLogViewController: UIViewController {
 
     // Notes card
     private let notesCard        = UIView()
+    private let titleTextField   = UITextField()
     private let notesTextView    = UITextView()
     private let notesPlaceholder = UILabel()
     private let notesSep         = UIView()
@@ -56,6 +62,49 @@ class SkinLogViewController: UIViewController {
         setupFlareCard()
         setupSaveButton()
         setupKeyboard()
+        populateIfEditing()
+    }
+
+    private func populateIfEditing() {
+        guard let entry = existingEntry else { return }
+        title = "Edit Skin Log"
+        saveButton.setTitle("Update Log", for: .normal)
+
+        titleTextField.text = entry.title
+        if !entry.note.isEmpty {
+            notesTextView.text = entry.note
+            notesPlaceholder.isHidden = true
+            notesSep.backgroundColor = UIColor.ainaCoralPink.withAlphaComponent(0.5)
+        }
+
+        existingPhotoFileNames = entry.photoFileNames
+        rebuildPhotoStrip()
+
+        if entry.isFlareUp {
+            isFlareUp = true
+            checkboxButton.isSelected = true
+            tagsContainer.isHidden = false
+            tagsContainer.alpha = 1
+            selectedTags = Set(entry.flareUps)
+            // Highlight pre-selected tag buttons
+            DispatchQueue.main.async { self.refreshTagButtonStates() }
+        }
+    }
+
+    private func refreshTagButtonStates() {
+        for row in tagsGrid.arrangedSubviews {
+            guard let rowStack = row as? UIStackView else { continue }
+            for wrapper in rowStack.arrangedSubviews {
+                guard let glass = wrapper as? UIVisualEffectView,
+                      let btn = glass.contentView.subviews.first(where: { $0 is UIButton }) as? UIButton,
+                      let tagTitle = btn.title(for: .normal) else { continue }
+                let selected = selectedTags.contains(tagTitle)
+                btn.isSelected        = selected
+                glass.backgroundColor = selected ? UIColor.ainaCoralPink.withAlphaComponent(0.75) : .clear
+                glass.layer.borderColor = selected ? UIColor.ainaCoralPink.cgColor : UIColor.clear.cgColor
+                glass.layer.borderWidth = selected ? 1 : 0
+            }
+        }
     }
 
     override func viewDidLayoutSubviews() {
@@ -71,6 +120,8 @@ class SkinLogViewController: UIViewController {
     private func setupNavBar() {
         title = "Skin Log"
         navigationController?.navigationBar.prefersLargeTitles = false
+        // Share/export only available when editing a saved entry
+        guard existingEntry != nil else { return }
         let exportBtn = UIBarButtonItem(
             image: UIImage(systemName: "square.and.arrow.up"),
             style: .plain,
@@ -83,11 +134,13 @@ class SkinLogViewController: UIViewController {
 
     @objc private func exportTapped() {
         let text  = notesTextView.text.trimmingCharacters(in: .whitespacesAndNewlines)
+        let title = titleTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
         let entry = SkinLogEntry(
             isFlareUp:      isFlareUp,
             flareUps:       Array(selectedTags).sorted(),
             note:           text,
-            photoFileNames: []   // photos not yet saved — export draft
+            title:          title,
+            photoFileNames: []
         )
         let pdf = SkinLogPDFExporter.generate(from: entry)
         let av  = UIActivityViewController(activityItems: [pdf], applicationActivities: nil)
@@ -164,13 +217,22 @@ class SkinLogViewController: UIViewController {
         contentView.addSubview(notesCard)
 
         let badge  = makeIconBadge(systemName: "note.text")
-        let header = makeSectionLabel("SKIN NOTES")
+        let header = makeSectionLabel("NOTES")
+
+        // Title field
+        titleTextField.placeholder  = "Add a title..."
+        titleTextField.font         = .systemFont(ofSize: 17, weight: .semibold)
+        titleTextField.textColor    = .ainaTextPrimary
+        titleTextField.tintColor    = .ainaCoralPink
+        titleTextField.borderStyle  = .none
+        titleTextField.translatesAutoresizingMaskIntoConstraints = false
 
         notesTextView.backgroundColor        = .clear
         notesTextView.font                   = .systemFont(ofSize: 15)
         notesTextView.textColor              = .ainaTextPrimary
         notesTextView.tintColor              = .ainaCoralPink
         notesTextView.textContainerInset     = UIEdgeInsets(top: 0, left: 4, bottom: 0, right: 4)
+        notesTextView.textContainer.lineFragmentPadding = 0  // align cursor with placeholder start
         notesTextView.isScrollEnabled        = false
         notesTextView.delegate               = self
         notesTextView.translatesAutoresizingMaskIntoConstraints = false
@@ -184,7 +246,7 @@ class SkinLogViewController: UIViewController {
         notesSep.backgroundColor = UIColor.ainaCoralPink.withAlphaComponent(0.15)
         notesSep.translatesAutoresizingMaskIntoConstraints = false
 
-        [badge, header, notesSep, notesPlaceholder, notesTextView].forEach { notesCard.addSubview($0) }
+        [badge, header, titleTextField, notesSep, notesPlaceholder, notesTextView].forEach { notesCard.addSubview($0) }
 
         NSLayoutConstraint.activate([
             notesCard.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 16),
@@ -197,7 +259,11 @@ class SkinLogViewController: UIViewController {
             header.centerYAnchor.constraint(equalTo: badge.centerYAnchor),
             header.leadingAnchor.constraint(equalTo: badge.trailingAnchor, constant: 12),
 
-            notesSep.topAnchor.constraint(equalTo: badge.bottomAnchor, constant: 12),
+            titleTextField.topAnchor.constraint(equalTo: badge.bottomAnchor, constant: 12),
+            titleTextField.leadingAnchor.constraint(equalTo: notesCard.leadingAnchor, constant: 20),
+            titleTextField.trailingAnchor.constraint(equalTo: notesCard.trailingAnchor, constant: -20),
+
+            notesSep.topAnchor.constraint(equalTo: titleTextField.bottomAnchor, constant: 10),
             notesSep.leadingAnchor.constraint(equalTo: notesCard.leadingAnchor, constant: 20),
             notesSep.trailingAnchor.constraint(equalTo: notesCard.trailingAnchor, constant: -20),
             notesSep.heightAnchor.constraint(equalToConstant: 1),
@@ -224,7 +290,7 @@ class SkinLogViewController: UIViewController {
         contentView.addSubview(photosCard)
 
         let badge    = makeIconBadge(systemName: "camera.fill")
-        let header   = makeSectionLabel("SKIN PHOTOS")
+        let header   = makeSectionLabel("PHOTOS")
 
         let subtitle = UILabel()
         subtitle.text          = "Attach photos to include in your report"
@@ -277,12 +343,59 @@ class SkinLogViewController: UIViewController {
 
     private func rebuildPhotoStrip() {
         photoStrip.arrangedSubviews.forEach { $0.removeFromSuperview() }
+
+        // Existing saved photos
+        for (i, name) in existingPhotoFileNames.enumerated() {
+            if let img = JournalPhotoStore.load(named: name) {
+                photoStrip.addArrangedSubview(makeExistingPhotoTile(image: img, index: i))
+            }
+        }
+        // Newly picked photos
         for (i, image) in selectedPhotos.enumerated() {
             photoStrip.addArrangedSubview(makePhotoTile(image: image, index: i))
         }
-        if selectedPhotos.count < 6 {
+
+        let total = existingPhotoFileNames.count + selectedPhotos.count
+        if total < 6 {
             photoStrip.addArrangedSubview(makeAddPhotoTile())
         }
+    }
+
+    private func makeExistingPhotoTile(image: UIImage, index: Int) -> UIView {
+        let container = UIView()
+        container.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            container.widthAnchor.constraint(equalToConstant: 80),
+            container.heightAnchor.constraint(equalToConstant: 80)
+        ])
+        let iv = UIImageView(image: image)
+        iv.contentMode = .scaleAspectFill
+        iv.clipsToBounds = true
+        iv.layer.cornerRadius = 14
+        iv.translatesAutoresizingMaskIntoConstraints = false
+        container.addSubview(iv)
+
+        let del = UIButton(type: .system)
+        del.setImage(UIImage(systemName: "xmark.circle.fill"), for: .normal)
+        del.tintColor = .ainaDustyRose
+        del.backgroundColor = UIColor.white.withAlphaComponent(0.85)
+        del.layer.cornerRadius = 10
+        del.tag = index
+        del.addTarget(self, action: #selector(removeExistingPhoto(_:)), for: .touchUpInside)
+        del.translatesAutoresizingMaskIntoConstraints = false
+        container.addSubview(del)
+
+        NSLayoutConstraint.activate([
+            iv.topAnchor.constraint(equalTo: container.topAnchor),
+            iv.leadingAnchor.constraint(equalTo: container.leadingAnchor),
+            iv.trailingAnchor.constraint(equalTo: container.trailingAnchor),
+            iv.bottomAnchor.constraint(equalTo: container.bottomAnchor),
+            del.topAnchor.constraint(equalTo: container.topAnchor, constant: 4),
+            del.trailingAnchor.constraint(equalTo: container.trailingAnchor, constant: -4),
+            del.widthAnchor.constraint(equalToConstant: 20),
+            del.heightAnchor.constraint(equalToConstant: 20)
+        ])
+        return container
     }
 
     private func makePhotoTile(image: UIImage, index: Int) -> UIView {
@@ -592,6 +705,12 @@ class SkinLogViewController: UIViewController {
         rebuildPhotoStrip()
     }
 
+    @objc private func removeExistingPhoto(_ sender: UIButton) {
+        guard sender.tag < existingPhotoFileNames.count else { return }
+        existingPhotoFileNames.remove(at: sender.tag)
+        rebuildPhotoStrip()
+    }
+
     @objc private func checkboxTapped() {
         isFlareUp.toggle()
         checkboxButton.isSelected = isFlareUp
@@ -607,7 +726,13 @@ class SkinLogViewController: UIViewController {
         sender.isSelected.toggle()
         if let glass = sender.superview?.superview as? UIVisualEffectView {
             UIView.animate(withDuration: 0.15) {
-                glass.backgroundColor = sender.isSelected ? .ainaTintedGlassMedium : .clear
+                glass.backgroundColor = sender.isSelected
+                    ? UIColor.ainaCoralPink.withAlphaComponent(0.75)
+                    : .clear
+                glass.layer.borderColor = sender.isSelected
+                    ? UIColor.ainaCoralPink.cgColor
+                    : UIColor.clear.cgColor
+                glass.layer.borderWidth = sender.isSelected ? 1 : 0
             }
         }
         if let title = sender.title(for: .normal) {
@@ -617,14 +742,32 @@ class SkinLogViewController: UIViewController {
 
     @objc private func saveTapped() {
         let text      = notesTextView.text.trimmingCharacters(in: .whitespacesAndNewlines)
-        let fileNames = selectedPhotos.compactMap { JournalPhotoStore.save($0) }
-        let entry = SkinLogEntry(
-            isFlareUp:      isFlareUp,
-            flareUps:       Array(selectedTags).sorted(),
-            note:           text,
-            photoFileNames: fileNames
-        )
-        onSave?(entry)
+        let entryTitle = titleTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+        let newFileNames  = selectedPhotos.compactMap { JournalPhotoStore.save($0) }
+        let allFileNames  = existingPhotoFileNames + newFileNames
+
+        if let existing = existingEntry {
+            // Editing: preserve original id and date
+            let updated = SkinLogEntry(
+                id:             existing.id,
+                date:           existing.date,
+                isFlareUp:      isFlareUp,
+                flareUps:       Array(selectedTags).sorted(),
+                note:           text,
+                title:          entryTitle,
+                photoFileNames: allFileNames
+            )
+            onUpdate?(updated)
+        } else {
+            let entry = SkinLogEntry(
+                isFlareUp:      isFlareUp,
+                flareUps:       Array(selectedTags).sorted(),
+                note:           text,
+                title:          entryTitle,
+                photoFileNames: allFileNames
+            )
+            onSave?(entry)
+        }
         navigationController?.popViewController(animated: true)
     }
 }
