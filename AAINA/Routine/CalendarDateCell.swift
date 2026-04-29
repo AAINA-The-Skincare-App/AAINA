@@ -32,15 +32,20 @@ final class CalendarDateCell: UICollectionViewCell {
         fatalError()
     }
 
-    func configure(text: String, selected: Bool) {
+    func configure(text: String, selected: Bool, isToday: Bool = false) {
         label.text = text
 
         if selected {
             contentView.backgroundColor = .ainaCoralPink.withAlphaComponent(0.75)
             contentView.layer.cornerRadius = 22
             label.textColor = .white
+        } else if isToday {
+            contentView.backgroundColor = .ainaCoralPink.withAlphaComponent(0.2)
+            contentView.layer.cornerRadius = 22
+            label.textColor = .ainaCoralPink
         } else {
             contentView.backgroundColor = .clear
+            contentView.layer.cornerRadius = 0
             label.textColor = .label
         }
     }
