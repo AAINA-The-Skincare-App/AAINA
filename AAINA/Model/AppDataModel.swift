@@ -137,6 +137,7 @@ final class AppDataModel {
         loadJournalEntries()
         loadSavedRoutines()
         aiRoutine = loadAIRoutineFromDisk()
+        lastFaceScanResult = loadLastFaceScanResult()
     }
 
     // MARK: Static (JSON-backed, read-only)
@@ -154,6 +155,7 @@ final class AppDataModel {
     private(set) var journalEntries: [JournalEntry] = []
     private(set) var savedRoutines: [SavedRoutine] = []
     private(set) var aiRoutine: AIRoutineOutput?
+    private(set) var lastFaceScanResult: FaceScanResult?
 
     // MARK: Session (in-memory)
 
@@ -279,6 +281,25 @@ extension AppDataModel {
         aiRoutine = output
     }
 
+    func saveLastFaceScanResult(_ result: FaceScanResult) {
+        guard let data = try? JSONEncoder().encode(result) else { return }
+        try? data.write(to: lastFaceScanURL)
+        lastFaceScanResult = result
+    }
+
+    func onboardingDataFromProfile() -> OnboardingData? {
+        guard let profile = userProfile else { return nil }
+        return OnboardingData(
+            birthYear: profile.birthYear,
+            tZone: profile.tZone,
+            uZone: profile.uZone,
+            cZone: profile.cZone,
+            sensitivity: profile.sensitivity,
+            goals: profile.goals,
+            uvExposure: profile.uvExposure
+        )
+    }
+
     func clearAIRoutine() {
         try? FileManager.default.removeItem(at: aiRoutineURL)
         aiRoutine = nil
@@ -289,8 +310,17 @@ extension AppDataModel {
         return try? JSONDecoder().decode(AIRoutineOutput.self, from: data)
     }
 
+    private func loadLastFaceScanResult() -> FaceScanResult? {
+        guard let data = try? Data(contentsOf: lastFaceScanURL) else { return nil }
+        return try? JSONDecoder().decode(FaceScanResult.self, from: data)
+    }
+
     private var aiRoutineURL: URL {
         documentsDirectory.appendingPathComponent("ai_routine.json")
+    }
+
+    private var lastFaceScanURL: URL {
+        documentsDirectory.appendingPathComponent("last_face_scan.json")
     }
 }
 

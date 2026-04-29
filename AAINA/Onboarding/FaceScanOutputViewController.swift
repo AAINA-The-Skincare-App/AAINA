@@ -7,11 +7,18 @@ import UIKit
 
 final class FaceScanOutputViewController: UIViewController {
 
+    enum LaunchMode {
+        case onboarding
+        case homeFirstRoutineUpdate
+        case homeRepeatAnalysis
+    }
+
     // MARK: - Input
     var capturedImage: UIImage?
     var dataModel: AppDataModel!
     var onboardingData: OnboardingData!
     var scanResult: FaceScanResult?
+    var launchMode: LaunchMode = .onboarding
     // MARK: - UI
     private let scrollView   = UIScrollView()
     private let contentStack = UIStackView()
@@ -109,12 +116,33 @@ final class FaceScanOutputViewController: UIViewController {
         }
         Task {
             do {
-                let result = try await GeminiFreeService().analyzeFace(image: image)
-                await MainActor.run { self.showResult(result) }
+                let result: FaceScanResult
+                if launchMode == .homeRepeatAnalysis {
+                    result = try await HomeFaceScanDetectionService().detectConcerns(image: image)
+                } else {
+                    result = try await GeminiFreeService().analyzeFace(image: image)
+                }
+                await MainActor.run { self.handleAnalysisResult(result) }
             } catch {
                 await MainActor.run { self.showFailureAlert() }
             }
         }
+    }
+
+    private func handleAnalysisResult(_ result: FaceScanResult) {
+        scanResult = result
+        dataModel.saveLastFaceScanResult(result)
+        InsightStore.shared.saveFaceScan(image: capturedImage, result: result)
+
+        if launchMode == .homeRepeatAnalysis {
+            let resultVC = FaceScanResultViewController()
+            resultVC.capturedImage = capturedImage
+            resultVC.result = result
+            navigationController?.pushViewController(resultVC, animated: true)
+            return
+        }
+
+        showResult(result)
     }
 
     private func showResult(_ result: FaceScanResult) {
@@ -138,7 +166,12 @@ final class FaceScanOutputViewController: UIViewController {
             self?.startAnalysis()
         })
         alert.addAction(UIAlertAction(title: "Skip", style: .cancel) { [weak self] _ in
-            self?.navigateToRoutineLoading()
+            guard let self else { return }
+            if self.launchMode == .onboarding {
+                self.navigateToRoutineLoading()
+            } else {
+                self.navigationController?.popToRootViewController(animated: true)
+            }
         })
         present(alert, animated: true)
     }
@@ -486,7 +519,8 @@ final class FaceScanOutputViewController: UIViewController {
     // MARK: - Continue button
 
     private func setupContinueButton() {
-        continueBtn.setTitle("Continue to My Routine", for: .normal)
+        let buttonTitle = launchMode == .homeFirstRoutineUpdate ? "Update My Routine" : "Continue to My Routine"
+        continueBtn.setTitle(buttonTitle, for: .normal)
         continueBtn.setTitleColor(.white, for: .normal)
         continueBtn.titleLabel?.font = .systemFont(ofSize: 17, weight: .semibold)
         continueBtn.backgroundColor = .ainaDustyRose
@@ -515,6 +549,7 @@ final class FaceScanOutputViewController: UIViewController {
         let loadingVC = RoutineLoadingViewController()
         loadingVC.onboardingData = onboardingData
         loadingVC.dataModel = dataModel
+        loadingVC.capturedImage = capturedImage
         navigationController?.pushViewController(loadingVC, animated: true)
     }
 

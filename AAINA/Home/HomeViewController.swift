@@ -17,17 +17,17 @@ class HomeViewController: UIViewController {
     private var steps: [RoutineStep] = []
     private var aiSteps: [AIRoutineStep] = []
     private var aiOutput: AIRoutineOutput?
-    private let skincareArticles: [(title: String, meta: String)] = [
-        ("Understanding Retinol", "4 min"),
-        ("Layering Ingredients", "5 min"),
-        ("Skin Hydration", "3 min"),
-        ("SPF Myths Debunked", "4 min")
+    private let skincareArticles: [(id: String, title: String, meta: String)] = [
+        ("retinol-101", "Understanding Retinol", "5 min read"),
+        ("layering-rules", "Layering Ingredients", "5 min read"),
+        ("hydration-system", "Skin Hydration", "5 min read"),
+        ("spf-protection", "SPF Myths Debunked", "6 min read")
     ]
-    private let nutritionArticles: [(title: String, meta: String)] = [
-        ("Collagen Boost", "8 min"),
-        ("Vitamins your skin love", "3 min"),
-        ("Nutrition Myths", "5 min"),
-        ("What to Avoid?", "4 min")
+    private let nutritionArticles: [(id: String, title: String, meta: String)] = [
+        ("collagen-boost", "Collagen Boost", "8 min read"),
+        ("skin-vitamins", "Vitamins your skin love", "3 min read"),
+        ("nutrition-myths", "Nutrition Myths", "5 min read"),
+        ("what-to-avoid", "What to Avoid?", "4 min read")
     ]
     
     private var currentUserID: String {
@@ -55,6 +55,7 @@ class HomeViewController: UIViewController {
             dataModel = AppDataModel.shared
         }
         
+        overrideUserInterfaceStyle = .light
         title = ""
         navigationController?.setNavigationBarHidden(true, animated: false)
         
@@ -65,6 +66,11 @@ class HomeViewController: UIViewController {
         setupCollectionView()
         registerCells()
         reloadRoutineData()
+    }
+
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        view.applyAINABackground()
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -102,9 +108,6 @@ class HomeViewController: UIViewController {
             guard let scanner = segue.destination as? ScannerViewController else { return }
             scanner.title = "Ingredient scanner"
             scanner.step = "Ingredient scanner"
-        case "home_to_profile_placeholder":
-            segue.destination.title = ""
-            segue.destination.view.applyAINABackground()
         case "home_to_face_scan", "home_to_skin_insights":
             segue.destination.title = ""
         default:
@@ -118,15 +121,79 @@ extension HomeViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         switch indexPath.section {
         case 1:
-            openHomeDestination(withIdentifier: "home_to_face_scan")
+            handleFaceScanTapped()
         case 2:
             openHomeDestination(withIdentifier: "home_to_ingredient_scan")
         case 4:
-            openHomeDestination(withIdentifier: "home_to_skin_insights")
+            openInsights()
+        case 5:
+            openArticle(skincareArticles[indexPath.item])
+        case 6:
+            openArticle(nutritionArticles[indexPath.item])
         default:
             break
         }
         collectionView.deselectItem(at: indexPath, animated: true)
+    }
+}
+
+private extension HomeViewController {
+    func handleFaceScanTapped() {
+        if dataModel.lastFaceScanResult == nil {
+            presentFirstFaceScanPrompt()
+        } else {
+            openFaceScanCamera(mode: .homeRepeatAnalysis)
+        }
+    }
+
+    func presentFirstFaceScanPrompt() {
+        let alert = UIAlertController(
+            title: "First Face Scan",
+            message: "This is your first face scan. Your routine will be updated with a better match because AAINA will use both your onboarding answers and your face scan.",
+            preferredStyle: .alert
+        )
+        alert.addAction(UIAlertAction(title: "Cancel Face Scan", style: .cancel))
+        alert.addAction(UIAlertAction(title: "Scan", style: .default) { [weak self] _ in
+            self?.openFaceScanCamera(mode: .homeFirstRoutineUpdate)
+        })
+        present(alert, animated: true)
+    }
+
+    func openFaceScanCamera(mode: OnboardingCameraViewController.LaunchMode) {
+        guard let onboardingData = dataModel.onboardingDataFromProfile() ?? savedOnboardingData() else {
+            presentScannerInfo(
+                title: "Profile Needed",
+                message: "Please complete onboarding before starting a face scan."
+            )
+            return
+        }
+
+        let cameraVC = OnboardingCameraViewController()
+        cameraVC.onboardingData = onboardingData
+        cameraVC.dataModel = dataModel
+        cameraVC.launchMode = mode
+        cameraVC.hidesBottomBarWhenPushed = true
+        navigationController?.pushViewController(cameraVC, animated: true)
+    }
+
+    func savedOnboardingData() -> OnboardingData? {
+        guard
+            let data = UserDefaults.standard.data(forKey: "onboardingData"),
+            let onboardingData = try? JSONDecoder().decode(OnboardingData.self, from: data),
+            onboardingData.tZone != nil,
+            onboardingData.uZone != nil,
+            onboardingData.cZone != nil,
+            onboardingData.sensitivity != nil,
+            onboardingData.uvExposure != nil
+        else { return nil }
+
+        return onboardingData
+    }
+
+    func openInsights() {
+        let insightsVC = InsightViewController()
+        insightsVC.hidesBottomBarWhenPushed = true
+        navigationController?.pushViewController(insightsVC, animated: true)
     }
 }
 
@@ -160,7 +227,8 @@ extension HomeViewController {
     
     private func reloadRoutineData() {
         if let ai = aiOutput {
-            aiSteps = selectedSegment == 0 ? ai.morning : ai.evening
+            let selectedSteps = selectedSegment == 0 ? ai.morning : ai.evening
+            aiSteps = selectedSteps.sorted { $0.stepNumber < $1.stepNumber }
             steps = []
         }
         else {
@@ -176,7 +244,9 @@ extension HomeViewController {
     }
     
     private func currentRoutineTitles() -> [String] {
-        let titles = aiOutput != nil ? aiSteps.map { $0.productType.rawValue } : steps.map { $0.type.rawValue }
+        let titles = aiOutput != nil
+            ? aiSteps.map { $0.productType.rawValue }
+            : steps.map { $0.type.rawValue }
         return titles.map { formattedRoutineTitle($0) }
     }
 
@@ -206,6 +276,21 @@ extension HomeViewController {
     private func openHomeDestination(withIdentifier identifier: String) {
         navigationController?.setNavigationBarHidden(false, animated: true)
         performSegue(withIdentifier: identifier, sender: self)
+    }
+
+    private func openProfile() {
+        (tabBarController as? MainTabBarViewController)?.openProfileFromHome()
+    }
+
+    private func openArticle(_ article: (id: String, title: String, meta: String)) {
+        let vc = ArticlesViewController()
+        vc.articleID = article.id
+        vc.articleTitle = article.title
+        vc.articleImageName = article.title
+        vc.articleReadTime = article.meta
+        vc.hidesBottomBarWhenPushed = true
+        navigationController?.setNavigationBarHidden(true, animated: true)
+        navigationController?.pushViewController(vc, animated: true)
     }
 }
 
@@ -242,7 +327,7 @@ extension HomeViewController: UICollectionViewDataSource {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: GreetingSectionCollectionViewCell.identifier, for: indexPath) as! GreetingSectionCollectionViewCell
             cell.configure(name: currentUserName())
             cell.onProfileTapped = { [weak self] in
-                self?.openHomeDestination(withIdentifier: "home_to_profile_placeholder")
+                self?.openProfile()
             }
             return cell
             
@@ -304,7 +389,7 @@ extension HomeViewController: UICollectionViewDataSource {
                 description: "From your last scan, your skin shows signs of improved hydration and reduced redness."
             )
             cell.onActionTapped = { [weak self] in
-                self?.openHomeDestination(withIdentifier: "home_to_skin_insights")
+                self?.openInsights()
             }
             
             return cell

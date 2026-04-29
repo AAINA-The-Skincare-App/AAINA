@@ -41,6 +41,7 @@ final class HomeRoutineSectionCollectionViewCell: UICollectionViewCell {
     }
     
     private func setupUI() {
+        overrideUserInterfaceStyle = .light
         backgroundColor = .clear
         contentView.backgroundColor = .clear
         
@@ -68,6 +69,16 @@ final class HomeRoutineSectionCollectionViewCell: UICollectionViewCell {
         segmentControl.insertSegment(withTitle: "Morning", at: 0, animated: false)
         segmentControl.insertSegment(withTitle: "Evening", at: 1, animated: false)
         segmentControl.selectedSegmentIndex = selectedSegment
+        segmentControl.selectedSegmentTintColor = UIColor.ainaCoralPink
+        segmentControl.backgroundColor = UIColor.white.withAlphaComponent(0.45)
+        segmentControl.setTitleTextAttributes([
+            .foregroundColor: UIColor.white,
+            .font: UIFont.systemFont(ofSize: 13, weight: .semibold)
+        ], for: .selected)
+        segmentControl.setTitleTextAttributes([
+            .foregroundColor: UIColor.ainaTextPrimary,
+            .font: UIFont.systemFont(ofSize: 13, weight: .medium)
+        ], for: .normal)
     }
     
     func configure(
@@ -121,7 +132,7 @@ final class HomeRoutineSectionCollectionViewCell: UICollectionViewCell {
         let titleLabel = UILabel()
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         titleLabel.text = title
-        titleLabel.textColor = .black
+        titleLabel.textColor = UIColor.ainaTextPrimary
         titleLabel.font = UIFont.systemFont(ofSize: 18, weight: .medium)
         titleLabel.numberOfLines = 1
         titleLabel.lineBreakMode = .byTruncatingTail

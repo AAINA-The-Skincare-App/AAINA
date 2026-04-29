@@ -28,6 +28,7 @@ class GreetingSectionCollectionViewCell: UICollectionViewCell {
     }
 
     private func setupUI() {
+        overrideUserInterfaceStyle = .light
         backgroundColor = .clear
         contentView.backgroundColor = .clear
 
@@ -70,7 +71,22 @@ class GreetingSectionCollectionViewCell: UICollectionViewCell {
     }
 
     func configure(name: String) {
-        titleLabel.text = "Hello! 🌸"
+        let title = NSMutableAttributedString(
+            string: "Hello! ",
+            attributes: [
+                .font: UIFont.systemFont(ofSize: 44, weight: .bold),
+                .foregroundColor: UIColor.ainaCoralPink
+            ]
+        )
+        title.append(NSAttributedString(
+            string: "🌸",
+            attributes: [
+                .font: UIFont.systemFont(ofSize: 28, weight: .bold),
+                .baselineOffset: 4,
+                .foregroundColor: UIColor.ainaCoralPink
+            ]
+        ))
+        titleLabel.attributedText = title
         subtitleLabel.text = "Your glow, Thoughtfully crafted"
     }
 }

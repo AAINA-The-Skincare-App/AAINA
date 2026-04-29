@@ -1,0 +1,104 @@
+{
+  "user_id": "user_789",
+  "insights_history": [
+    {
+      "date": "2026-04-18",
+      "is_today": false,
+      "scan_type": "weekly_input",
+      "scan_image_url": "https://api.skincareapp.com/v1/scans/scan_001.jpg",
+      "analysis_report": {
+        "summary": "Baseline established.",
+        "comparative_insights": [
+          {
+            "attribute": "Acne",
+            "location": "Left Cheek",
+            "change_type": "neutral",
+            "message": "Baseline: Active acne clusters detected on the left cheek. We'll monitor this for reduction in redness."
+          }
+        ]
+      },
+      "weekly_input_data": {
+        "insight_title": "Weekly Insights",
+        "lifestyle_factors": { "sleep_quality": 2, "stress_level": 0.8, "water_intake_avg": 3 }
+      }
+    },
+    {
+      "date": "2026-04-20",
+      "is_today": false,
+      "scan_type": "normal",
+      "scan_image_url": "https://api.skincareapp.com/v1/scans/scan_002.jpg",
+      "analysis_report": {
+        "summary": "Single improvement detected.",
+        "comparative_insights": [
+          {
+            "attribute": "Acne",
+            "location": "Left Cheek",
+            "change_type": "positive",
+            "message": "Acne has gotten better! Inflammation is visibly reduced compared to April 18."
+          }
+        ]
+      },
+      "weekly_input_data": null
+    },
+    {
+      "date": "2026-04-23",
+      "is_today": false,
+      "scan_type": "normal",
+      "scan_image_url": "https://api.skincareapp.com/v1/scans/scan_003.jpg",
+      "analysis_report": {
+        "summary": "Mixed results: Clearer skin but new texture concerns.",
+        "comparative_insights": [
+          {
+            "attribute": "Pigmentation",
+            "location": "Cheeks",
+            "change_type": "positive",
+            "message": "Pigmentation has gone down significantly since your last scan."
+          },
+          {
+            "attribute": "Texture",
+            "location": "Forehead",
+            "change_type": "negative",
+            "message": "Forehead bumps are visible which were not present in the last scan. This may be due to recent product changes or sweat."
+          }
+        ]
+      },
+      "weekly_input_data": null
+    },
+    {
+      "date": "2026-04-25",
+      "is_today": true,
+      "scan_type": "weekly_input",
+      "scan_image_url": "https://api.skincareapp.com/v1/scans/scan_004.jpg",
+      "analysis_report": {
+        "summary": "Hydration is driving recovery.",
+        "comparative_insights": [
+          {
+            "attribute": "Forehead Bumps",
+            "location": "Forehead",
+            "change_type": "positive",
+            "message": "The bumps detected on April 23 have smoothed out."
+          },
+          {
+            "attribute": "Glow",
+            "location": "Overall",
+            "change_type": "positive",
+            "message": "Overall radiance is at a 30-day high."
+          }
+        ]
+      },
+      "weekly_input_data": {
+        "insight_title": "This Week's Insights",
+        "skin_feel": "Balanced",
+        "lifestyle_factors": { "sleep_quality": 5, "stress_level": 0.2, "water_intake_avg": 8 },
+        "correlation_logic": "Your high water intake (8 glasses avg) and improved sleep directly cleared the forehead bumps and boosted your glow."
+      }
+    }
+  ],
+  "meta_data": {
+    "status_icons": {
+      "positive": "trending_up_green",
+      "negative": "alert_red",
+      "neutral": "info_blue"
+    }
+  }
+}

@@ -4,6 +4,8 @@ class RoutineLoadingViewController: UIViewController {
 
     var onboardingData: OnboardingData!
     var dataModel: AppDataModel!
+    var capturedImage: UIImage?
+    var returnToMainAppAfterGeneration = true
 
     private let spinner = UIActivityIndicatorView(style: .large)
     private let headlineLabel = UILabel()
@@ -65,14 +67,35 @@ class RoutineLoadingViewController: UIViewController {
                 let prompt = RoutinePromptBuilder.build(
                     onboardingData: onboardingData,
                     ingredients: dataModel.allIngredients(),
-                    imageProvided: false
+                    imageProvided: capturedImage != nil
                 )
                 let output = try await GeminiFreeService().generateRoutine(
                     prompt: prompt,
-                    image: nil
+                    image: capturedImage
                 )
                 dataModel.saveAIRoutine(output.routine)
+<<<<<<< Updated upstream
                 await MainActor.run { self.transitionToOnboardingResult() }
+=======
+                if capturedImage != nil {
+                    dataModel.saveLastFaceScanResult(output.scanResult)
+                }
+
+                // Build and persist UserProfile with the real login name
+                let loginName = UserDefaults.standard.string(forKey: "userName") ?? "User"
+                if let profile = UserProfile.from(onboarding: self.onboardingData, name: loginName) {
+                    AppDataModel.shared.saveProfile(profile)
+                }
+
+                await MainActor.run {
+                    if self.returnToMainAppAfterGeneration {
+                        self.transitionToMainApp()
+                    } else {
+                        self.navigationController?.popToRootViewController(animated: true)
+                    }
+                }
+
+>>>>>>> Stashed changes
             } catch {
                 await MainActor.run { self.showFailureAlert() }
             }

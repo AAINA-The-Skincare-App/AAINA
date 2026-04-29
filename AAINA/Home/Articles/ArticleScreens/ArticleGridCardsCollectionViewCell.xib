@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="24506" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies><plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24504"/><capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/></dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <collectionViewCell opaque="NO" clipsSubviews="NO" multipleTouchEnabled="YES" contentMode="center" id="cell" customClass="ArticleGridCardsCollectionViewCell" customModule="AAINA" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="341" height="112"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <view key="contentView" opaque="NO" clipsSubviews="NO" multipleTouchEnabled="YES" contentMode="center">
+                <rect key="frame" x="0.0" y="0.0" width="341" height="112"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <scrollView clipsSubviews="NO" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="scroll">
+                        <rect key="frame" x="0.0" y="0.0" width="341" height="112"/>
+                        <subviews>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="horizontal" spacing="18" translatesAutoresizingMaskIntoConstraints="NO" id="stack">
+                                <rect key="frame" x="0.0" y="0.0" width="341" height="112"/>
+                            </stackView>
+                        </subviews>
+                        <constraints>
+                            <constraint firstItem="stack" firstAttribute="top" secondItem="scroll" secondAttribute="top" id="s1"/>
+                            <constraint firstItem="stack" firstAttribute="bottom" secondItem="scroll" secondAttribute="bottom" id="s2"/>
+                            <constraint firstItem="stack" firstAttribute="leading" secondItem="scroll" secondAttribute="leading" id="s3"/>
+                            <constraint firstItem="stack" firstAttribute="trailing" secondItem="scroll" secondAttribute="trailing" id="s4"/>
+                            <constraint firstItem="stack" firstAttribute="height" secondItem="scroll" secondAttribute="height" id="s5"/>
+                        </constraints>
+                    </scrollView>
+                </subviews>
+            </view>
+            <constraints>
+                <constraint firstItem="scroll" firstAttribute="top" secondItem="cell" secondAttribute="top" id="c1"/>
+                <constraint firstItem="scroll" firstAttribute="leading" secondItem="cell" secondAttribute="leading" id="c2"/>
+                <constraint firstAttribute="trailing" secondItem="scroll" secondAttribute="trailing" id="c3"/>
+                <constraint firstAttribute="bottom" secondItem="scroll" secondAttribute="bottom" id="c4"/>
+            </constraints>
+            <size key="customSize" width="341" height="112"/>
+            <connections>
+                <outlet property="scrollView" destination="scroll" id="o1"/>
+                <outlet property="stackView" destination="stack" id="o2"/>
+            </connections>
+        </collectionViewCell>
+    </objects>
+</document>

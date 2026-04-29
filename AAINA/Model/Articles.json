@@ -1,0 +1,440 @@
+[
+  {
+    "article_id": "retinol-101",
+    "read_time": "5 min read",
+    "header_badges": ["Dermatologist-reviewed", "Clinical studies"],
+    "sections": [
+      {
+        "heading": "WHAT IS IT",
+        "type": "intro_card",
+        "content": "Retinol is a form of Vitamin A — one of dermatology's most researched ingredients. Your skin converts it into retinoic acid, the active form that drives visible change at a cellular level.",
+        "pills": ["Retinol", "Retinaldehyde", "Retinoic acid"]
+      },
+      {
+        "heading": "WHAT IT DOES",
+        "type": "grid_cards",
+        "items": [
+          { "sf_symbol": "timer", "title": "Speeds cell renewal", "description": "Sheds old cells faster, revealing fresher skin beneath." },
+          { "sf_symbol": "arrow.up.circle.fill", "title": "Boosts collagen", "description": "Builds collagen and slows its breakdown over time." },
+          { "sf_symbol": "waveform.path.ecg", "title": "Softens wrinkles", "description": "Visible fine line improvement in as early as 12 weeks." },
+          { "sf_symbol": "target", "title": "Clears pores", "description": "Unclogs pores and reduces acne with consistent use." }
+        ]
+      },
+      {
+        "heading": "REALISTIC TIMELINE",
+        "type": "timeline",
+        "steps": [
+          { "label": "Week 1–4", "color": "green", "text": "Skin may feel slightly dry or flaky — completely normal. Start 1–2x per week to let skin adjust." },
+          { "label": "Week 4–12", "color": "purple", "text": "Texture starts smoothing. Pores look smaller. Skin tone begins to even out noticeably." },
+          { "label": "Month 3–6", "color": "orange", "text": "Collagen rebuilding becomes visible. Fine lines soften meaningfully. This is the full science." }
+        ]
+      },
+      {
+        "heading": "GOOD TO KNOW",
+        "type": "info_group",
+        "alert_box": {
+          "sf_symbol": "exclamationmark.triangle.fill",
+          "title": "SPF is non-negotiable",
+          "description": "OTC retinol is effective but gentler than prescription tretinoin. Both are clinically backed. Always wear sunscreen in the morning while using retinol."
+        },
+        "bottom_cards": [
+          { "sf_symbol": "barometer", "title": "Start at 0.1–0.3%", "description": "Best for beginners. Build up gradually as skin adjusts." },
+          { "sf_symbol": "moon.stars.fill", "title": "Night use only", "description": "Retinol degrades in sunlight. Always apply before bed." }
+        ]
+      },
+      {
+        "heading": "CLINICAL SOURCES",
+        "type": "sources_list",
+        "sources": [
+          { "title": "Retinoids in the treatment of skin aging", "source_tag": "PubMed" },
+          { "title": "Improvement of naturally aged skin with Vitamin A", "source_tag": "JAMA" },
+          { "title": "Retinoid or retinol? — Dermatology guide", "source_tag": "AAD" },
+          { "title": "Do retinoids really reduce wrinkles?", "source_tag": "Harvard" }
+        ]
+      }
+    ]
+  },
+  {
+    "article_id": "layering-rules",
+    "read_time": "5 min read",
+    "header_badges": ["Dermatologist-reviewed", "Clinical studies"],
+    "sections": [
+      {
+        "heading": "WHY IT MATTERS",
+        "type": "intro_card",
+        "content": "Layering skincare in the correct order improves absorption and reduces irritation. Wrong order can deactivate ingredients or reduce their effect. The logic is based on biology, not trends — and too many actives stacked together cause barrier damage, not better results."
+      },
+      {
+        "heading": "THE CORE RULES",
+        "type": "grid_cards",
+        "items": [
+          { "sf_symbol": "arrow.up.to.line.compact", "title": "Thinnest first", "description": "Apply lightest formulas before heavy ones to ensure actives penetrate properly." },
+          { "sf_symbol": "drop.circle.fill", "title": "Water before oil", "description": "Oils block serums if applied first — reducing absorption by 30–40%." },
+          { "sf_symbol": "checkmark.shield.fill", "title": "Check compatibility", "description": "Some pairs cancel out or irritate — combining wrong actives reduces effectiveness." },
+          { "sf_symbol": "text.badge.minus", "title": "Less is more", "description": "An 80-dermatologist study confirmed over-layering actives causes barrier damage." }
+        ]
+      },
+      {
+        "heading": "WHAT TO MIX — AND WHAT NOT TO",
+        "type": "timeline",
+        "steps": [
+          { "label": "Safe to pair", "color": "green", "text": "Vitamin C + Sunscreen, Niacinamide + SPF, Hyaluronic acid + most actives — these combinations enhance or don't interfere with each other." },
+          { "label": "Avoid mixing", "color": "red", "text": "Retinol + strong acids and Vitamin C + salicylic acid (same session) — these combinations increase irritation and reduce effectiveness." },
+          { "label": "Reality check", "color": "orange", "text": "Skincare products are not tested like drugs. Trust the ingredient science and mechanisms — not brand-level product claims." }
+        ]
+      },
+      {
+        "heading": "GOOD TO KNOW",
+        "type": "info_group",
+        "alert_box": {
+          "sf_symbol": "exclamationmark.triangle.fill",
+          "title": "Products are not drugs",
+          "description": "Individual ingredients (retinoids, SPF, salicylic acid, azelaic acid) and absorption mechanisms have strong clinical backing. Trust the ingredient science, not brand claims."
+        },
+        "bottom_cards": [
+          { "sf_symbol": "arrow.up.and.down.square.fill", "title": "Thin → thick always", "description": "Toner → serum → moisturiser → oil. Never reverse this order." },
+          { "sf_symbol": "calendar.badge.clock", "title": "Separate problem pairs", "description": "Use conflicting actives on alternate nights, not the same session." }
+        ]
+      },
+      {
+        "heading": "CLINICAL SOURCES",
+        "type": "sources_list",
+        "sources": [
+          { "title": "Top skin-care ingredients recommended by dermatologists", "source_tag": "Northwestern" },
+          { "title": "Skincare ingredients recommended by cosmetic dermatologists", "source_tag": "PubMed" },
+          { "title": "Dermatologist's guide to layering skincare — iHerb", "source_tag": "iHerb" },
+          { "title": "Dermatologist's guide to skincare ingredients — Self London", "source_tag": "Self London" },
+          { "title": "Doctor's guide to layer skincare ingredients — Clinikally", "source_tag": "Clinikally" },
+          { "title": "Skincare ingredients not to mix — dermatologist guide", "source_tag": "KAYURA" }
+        ]
+      }
+    ]
+  },
+  {
+    "article_id": "hydration-system",
+    "read_time": "5 min read",
+    "header_badges": ["AAD-reviewed", "NIH / PubMed"],
+    "sections": [
+      {
+        "heading": "WHAT HYDRATION ACTUALLY MEANS",
+        "type": "intro_card",
+        "content": "Hydration is about maintaining the skin barrier (stratum corneum) — preventing water from escaping, not just adding water to the skin. Healthy skin has low Transepidermal Water Loss (TEWL). When the barrier is damaged, skin becomes dehydrated, irritated, and sensitive.",
+        "pills": ["Humectants", "Emollients", "Occlusives"]
+      },
+      {
+        "heading": "THE 3-PART SYSTEM",
+        "type": "grid_cards",
+        "items": [
+          { "sf_symbol": "drop.fill", "title": "Humectants", "description": "Pull water into skin. Hyaluronic acid, glycerin, and urea increase water in the stratum corneum." },
+          { "sf_symbol": "briefcase.fill", "title": "Emollients", "description": "Repair the lipid matrix — ceramides, fatty acids, and cholesterol reduce water loss long-term." },
+          { "sf_symbol": "lock.fill", "title": "Occlusives", "description": "Lock moisture in. Petrolatum can reduce TEWL by up to ~98% — the gold standard in dermatology." },
+          { "sf_symbol": "shield.lefthalf.filled", "title": "Barrier function", "description": "Dry skin is often barrier dysfunction. Avoid harsh cleansers and restore lipids to fix it at the root." }
+        ]
+      },
+      {
+        "heading": "EVIDENCE-BASED ROUTINE",
+        "type": "timeline",
+        "steps": [
+          { "label": "Step 1", "color": "blue", "text": "Apply humectant on damp skin — draws water into the skin while moisture is still present on the surface." },
+          { "label": "Step 2", "color": "green", "text": "Layer an emollient — repairs the lipid barrier so water doesn't escape between applications." },
+          { "label": "Step 3", "color": "purple", "text": "Seal with an occlusive — the AAD recommends applying moisturiser immediately after bathing for best effect." }
+        ]
+      },
+      {
+        "heading": "GOOD TO KNOW",
+        "type": "info_group",
+        "alert_box": {
+          "sf_symbol": "exclamationmark.triangle.fill",
+          "title": "Drinking water alone ≠ hydrated skin",
+          "description": "Barrier function matters more than water intake. Prefer creams and ointments over lotions — they provide significantly better barrier repair, per AAD clinical guidance."
+        },
+        "bottom_cards": [
+          { "sf_symbol": "drop.triangle.fill", "title": "Oily skin needs it too", "description": "All skin types need barrier support regardless of how much oil they produce." },
+          { "sf_symbol": "sparkles", "title": "Apply right after bathing", "description": "Clinically proven to be the most effective time — skin is still damp and most receptive." }
+        ]
+      },
+      {
+        "heading": "CLINICAL SOURCES",
+        "type": "sources_list",
+        "sources": [
+          { "title": "American Academy of Dermatology — skin barrier & moisturiser guidance", "source_tag": "AAD" },
+          { "title": "NIH / PubMed — transepidermal water loss & barrier repair research", "source_tag": "PubMed" },
+          { "title": "British Association of Dermatologists — emollient & barrier guidance", "source_tag": "BAD" }
+        ]
+      }
+    ]
+  },
+  {
+    "article_id": "spf-protection",
+    "read_time": "6 min read",
+    "header_badges": ["AAD-reviewed", "Clinical studies"],
+    "sections": [
+      {
+        "heading": "WHAT SPF ACTUALLY MEANS",
+        "type": "intro_card",
+        "content": "SPF measures UVB protection (burning rays) — it tells you how much more UV dose your skin can tolerate before burning compared to no sunscreen. It does not directly measure UVA protection (aging rays). For full protection you need broad-spectrum on the label.",
+        "pills": ["UVB — burning", "SPF number", "UVA — aging"]
+      },
+      {
+        "heading": "THE MYTHS",
+        "type": "grid_cards",
+        "items": [
+          { "sf_symbol": "chart.bar.fill", "title": "Higher SPF ≠ double protection", "description": "SPF 30 blocks ~97% UVB. SPF 50 blocks ~98%. The difference is marginal, not double." },
+          { "sf_symbol": "cloud.sun.fill", "title": "Cloudy days still need SPF", "description": "UVA rays penetrate clouds and pass through glass — aging damage still occurs." },
+          { "sf_symbol": "globe.americas.fill", "title": "All skin tones need SPF", "description": "Melanin offers ~SPF 13 equivalent but doesn't prevent DNA damage or hyperpigmentation." },
+          { "sf_symbol": "face.dashed.fill", "title": "Makeup SPF isn't enough", "description": "SPF testing requires 2 mg/cm². Makeup is applied at only 25–50% of that amount." }
+        ]
+      },
+      {
+        "heading": "MORE MYTHS — AND THE SCIENCE",
+        "type": "timeline",
+        "steps": [
+          { "label": "One application lasts all day", "color": "green", "text": "Sunscreen degrades due to UV exposure, sweat and oil. Reapply every 2 hours and immediately after swimming or sweating — this is the AAD recommendation." },
+          { "label": "Sunscreen blocks vitamin D completely", "color": "orange", "text": "Real-world sunscreen use is imperfect. Enough UV still penetrates to allow vitamin D synthesis. No strong evidence that sunscreen causes deficiency." },
+          { "label": "Natural sunscreens are always safer", "color": "purple", "text": "Both mineral (zinc oxide, titanium dioxide) and chemical filters (avobenzone, octinoxate) are regulated and considered safe when approved by regulators. \"Natural\" ≠ safer." }
+        ]
+      },
+      {
+        "heading": "GOOD TO KNOW",
+        "type": "info_group",
+        "alert_box": {
+          "sf_symbol": "exclamationmark.triangle.fill",
+          "title": "Amount matters as much as SPF",
+          "description": "SPF is tested at 2 mg/cm². Most people apply only 25–50% of this. Real-world protection is far lower than the label. Apply ~2 finger lengths for face and ~30 ml for body."
+        },
+        "bottom_cards": [
+          { "sf_symbol": "arrow.clockwise.circle.fill", "title": "Reapply every 2 hours", "description": "More impactful than choosing a higher SPF number — consistency is key." },
+          { "sf_symbol": "sun.max.fill", "title": "SPF indoors counts", "description": "UVA passes through standard glass. Daily SPF is needed even at a desk by a window." }
+        ]
+      },
+      {
+        "heading": "CLINICAL SOURCES",
+        "type": "sources_list",
+        "sources": [
+          { "title": "American Academy of Dermatology — sunscreen guidance & SPF recommendations", "source_tag": "AAD" },
+          { "title": "NIH / PubMed — UV radiation, DNA damage & photoaging clinical trials", "source_tag": "PubMed" },
+          { "title": "Skin Cancer Foundation — real-world sunscreen effectiveness & cancer risk", "source_tag": "SCF" },
+          { "title": "U.S. Food & Drug Administration — sunscreen ingredient safety regulations", "source_tag": "FDA" }
+        ]
+      }
+    ]
+  },
+  {
+    "article_id": "collagen-boost",
+    "read_time": "5 min read",
+    "header_badges": ["AAD-reviewed", "NIH / PubMed"],
+    "sections": [
+      {
+        "heading": "WHAT “COLLAGEN BOOST” ACTUALLY MEANS",
+        "type": "intro_card",
+        "content": "Skin collagen depends on how much your fibroblasts produce minus how much is broken down by UV and enzymes (MMPs). So \"boosting collagen\" means two things — Increase production and reduce breakdown. Collagen sits in the dermis, not the surface, which is why most topical collagen products can't reach it.",
+        "pills": ["Fibroblasts produce", "Collagen", "UV degrades"]
+      },
+      {
+        "heading": "THE MYTHS",
+        "type": "grid_cards",
+        "items": [
+          { "sf_symbol": "cup.and.saucer.fill", "title": "Collagen creams rebuild skin", "description": "Collagen molecules are too large to penetrate skin. They act as moisturisers only — not dermal rebuilders." },
+          { "sf_symbol": "wineglass.fill", "title": "Drinking collagen works directly", "description": "Collagen is broken into amino acids during digestion. Evidence is inconsistent — effects are indirect at best." },
+          { "sf_symbol": "leaf.fill", "title": "Natural oils boost collagen", "description": "Oils moisturise and support the barrier but do not stimulate fibroblasts. No strong clinical evidence." },
+          { "sf_symbol": "bolt.fill", "title": "Lost collagen rebuilds fast", "description": "Collagen synthesis takes weeks to months. Aging and UV damage is cumulative — no instant fixes exist." }
+        ]
+      },
+      {
+        "heading": "INGREDIENTS WITH REAL CLINICAL EVIDENCE",
+        "type": "timeline",
+        "steps": [
+          { "label": "Retinoids — Gold standard", "color": "blue", "text": "Increase fibroblast activity and reduce collagen breakdown via MMP inhibition. Backed by decades of clinical studies — the most evidence-supported ingredient for collagen." },
+          { "label": "Vitamin C (L-ascorbic acid)", "color": "green", "text": "Required for collagen synthesis. Also reduces oxidative damage from UV. Clinically supported, especially at 10–20% concentration." },
+          { "label": "Sunscreen — Most Important", "color": "orange", "text": "UV is the biggest external cause of collagen breakdown. Without daily SPF, all other collagen-support efforts are significantly less effective." },
+          { "label": "Peptides — Emerging evidence", "color": "purple", "text": "Signal skin to produce collagen. Evidence is moderate — not yet as strong as retinoids, but a valid supporting ingredient." }
+        ]
+      },
+      {
+        "heading": "GOOD TO KNOW",
+        "type": "info_group",
+        "alert_box": {
+          "sf_symbol": "exclamationmark.triangle.fill",
+          "title": "Prevention is more effective than reversal",
+          "description": "The British Association of Dermatologists confirms that UV protection prevents far more collagen breakdown than any ingredient can reverse. Aging + UV damage is cumulative — daily SPF is non-negotiable."
+        },
+        "bottom_cards": [
+          { "sf_symbol": "moon.fill", "title": "Retinoids at night", "description": "Retinoids degrade in sunlight. Always apply at night, always follow with SPF in the morning." },
+          { "sf_symbol": "sun.max.fill", "title": "Vitamin C in the morning", "description": "Pairs with SPF to reduce UV-induced oxidative damage and support collagen synthesis daily." }
+        ]
+      },
+      {
+        "heading": "CLINICAL SOURCES",
+        "type": "sources_list",
+        "sources": [
+          { "title": "American Academy of Dermatology — collagen decline, retinoids & daily SPF guidance", "source_tag": "AAD" },
+          { "title": "NIH / PubMed — collagen synthesis pathways, retinoids, peptides & Vitamin C studies", "source_tag": "PubMed" },
+          { "title": "British Association of Dermatologists — aging, collagen loss & UV prevention evidence", "source_tag": "BAD" }
+        ]
+      }
+    ]
+  },
+  {
+    "article_id": "vitamins-skincare",
+    "read_time": "6 min read",
+    "header_badges": ["AAD-reviewed", "NIH / PubMed"],
+    "sections": [
+      {
+        "heading": "WHAT VITAMINS ACTUALLY DO IN SKIN",
+        "type": "intro_card",
+        "content": "Vitamins support skin health by boosting cell renewal, supporting collagen synthesis, protecting from UV and free radical damage, and maintaining the skin barrier. Each vitamin works through a distinct mechanism — they are not interchangeable.",
+        "pills": ["Cell renewal", "Barrier", "Antioxidant"]
+      },
+      {
+        "heading": "THE VITAMINS",
+        "type": "grid_cards",
+        "items": [
+          { "sf_symbol": "pills.fill", "title": "Vitamin A — Gold standard", "description": "Retinol, retinal, tretinoin. Increases collagen, boosts cell turnover, treats acne. Strongest evidence in dermatology." },
+          { "sf_symbol": "orange.fill", "title": "Vitamin C — Antioxidant", "description": "Antioxidant protection, brightens skin, supports collagen. Works best at 10–20% concentration." },
+          { "sf_symbol": "leaf.arrow.triangle.circlepath", "title": "Vitamin E — Barrier", "description": "Protects the lipid barrier and reduces oxidative stress. Works best paired with Vitamin C for a synergy effect." },
+          { "sf_symbol": "drop.fill", "title": "Vitamin B3 — Niacinamide", "description": "Strengthens barrier (increases ceramides), reduces oil production, calms inflammation. Beginner-friendly." }
+        ]
+      },
+      {
+        "heading": "COMMON MYTHS",
+        "type": "timeline",
+        "steps": [
+          { "label": "More vitamins = better skin", "color": "blue", "text": "Overuse — especially of Vitamin A — causes irritation and barrier damage. More is not more." },
+          { "label": "All vitamin serums work the same", "color": "green", "text": "Stability matters. Vitamin C oxidises quickly — formulation quality is critical. Not all serums deliver the same results." },
+          { "label": "Oral vitamins give an instant glow", "color": "orange", "text": "Oral vitamins only help if you are deficient — otherwise effects on skin are limited." },
+          { "label": "Natural vitamin oils = active forms", "color": "purple", "text": "Carrot oil is not retinol. Natural sources are not equivalent in clinical effect to active vitamin forms." }
+        ]
+      },
+      {
+        "heading": "GOOD TO KNOW",
+        "type": "info_group",
+        "alert_box": {
+          "sf_symbol": "exclamationmark.triangle.fill",
+          "title": "Formulation quality is non-negotiable",
+          "description": "Vitamin C oxidises quickly and random \"vitamin blends\" without proper formulation have no strong clinical backing. Trust the ingredient science and concentration — not the label."
+        },
+        "bottom_cards": [
+          { "sf_symbol": "sun.haze.fill", "title": "Morning stack", "description": "Vitamin C + Sunscreen. Antioxidant defence paired with UV protection." },
+          { "sf_symbol": "moon.stars.fill", "title": "Night stack", "description": "Vitamin A (retinoid). Niacinamide works anytime. Vitamin E pairs well with Vitamin C." }
+        ]
+      },
+      {
+        "heading": "CLINICAL SOURCES",
+        "type": "sources_list",
+        "sources": [
+          { "title": "American Academy of Dermatology — Vitamin C, retinoids & antioxidant guidance", "source_tag": "AAD" },
+          { "title": "NIH / PubMed — vitamin absorption, antioxidant effects & anti-aging mechanisms", "source_tag": "PubMed" },
+          { "title": "British Association of Dermatologists — evidence-based vitamins for acne, pigmentation & aging", "source_tag": "BAD" }
+        ]
+      }
+    ]
+  },
+  {
+    "article_id": "nutrition-skin",
+    "read_time": "6 min read",
+    "header_badges": ["AAD-reviewed", "NIH / PubMed"],
+    "sections": [
+      {
+        "heading": "WHAT NUTRITION ACTUALLY DOES FOR SKIN",
+        "type": "intro_card",
+        "content": "Skin reflects your nutrient availability, your body's inflammation levels, and oxidative damage. Diet influences skin indirectly and gradually — not instantly. There is no single miracle food, and no single bad food that ruins skin.",
+        "pills": ["Nutrients", "Skin health", "Inflammation"]
+      },
+      {
+        "heading": "THE MYTHS",
+        "type": "grid_cards",
+        "items": [
+          { "sf_symbol": "drop.fill", "title": "More water = glowing skin", "description": "Hydration depends on the skin barrier. Extra water only helps if you're already dehydrated." },
+          { "sf_symbol": "chocolate.bar.fill", "title": "Chocolate causes acne", "description": "No strong evidence. The real factor is high glycemic load and excess sugar — not chocolate alone." },
+          { "sf_symbol": "hamburger.fill", "title": "Greasy food = oily skin", "description": "Skin oil is produced by sebaceous glands driven by hormones — not by eating oily food." },
+          { "sf_symbol": "cup.and.saucer.fill", "title": "Detox diets cleanse skin", "description": "Your liver and kidneys already detox your body. No scientific evidence that detox diets improve skin." }
+        ]
+      },
+      {
+        "heading": "MORE MYTHS — AND THE SCIENCE",
+        "type": "timeline",
+        "steps": [
+          { "label": "Dairy always causes acne", "color": "blue", "text": "Evidence is mixed. Some people may be sensitive — especially to skim milk — but this is not universal and varies person to person." },
+          { "label": "Supplements beat whole food", "color": "orange", "text": "Supplements help only if you are deficient. Whole foods provide better absorption and deliver multiple nutrients at once — food beats pills in most cases." },
+          { "label": "Healthy eating gives an instant glow", "color": "purple", "text": "The skin renewal cycle is 28–40 days. Nutrition changes take weeks to months to show visible effects — no overnight transformation exists." }
+        ]
+      },
+      {
+        "heading": "GOOD TO KNOW",
+        "type": "info_group",
+        "alert_box": {
+          "sf_symbol": "exclamationmark.triangle.fill",
+          "title": "Diet patterns matter — not single foods",
+          "description": "The AAD states there is no single miracle food for skin. The WHO emphasises long-term dietary patterns — not quick fixes. Consistent, balanced nutrition over weeks and months is what influences skin."
+        },
+        "bottom_cards": [
+          { "sf_symbol": "carrot.fill", "title": "Antioxidants help", "description": "Berries, citrus, leafy greens — reduce oxidative stress on skin. Clinically supported." },
+          { "sf_symbol": "fish.fill", "title": "Healthy fats matter", "description": "Omega-3 fatty acids reduce inflammation and support the skin barrier. Found in fish, walnuts, flaxseed." }
+        ]
+      },
+      {
+        "heading": "CLINICAL SOURCES",
+        "type": "sources_list",
+        "sources": [
+          { "title": "NIH / PubMed — diet–skin interactions, glycemic load, acne & antioxidant research", "source_tag": "PubMed" },
+          { "title": "American Academy of Dermatology — balanced diet, skin function & no single miracle food", "source_tag": "AAD" },
+          { "title": "World Health Organization — nutrition, systemic health & long-term dietary patterns", "source_tag": "WHO" }
+        ]
+      }
+    ]
+  },
+  {
+    "article_id": "foods-to-limit",
+    "read_time": "5 min read",
+    "header_badges": ["AAD-reviewed", "NIH / PubMed"],
+    "sections": [
+      {
+        "heading": "WHY CERTAIN FOODS AFFECT SKIN",
+        "type": "intro_card",
+        "content": "Foods that increase blood sugar spikes, drive inflammation, or trigger hormonal activity can worsen acne, oiliness, and dullness. The effect is gradual and systemic — it's about patterns, not a single meal. No single food causes or fixes skin on its own.",
+        "pills": ["Blood sugar", "Inflammation", "Skin impact"]
+      },
+      {
+        "heading": "FOODS TO LIMIT",
+        "type": "grid_cards",
+        "items": [
+          { "sf_symbol": "candybar.fill", "title": "High sugar / high GI foods", "description": "Sweets, white bread, soft drinks, pastries. Spikes insulin → increases oil production → acne. Strongest diet–skin link." },
+          { "sf_symbol": "glass.rear.fill", "title": "Excess dairy", "description": "Especially skim milk. May increase IGF-1 (growth hormone) and is linked to acne in some individuals — not everyone." },
+          { "sf_symbol": "box.truck.fill", "title": "Ultra-processed food", "description": "Chips, fries, packaged snacks, processed meats. Increases inflammation and reduces overall nutrient quality." },
+          { "sf_symbol": "mug.fill", "title": "Excess alcohol", "description": "Causes dehydration and inflammation. Worsens rosacea and dull skin. Affects barrier function over time." }
+        ]
+      },
+      {
+        "heading": "ALSO WORTH KNOWING",
+        "type": "timeline",
+        "steps": [
+          { "label": "Excess salt — indirect impact", "color": "orange", "text": "Can contribute to systemic dehydration and puffiness. Not a major acne trigger, but affects overall skin appearance." },
+          { "label": "Chocolate — not proven alone", "color": "green", "text": "No strong evidence that chocolate by itself causes acne. The real factor is the high glycemic load and sugar content — not chocolate specifically." },
+          { "label": "Oily food and spicy food — not proven", "color": "blue", "text": "Oily food does not directly cause oily skin — sebum is driven by hormones. Spicy food only affects some people. Over-restriction can harm overall health." }
+        ]
+      },
+      {
+        "heading": "GOOD TO KNOW",
+        "type": "info_group",
+        "alert_box": {
+          "sf_symbol": "exclamationmark.triangle.fill",
+          "title": "Limit — don't eliminate",
+          "description": "The AAD confirms no single food causes skin problems on its own — patterns matter. Reduce sugar spikes and ultra-processed foods, monitor your dairy response, and maintain a balanced diet. Extreme avoidance is not clinically supported."
+        },
+        "bottom_cards": [
+          { "sf_symbol": "chart.line.downtrend.xyaxis", "title": "Reduce, don't restrict", "description": "Lower glycemic load over time. Whole grains over white bread. Consistency over perfection." },
+          { "sf_symbol": "magnifyingglass", "title": "Monitor dairy yourself", "description": "Dairy–acne link varies person to person. Observe your own skin response rather than blanket avoidance." }
+        ]
+      },
+      {
+        "heading": "CLINICAL SOURCES",
+        "type": "sources_list",
+        "sources": [
+          { "title": "NIH / PubMed — diet–inflammation, glycemic load, acne & dairy research", "source_tag": "PubMed" },
+          { "title": "American Academy of Dermatology — diet, acne influence & dietary pattern guidance", "source_tag": "AAD" },
+          { "title": "World Health Organization — added sugars, ultra-processed foods & systemic health", "source_tag": "WHO" }
+        ]
+      }
+    ]
+  }
+]
