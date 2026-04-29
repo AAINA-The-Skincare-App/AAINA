@@ -75,24 +75,22 @@ class RoutineLoadingViewController: UIViewController {
                 )
 
                 dataModel.saveAIRoutine(output.routine)
-                await MainActor.run { self.transitionToOnboardingResult() }
+                dataModel.saveLastFaceScanResult(output.scanResult)
 
-                // Build and persist UserProfile with the real login name
                 let loginName = UserDefaults.standard.string(forKey: "userName") ?? "User"
                 if let profile = UserProfile.from(onboarding: self.onboardingData, name: loginName) {
                     AppDataModel.shared.saveProfile(profile)
                 }
+
                 await MainActor.run {
                     if self.returnToMainAppAfterGeneration {
-                        self.transitionToMainApp()
+                        self.transitionToOnboardingResult()
                     } else {
                         self.navigationController?.popToRootViewController(animated: true)
                     }
                 }
-
-
             } catch {
-                await MainActor.run { self.showFailureAlert() }
+                await MainActor.run { self.showFailureAlert(error: error) }
             }
         }
     }
@@ -122,17 +120,32 @@ class RoutineLoadingViewController: UIViewController {
         navigationController?.pushViewController(resultVC, animated: true)
     }
 
-    private func showFailureAlert() {
+    private func showFailureAlert(error: Error) {
+        let nsError = error as NSError
+        let detail: String
+        if nsError.domain == "Gemini" && nsError.code == 429 {
+            detail = "The AI service is rate-limited right now. Please try again in a minute or use a default routine."
+        } else if nsError.domain == "Gemini" {
+            detail = "Gemini error (\(nsError.code)). \(nsError.localizedDescription)"
+        } else {
+            detail = nsError.localizedDescription
+        }
+
         let alert = UIAlertController(
-            title: "Something went wrong",
-            message: "We couldn't build your routine right now.",
+            title: "Couldn't build your routine",
+            message: detail,
             preferredStyle: .alert
         )
         alert.addAction(UIAlertAction(title: "Retry", style: .default) { [weak self] _ in
             self?.startAnalysis()
         })
         alert.addAction(UIAlertAction(title: "Use Default Routine", style: .cancel) { [weak self] _ in
-            DispatchQueue.main.async { self?.transitionToOnboardingResult() }
+            guard let self else { return }
+            let loginName = UserDefaults.standard.string(forKey: "userName") ?? "User"
+            if let profile = UserProfile.from(onboarding: self.onboardingData, name: loginName) {
+                AppDataModel.shared.saveProfile(profile)
+            }
+            DispatchQueue.main.async { self.transitionToOnboardingResult() }
         })
         present(alert, animated: true)
     }

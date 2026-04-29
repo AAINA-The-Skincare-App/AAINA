@@ -6,6 +6,9 @@ class TimelineCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var dateLabel: UILabel!
     
     static let reuseIdentifier = "TimelineCollectionViewCell"
+
+    private let faceScanIndicator = UIView()
+    private let weeklyInputIndicator = UIView()
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -21,6 +24,9 @@ class TimelineCollectionViewCell: UICollectionViewCell {
         dateLabel.backgroundColor = UIColor.ainaLightBlush.withAlphaComponent(0.4)
         dateLabel.clipsToBounds = true
         dateLabel.textAlignment = .center
+
+        setupInsightIndicator(faceScanIndicator, color: .ainaDustyRose)
+        setupInsightIndicator(weeklyInputIndicator, color: .ainaSageGreen)
     }
     
     override func layoutSubviews() {
@@ -31,12 +37,21 @@ class TimelineCollectionViewCell: UICollectionViewCell {
         dateLabel.frame = CGRect(x: (w - 44) / 2, y: 28, width: 44, height: 44)
         dateLabel.layer.cornerRadius = 22
         dateLabel.clipsToBounds = true
+
+        faceScanIndicator.frame = CGRect(x: (w - 17) / 2, y: 78, width: 6, height: 6)
+        weeklyInputIndicator.frame = CGRect(x: (w + 5) / 2, y: 78, width: 6, height: 6)
+        faceScanIndicator.layer.cornerRadius = 3
+        weeklyInputIndicator.layer.cornerRadius = 3
     }
     
     override func prepareForReuse() {
         super.prepareForReuse()
         dateLabel.layer.borderWidth = 0
         dateLabel.layer.borderColor = nil
+        dayLabel.textColor = .secondaryLabel
+        contentView.alpha = 1
+        faceScanIndicator.isHidden = true
+        weeklyInputIndicator.isHidden = true
     }
     
     func configure(day: String, date: String, isToday: Bool, isSelected: Bool) {
@@ -85,5 +100,34 @@ class TimelineCollectionViewCell: UICollectionViewCell {
             
             dateLabel.textColor = UIColor.ainaTextPrimary
         }
+    }
+
+    func configureForInsight(day: String,
+                             date: String,
+                             isToday: Bool,
+                             isSelected: Bool,
+                             hasFaceScan: Bool,
+                             hasWeeklyInput: Bool,
+                             isFuture: Bool) {
+        configure(day: day, date: date, isToday: isToday, isSelected: isSelected)
+
+        faceScanIndicator.isHidden = !hasFaceScan
+        weeklyInputIndicator.isHidden = !hasWeeklyInput
+        contentView.alpha = isFuture ? 0.35 : 1
+
+        if isFuture {
+            dateLabel.backgroundColor = UIColor.white.withAlphaComponent(0.18)
+            dateLabel.textColor = UIColor.ainaTextTertiary
+            dayLabel.textColor = UIColor.ainaTextTertiary
+        } else {
+            dayLabel.textColor = .secondaryLabel
+        }
+    }
+
+    private func setupInsightIndicator(_ indicator: UIView, color: UIColor) {
+        indicator.backgroundColor = color
+        indicator.isHidden = true
+        indicator.clipsToBounds = true
+        contentView.addSubview(indicator)
     }
 }

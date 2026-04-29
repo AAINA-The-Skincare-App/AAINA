@@ -3,5 +3,5 @@
 
 enum Config {
     static let geminiAPIKey = "" // ⚠️Get a new key from Google AI Studio and paste it here (do NOT commit it)
-    static let geminiEndpoint = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent"
+    static let geminiEndpoint = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:generateContent"
 }

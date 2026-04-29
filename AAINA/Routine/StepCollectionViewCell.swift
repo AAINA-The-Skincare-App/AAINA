@@ -34,6 +34,7 @@ class StepCollectionViewCell: UICollectionViewCell {
     private var ingredients: [String] = []
     private(set) var isExpanded = false
     private var products: [SkincareProduct] = []
+    private var productsBuilt = false
     
     // Lifecycle
     
@@ -52,6 +53,8 @@ class StepCollectionViewCell: UICollectionViewCell {
         super.prepareForReuse()
         updateCheckboxUI(animated: false)
         ingredientsStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
+        productsContainerView.subviews.forEach { $0.removeFromSuperview() }
+        productsBuilt = false
         collapseProducts(animated: false)
     }
 
@@ -125,6 +128,7 @@ class StepCollectionViewCell: UICollectionViewCell {
                 productsContainerView.isHidden = true
                 productsContainerView.alpha = 0
                 productsContainerHeight.constant = 0
+                productsContainerHeight.priority = .defaultHigh
             }
 
             private func styleExploreButton(expanded: Bool) {
@@ -169,7 +173,8 @@ class StepCollectionViewCell: UICollectionViewCell {
                 updateCheckboxUI(animated: false)
                 buildIngredientsGrid()
                 products = SkincareProductDatabase.shared.products(matchingIngredients: self.ingredients)
-                buildProductCards()
+                productsBuilt = false
+                productsContainerView.subviews.forEach { $0.removeFromSuperview() }
             }
 
             func configure(aiStep: AIRoutineStep, isChecked: Bool) {
@@ -181,7 +186,8 @@ class StepCollectionViewCell: UICollectionViewCell {
                 updateCheckboxUI(animated: false)
                 buildIngredientsGrid()
                 products = SkincareProductDatabase.shared.products(matchingIngredients: self.ingredients)
-                buildProductCards()
+                productsBuilt = false
+                productsContainerView.subviews.forEach { $0.removeFromSuperview() }
             }
 
             func configure(aiStep: AIRoutineStep, isChecked: Bool, isLocked: Bool) {
@@ -216,6 +222,11 @@ class StepCollectionViewCell: UICollectionViewCell {
             private func expandProducts(animated: Bool) {
                 isExpanded = true
                 styleExploreButton(expanded: true)
+
+                if !productsBuilt {
+                    buildProductCards()
+                    productsBuilt = true
+                }
 
                 // Set explicit height so layout engine has a real value
                 productsContainerHeight.constant = 380
@@ -298,11 +309,16 @@ class StepCollectionViewCell: UICollectionViewCell {
                 productsContainerView.addSubview(scrollView)
                 productsContainerView.addSubview(footer)
 
+                let scrollTop = scrollView.topAnchor.constraint(equalTo: productsContainerView.topAnchor, constant: 12)
+                let scrollHeight = scrollView.heightAnchor.constraint(equalToConstant: 300)
+                let footerTop = footer.topAnchor.constraint(equalTo: scrollView.bottomAnchor, constant: 10)
+                [scrollTop, scrollHeight, footerTop].forEach { $0.priority = .defaultHigh }
+
                 NSLayoutConstraint.activate([
-                    scrollView.topAnchor.constraint(equalTo: productsContainerView.topAnchor, constant: 12),
+                    scrollTop,
                     scrollView.leadingAnchor.constraint(equalTo: productsContainerView.leadingAnchor, constant: 4),
                     scrollView.trailingAnchor.constraint(equalTo: productsContainerView.trailingAnchor, constant: -4),
-                    scrollView.heightAnchor.constraint(equalToConstant: 300),
+                    scrollHeight,
 
                     cardsStack.topAnchor.constraint(equalTo: scrollView.topAnchor),
                     cardsStack.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
@@ -310,7 +326,7 @@ class StepCollectionViewCell: UICollectionViewCell {
                     cardsStack.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
                     cardsStack.heightAnchor.constraint(equalTo: scrollView.heightAnchor),
 
-                    footer.topAnchor.constraint(equalTo: scrollView.bottomAnchor, constant: 10),
+                    footerTop,
                     footer.leadingAnchor.constraint(equalTo: productsContainerView.leadingAnchor, constant: 12),
                     footer.trailingAnchor.constraint(equalTo: productsContainerView.trailingAnchor, constant: -12),
                     footer.bottomAnchor.constraint(lessThanOrEqualTo: productsContainerView.bottomAnchor, constant: -8)

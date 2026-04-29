@@ -62,6 +62,12 @@ final class RoutineViewController: UIViewController {
             navigationController?.navigationBar.scrollEdgeAppearance = appearance
         }
 
+        override func viewWillAppear(_ animated: Bool) {
+            super.viewWillAppear(animated)
+            aiOutput = dataModel.loadAIRoutine()
+            reloadSteps()
+        }
+
         override func viewDidLayoutSubviews() {
             super.viewDidLayoutSubviews()
             view.applyAINABackground()
