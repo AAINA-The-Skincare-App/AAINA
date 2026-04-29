@@ -24,8 +24,8 @@
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="GLs-LL-uEn" userLabel="mainStack View">
                                 <rect key="frame" x="16" y="16" width="381" height="197"/>
                                 <subviews>
-                                    <stackView opaque="NO" contentMode="scaleToFill" alignment="center" spacing="12" translatesAutoresizingMaskIntoConstraints="NO" id="IAp-T3-eWM" userLabel="row1Stack">
-                                        <rect key="frame" x="0.0" y="0.0" width="381" height="56"/>
+                                    <stackView hidden="YES" opaque="NO" contentMode="scaleToFill" alignment="center" spacing="12" translatesAutoresizingMaskIntoConstraints="NO" id="IAp-T3-eWM" userLabel="row1Stack">
+                                        <rect key="frame" x="0.0" y="-56" width="381" height="56"/>
                                         <subviews>
                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="doc.text" translatesAutoresizingMaskIntoConstraints="NO" id="GXI-lt-zuu">
                                                 <rect key="frame" x="0.0" y="16" width="24" height="24"/>
@@ -58,15 +58,15 @@
                                             <constraint firstAttribute="height" constant="56" id="tmV-VH-znw"/>
                                         </constraints>
                                     </stackView>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9ua-VI-PwI" userLabel="divider1">
-                                        <rect key="frame" x="0.0" y="56" width="381" height="0.6666666666666643"/>
+                                    <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9ua-VI-PwI" userLabel="divider1">
+                                        <rect key="frame" x="0.0" y="-0.33333333333333393" width="381" height="0.33333333333333331"/>
                                         <color key="backgroundColor" systemColor="separatorColor"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="0.5" id="s5x-Ho-PRS"/>
                                         </constraints>
                                     </view>
                                     <stackView opaque="NO" contentMode="scaleToFill" alignment="center" spacing="12" translatesAutoresizingMaskIntoConstraints="NO" id="TzE-mN-NcG" userLabel="row2Stack">
-                                        <rect key="frame" x="0.0" y="56.666666666666671" width="381" height="56"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="381" height="56"/>
                                         <subviews>
                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="square.and.arrow.up" translatesAutoresizingMaskIntoConstraints="NO" id="9Vz-yy-GC5">
                                                 <rect key="frame" x="0.0" y="16" width="24" height="24"/>
@@ -77,7 +77,7 @@
                                                 </constraints>
                                             </imageView>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Share the app" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="J24-q8-Qa4">
-                                                <rect key="frame" x="36.000000000000007" y="18.333333333333329" width="103.66666666666669" height="19.333333333333329"/>
+                                                <rect key="frame" x="36.000000000000007" y="18.333333333333336" width="103.66666666666669" height="19.333333333333336"/>
                                                 <fontDescription key="fontDescription" type="system" weight="medium" pointSize="16"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
@@ -100,17 +100,17 @@
                                         </constraints>
                                     </stackView>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hMp-gI-7J1" userLabel="divider2">
-                                        <rect key="frame" x="0.0" y="112.66666666666666" width="381" height="0.3333333333333286"/>
+                                        <rect key="frame" x="0.0" y="56" width="381" height="0.6666666666666643"/>
                                         <color key="backgroundColor" systemColor="separatorColor"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="0.5" id="BDf-Qa-rMv"/>
                                         </constraints>
                                     </view>
                                     <stackView opaque="NO" contentMode="scaleToFill" alignment="center" spacing="12" translatesAutoresizingMaskIntoConstraints="NO" id="SiN-41-sq7" userLabel="row3Stack">
-                                        <rect key="frame" x="0.0" y="113" width="381" height="27.666666666666657"/>
+                                        <rect key="frame" x="0.0" y="56.666666666666671" width="381" height="84.000000000000014"/>
                                         <subviews>
                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="star" translatesAutoresizingMaskIntoConstraints="NO" id="k2N-fM-gwy">
-                                                <rect key="frame" x="0.0" y="1.6666666666666572" width="24" height="24"/>
+                                                <rect key="frame" x="0.0" y="30" width="24" height="24"/>
                                                 <color key="tintColor" name="primarypink"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="24" id="48X-km-QzS"/>
@@ -118,17 +118,17 @@
                                                 </constraints>
                                             </imageView>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Leave a review" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sHg-YK-Ede">
-                                                <rect key="frame" x="36" y="4" width="109" height="19.333333333333332"/>
+                                                <rect key="frame" x="36" y="32.333333333333329" width="109" height="19.333333333333329"/>
                                                 <fontDescription key="fontDescription" type="system" weight="medium" pointSize="16"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="PLi-Ll-VqT">
-                                                <rect key="frame" x="157" y="0.0" width="200" height="27.666666666666668"/>
+                                                <rect key="frame" x="157" y="17" width="200" height="50"/>
                                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                             </view>
                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="chevron.right" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="Akn-Cd-eXK">
-                                                <rect key="frame" x="369" y="7.6666666666666572" width="12" height="12.333333333333332"/>
+                                                <rect key="frame" x="369" y="36" width="12" height="12.333333333333329"/>
                                                 <color key="tintColor" name="primarypink"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="16" id="6Dh-3K-VuD"/>
@@ -226,7 +226,7 @@
             <color red="0.85098039215686272" green="0.44313725490196076" blue="0.50980392156862742" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <systemColor name="separatorColor">
-            <color red="0.23529411764705882" green="0.23529411764705882" blue="0.2627450980392157" alpha="0.12" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.23529411759999999" green="0.23529411759999999" blue="0.26274509800000001" alpha="0.28999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>

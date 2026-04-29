@@ -30,10 +30,32 @@ class EntryCollectionViewCell: UITableViewCell {
         let f = DateFormatter(); f.timeStyle = .short; return f
     }()
 
-    func configure(skinLog: SkinLogEntry) {
-        let prefix = skinLog.isFlareUp ? "🔴 " : "✅ "
-        entryLabel.text = skinLog.note.isEmpty ? "\(prefix)Skin log" : "\(prefix)\(skinLog.note)"
-        timeLabel.text  = Self.timeFmt.string(from: skinLog.date)
+    private static let dateFmt: DateFormatter = {
+        let f = DateFormatter(); f.dateFormat = "d MMM yyyy"; return f
+    }()
+
+    private func formattedDate(_ date: Date, showFullDate: Bool) -> String {
+        guard showFullDate else { return Self.timeFmt.string(from: date) }
+        let prefix = Calendar.current.isDateInToday(date)
+            ? "Today"
+            : Self.dateFmt.string(from: date)
+        return "\(prefix)  ·  \(Self.timeFmt.string(from: date))"
+    }
+
+    func configure(skinLog: SkinLogEntry, showFullDate: Bool = false) {
+        let displayText: String
+        if !skinLog.title.isEmpty {
+            displayText = skinLog.title
+        } else if !skinLog.note.isEmpty {
+            displayText = skinLog.note
+        } else {
+            displayText = "Skin log"
+        }
+
+        entryLabel.attributedText = nil
+        entryLabel.text = displayText
+
+        timeLabel.text = formattedDate(skinLog.date, showFullDate: showFullDate)
         tagsStack.arrangedSubviews.forEach { $0.removeFromSuperview() }
         for tag in skinLog.flareUps { tagsStack.addArrangedSubview(makeTagView(tag)) }
         if !skinLog.photoFileNames.isEmpty {
@@ -41,9 +63,15 @@ class EntryCollectionViewCell: UITableViewCell {
         }
     }
 
-    func configure(entry: JournalEntry) {
-        entryLabel.text = entry.note.isEmpty ? "No notes" : entry.note
-        timeLabel.text  = Self.timeFmt.string(from: entry.date)
+    func configure(entry: JournalEntry, showFullDate: Bool = false) {
+        if !entry.title.isEmpty {
+            entryLabel.text = entry.title
+        } else if !entry.note.isEmpty {
+            entryLabel.text = entry.note
+        } else {
+            entryLabel.text = "No notes"
+        }
+        timeLabel.text = formattedDate(entry.date, showFullDate: showFullDate)
 
         tagsStack.arrangedSubviews.forEach { $0.removeFromSuperview() }
         for tag in entry.flareUps {

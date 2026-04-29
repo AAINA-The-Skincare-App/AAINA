@@ -31,7 +31,7 @@ class OnboardingExposureViewController: UIViewController {
     private func setupCard() {
         exposureCardView.backgroundColor = .clear
 
-        // ✅ SAME GLASS AS ALL SCREENS
+      
         exposureCardView.applyGlass(cornerRadius: 24)
 
         exposureCardView.layer.shadowColor = UIColor.ainaCardShadowColor.cgColor
@@ -49,7 +49,7 @@ class OnboardingExposureViewController: UIViewController {
 
             $0.layer.cornerRadius = 22
 
-            // ✅ MATCH OTHER SCREENS
+            // MATCH OTHER SCREENS
             $0.backgroundColor = UIColor.white.withAlphaComponent(0.25)
 
             $0.layer.borderWidth = 1
@@ -104,7 +104,7 @@ class OnboardingExposureViewController: UIViewController {
 
             if button == selected {
 
-                // ✅ MATCH SELECTED STYLE
+                // MATCH SELECTED STYLE
                 button.backgroundColor = UIColor.ainaCoralPink.withAlphaComponent(0.15)
                 button.layer.borderColor = UIColor.ainaCoralPink.cgColor
                 button.layer.borderWidth = 1
@@ -122,7 +122,7 @@ class OnboardingExposureViewController: UIViewController {
 
             } else {
 
-                // ✅ MATCH UNSELECTED STYLE
+                // MATCH UNSELECTED STYLE
                 button.backgroundColor = UIColor.white.withAlphaComponent(0.25)
                 button.layer.borderColor = UIColor.ainaTextTertiary.withAlphaComponent(0.25).cgColor
                 button.layer.borderWidth = 1

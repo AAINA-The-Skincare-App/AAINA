@@ -85,9 +85,9 @@ class ProfileCollectionViewCell: UICollectionViewCell {
         // Name
         nameLabel.font = UIFont.boldSystemFont(ofSize: 18)
         nameLabel.textAlignment = .center
-        nameLabel.text = "Diya "
        
-        memberLabel.text = "Member since 2025"
+        let year = UserDefaults.standard.integer(forKey: "member_since_year")
+        memberLabel.text = year > 0 ? "Member since \(year)" : "Member since \(Calendar.current.component(.year, from: Date()))"
         ageLabel.backgroundColor = UIColor.systemPink.withAlphaComponent(0.15)
 
         ageLabel.textAlignment = .center

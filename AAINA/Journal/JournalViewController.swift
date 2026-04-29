@@ -70,12 +70,13 @@ class JournalViewController: UIViewController {
         super.viewDidLayoutSubviews()
         view.applyAINABackground()
         scrollTimelineToSelected(animated: false)
+        sizeTableHeaderView()
     }
 
     // MARK: - Buttons
     private func setupButtons() {
-        applyGlassConfig(to: skinLogButton, title: " Skin Log", icon: "plus")
-        applyGlassConfig(to: reminderButton, title: " Reminder", icon: "plus")
+        applyGlassConfig(to: skinLogButton, title: " Skin Log", icon: "waveform.path.ecg.text.clipboard")
+        applyGlassConfig(to: reminderButton, title: " Reminder", icon: "bell")
         applyGlassConfig(to: myNotesButton, title: " My Notes", icon: "note.text")
     }
 
@@ -93,6 +94,14 @@ class JournalViewController: UIViewController {
         title = "Journal"
         navigationController?.navigationBar.prefersLargeTitles = true
         navigationItem.largeTitleDisplayMode = .always
+
+        let appearance = UINavigationBarAppearance()
+        appearance.configureWithTransparentBackground()
+        appearance.titleTextAttributes = [.foregroundColor: UIColor.ainaTextPrimary]
+        appearance.largeTitleTextAttributes = [.foregroundColor: UIColor.ainaTextPrimary]
+        navigationController?.navigationBar.standardAppearance = appearance
+        navigationController?.navigationBar.scrollEdgeAppearance = appearance
+        navigationController?.navigationBar.compactAppearance = appearance
 
         let calendarButton = UIBarButtonItem(
             image: UIImage(systemName: "calendar"),
@@ -336,6 +345,53 @@ class JournalViewController: UIViewController {
 
         tableView.register(UINib(nibName: "ReminderTableViewCell", bundle: nil), forCellReuseIdentifier: "ReminderTableViewCell")
         tableView.register(UINib(nibName: "EntryCollectionViewCell", bundle: nil), forCellReuseIdentifier: "EntryCollectionViewCell")
+        tableView.register(EmptyStateInfoCell.self, forCellReuseIdentifier: EmptyStateInfoCell.reuseIdentifier)
+
+        installButtonStackAsTableHeader()
+    }
+
+    // Move the storyboard button stack into the table's header so it scrolls
+    // with the journal content instead of staying pinned below the timeline.
+    private func installButtonStackAsTableHeader() {
+        buttonStack.removeFromSuperview()
+
+        let header = UIView()
+        header.backgroundColor = .clear
+        header.addSubview(buttonStack)
+        buttonStack.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            buttonStack.topAnchor.constraint(equalTo: header.topAnchor, constant: 12),
+            buttonStack.bottomAnchor.constraint(equalTo: header.bottomAnchor, constant: -16),
+            buttonStack.leadingAnchor.constraint(equalTo: header.leadingAnchor, constant: 16),
+            buttonStack.trailingAnchor.constraint(equalTo: header.trailingAnchor, constant: -16)
+        ])
+
+        tableView.tableHeaderView = header
+        sizeTableHeaderView()
+    }
+
+    private func sizeTableHeaderView() {
+        guard let header = tableView.tableHeaderView else { return }
+        let width = tableView.bounds.width > 0 ? tableView.bounds.width : view.bounds.width
+        header.frame = CGRect(x: 0, y: 0, width: width, height: 0)
+        let size = header.systemLayoutSizeFitting(
+            CGSize(width: width, height: UIView.layoutFittingCompressedSize.height),
+            withHorizontalFittingPriority: .required,
+            verticalFittingPriority: .fittingSizeLevel
+        )
+        if abs(header.frame.height - size.height) > 0.5 {
+            header.frame = CGRect(x: 0, y: 0, width: width, height: size.height)
+            tableView.tableHeaderView = header
+        }
+    }
+
+    // MARK: - Empty state helpers
+    private func isSectionEmpty(_ section: Int) -> Bool {
+        switch section {
+        case 0:  return skinLogEntries.isEmpty
+        case 1:  return reminders.isEmpty
+        default: return journalEntries.isEmpty
+        }
     }
 
     // MARK: - Layout
@@ -365,13 +421,83 @@ class JournalViewController: UIViewController {
     }
 
     @objc private func seeMoreTapped(_ sender: UIButton) {
-        let section = sender.tag
-        switch section {
-        case 0:  skinLogExpanded.toggle()
-        case 1:  remindersExpanded.toggle()
-        default: entriesExpanded.toggle()
+        remindersExpanded.toggle()
+        tableView.reloadSections(IndexSet(integer: 1), with: .automatic)
+    }
+
+    @objc private func seeAllSkinLogTapped() {
+        let vc = SkinLogListViewController()
+        vc.allEntries = allSkinLogEntries
+        vc.onEntryUpdated = { [weak self] updated in
+            guard let self else { return }
+            if let idx = self.allSkinLogEntries.firstIndex(where: { $0.id == updated.id }) {
+                self.allSkinLogEntries[idx] = updated
+                self.saveSkinLogEntries()
+            }
+            self.filterSkinLogForSelectedDate()
+            self.tableView.reloadSections(IndexSet(integer: 0), with: .automatic)
         }
-        tableView.reloadSections(IndexSet(integer: section), with: .automatic)
+        vc.onEntryDeleted = { [weak self] id in
+            guard let self else { return }
+            self.allSkinLogEntries.removeAll { $0.id == id }
+            self.saveSkinLogEntries()
+            self.filterSkinLogForSelectedDate()
+            self.tableView.reloadSections(IndexSet(integer: 0), with: .automatic)
+        }
+        navigationController?.pushViewController(vc, animated: true)
+    }
+
+    @objc private func seeAllNotesTapped() {
+        let vc = NotesListViewController()
+        vc.allEntries = allJournalEntries
+        vc.onEntryUpdated = { [weak self] updated in
+            guard let self else { return }
+            if let idx = self.allJournalEntries.firstIndex(where: { $0.id == updated.id }) {
+                self.allJournalEntries[idx] = updated
+                self.saveEntries()
+            }
+            self.filterEntriesForSelectedDate()
+            self.tableView.reloadSections(IndexSet(integer: 2), with: .automatic)
+        }
+        vc.onEntryDeleted = { [weak self] id in
+            guard let self else { return }
+            self.allJournalEntries.removeAll { $0.id == id }
+            self.saveEntries()
+            self.filterEntriesForSelectedDate()
+            self.tableView.reloadSections(IndexSet(integer: 2), with: .automatic)
+        }
+        navigationController?.pushViewController(vc, animated: true)
+    }
+
+    private func makeFooter(title: String, chevron: Bool, action: Selector, tag: Int = 0) -> UIView {
+        let footer = UIView()
+        footer.backgroundColor = .clear
+
+        var cfg = UIButton.Configuration.plain()
+        cfg.baseForegroundColor = .ainaDustyRose
+        cfg.background.backgroundColor = UIColor.ainaCoralPink.withAlphaComponent(0.10)
+        cfg.background.cornerRadius = 14
+        cfg.contentInsets = NSDirectionalEdgeInsets(top: 7, leading: 16, bottom: 7, trailing: chevron ? 12 : 16)
+        cfg.attributedTitle = AttributedString(title, attributes: AttributeContainer([
+            .font: UIFont.systemFont(ofSize: 13, weight: .medium),
+            .foregroundColor: UIColor.ainaDustyRose
+        ]))
+        if chevron {
+            cfg.image = UIImage(systemName: "chevron.right",
+                                withConfiguration: UIImage.SymbolConfiguration(scale: .small))
+            cfg.imagePlacement = .trailing
+            cfg.imagePadding   = 5
+        }
+        let button = UIButton(configuration: cfg)
+        button.tag = tag
+        button.addTarget(self, action: action, for: .touchUpInside)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        footer.addSubview(button)
+        NSLayoutConstraint.activate([
+            button.trailingAnchor.constraint(equalTo: footer.trailingAnchor, constant: -20),
+            button.centerYAnchor.constraint(equalTo: footer.centerYAnchor)
+        ])
+        return footer
     }
 }
 
@@ -426,12 +552,40 @@ extension JournalViewController: UITableViewDataSource, UITableViewDelegate {
 
     func tableView(_ tableView: UITableView,
                    numberOfRowsInSection section: Int) -> Int {
-        return visibleCount(for: section)
+        let count = visibleCount(for: section)
+        return count == 0 ? 1 : count
     }
 
     func tableView(_ tableView: UITableView,
                    cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         // Section 0 = Skin Log, 1 = Reminders, 2 = My Notes
+        if isSectionEmpty(indexPath.section) {
+            let cell = tableView.dequeueReusableCell(
+                withIdentifier: EmptyStateInfoCell.reuseIdentifier, for: indexPath
+            ) as! EmptyStateInfoCell
+            switch indexPath.section {
+            case 0:
+                cell.configure(
+                    icon: "waveform.path.ecg.text.clipboard",
+                    title: "No skin log for today",
+                    subtitle: "Save entry to make a consultation skin report for dermatologist."
+                )
+            case 1:
+                cell.configure(
+                    icon: "bell.fill",
+                    title: "No reminders set",
+                    subtitle: "Add a reminder to stay on top of your routine and check-ins."
+                )
+            default:
+                cell.configure(
+                    icon: "note.text",
+                    title: "No notes for today",
+                    subtitle: "Jot down thoughts on products, triggers, or how your skin feels."
+                )
+            }
+            return cell
+        }
+
         switch indexPath.section {
         case 0:
             let cell = tableView.dequeueReusableCell(
@@ -490,52 +644,43 @@ extension JournalViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView,
                    heightForHeaderInSection section: Int) -> CGFloat { 60 }
 
-    // MARK: - Footer for See More / See Less
+    // MARK: - Footer
     func tableView(_ tableView: UITableView,
                    viewForFooterInSection section: Int) -> UIView? {
-        guard needsToggleButton(for: section) else { return nil }
-
-        let expanded: Bool
         switch section {
-        case 0: expanded = skinLogExpanded
-        case 1: expanded = remindersExpanded
-        default: expanded = entriesExpanded
+        case 0:
+            return makeFooter(title: "See all logs", chevron: true,
+                              action: #selector(seeAllSkinLogTapped))
+        case 1:
+            guard needsToggleButton(for: section) else { return nil }
+            let title = remindersExpanded ? "Show less" : "See more"
+            return makeFooter(title: title, chevron: false,
+                              action: #selector(seeMoreTapped(_:)), tag: section)
+        default:
+            return makeFooter(title: "See all notes", chevron: true,
+                              action: #selector(seeAllNotesTapped))
         }
-
-        let footer = UIView()
-        footer.backgroundColor = .clear
-
-        let button = UIButton(type: .system)
-        button.setTitle(expanded ? "See Less" : "See More", for: .normal)
-        button.setImage(nil, for: .normal)
-        button.tintColor = .ainaDustyRose
-        button.setTitleColor(.ainaDustyRose, for: .normal)
-        button.titleLabel?.font = .systemFont(ofSize: 12, weight: .regular)
-        button.tag = section
-        button.addTarget(self, action: #selector(seeMoreTapped(_:)), for: .touchUpInside)
-        button.translatesAutoresizingMaskIntoConstraints = false
-
-        footer.addSubview(button)
-        NSLayoutConstraint.activate([
-            button.trailingAnchor.constraint(equalTo: footer.trailingAnchor, constant: -20),
-            button.centerYAnchor.constraint(equalTo: footer.centerYAnchor)
-        ])
-        return footer
     }
 
     func tableView(_ tableView: UITableView,
                    heightForFooterInSection section: Int) -> CGFloat {
-        return needsToggleButton(for: section) ? 44 : 0
+        switch section {
+        case 0:  return 44
+        case 1:  return needsToggleButton(for: section) ? 44 : 0
+        default: return 44
+        }
     }
 
     func tableView(_ tableView: UITableView,
                    heightForRowAt indexPath: IndexPath) -> CGFloat {
-        indexPath.section == 1 ? 88 : 100  // Reminders are shorter
+        if isSectionEmpty(indexPath.section) { return 96 }
+        return indexPath.section == 1 ? 88 : 100  // Reminders are shorter
     }
 
     // Swipe left → Delete
     func tableView(_ tableView: UITableView,
                    trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        if isSectionEmpty(indexPath.section) { return nil }
         let action = UIContextualAction(style: .destructive, title: "Delete") { [weak self] _, _, done in
             guard let self else { return done(false) }
             // Section 0 = Skin Log, 1 = Reminders, 2 = My Notes
@@ -571,6 +716,7 @@ extension JournalViewController: UITableViewDataSource, UITableViewDelegate {
 
     // Tap entry → show notes / export skin log
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if isSectionEmpty(indexPath.section) { return }
         if indexPath.section == 0 {
             // Skin log: offer PDF export
             let entry = skinLogEntries[indexPath.row]
@@ -578,7 +724,16 @@ extension JournalViewController: UITableViewDataSource, UITableViewDelegate {
         } else if indexPath.section == 2 {
             let entry = journalEntries[indexPath.row]
             let vc = NotesEditorViewController()
-            vc.initialText = entry.note
+            vc.entry = entry
+            vc.onUpdate = { [weak self] updated in
+                guard let self else { return }
+                if let idx = self.allJournalEntries.firstIndex(where: { $0.id == updated.id }) {
+                    self.allJournalEntries[idx] = updated
+                    self.saveEntries()
+                    self.filterEntriesForSelectedDate()
+                    self.tableView.reloadSections(IndexSet(integer: 2), with: .automatic)
+                }
+            }
             navigationController?.pushViewController(vc, animated: true)
         }
     }

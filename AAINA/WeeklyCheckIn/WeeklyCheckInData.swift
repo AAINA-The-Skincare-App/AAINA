@@ -3,20 +3,23 @@
 //  AAINA
 //
 
-import UIKit
+import Foundation
 
-struct WeeklyCheckInData {
-    var weekStart: Date = Date()
-    var skinCondition: String = ""
-    var concerns: [String] = []
-    var morningDaysCompleted: [Int] = []   // indices 0-6
-    var eveningDaysCompleted: [Int] = []
-    var sleepQuality: Int = 0              // 1-5
-    var stressLevel: Float = 0.5           // 0-1
-    var waterIntake: Int = 0               // glasses
-    var productChanges: [(name: String, isAdded: Bool)] = []
-    var progressPhoto: UIImage? = nil
-    var additionalNotes: String = ""
-    var wantsRoutineChange: Bool = false
-    var routineChangeReason: String = ""
+struct WeeklyCheckInData: Codable {
+    var weekKey:   String = ""
+    var weekStart: Date   = Date()
+    var weekEnd:   Date   = Date()
+
+    var skinCondition:          String   = ""
+    var concerns:               [String] = []
+    var sleepQuality:           Int      = -1
+    var stressLevel:            Float    = 0.5
+    var waterIntake:            Int      = 0
+    var progressPhotoFileNames: [String] = []
+    var additionalNotes:        String   = ""
+    var wantsRoutineChange:     Bool     = false
+    var routineTarget:          String   = ""   // "morning", "evening", "both"
+    var stepsToChange:          [String] = []
+    var routineAction:          String   = ""   // "change" or "remove"
+    var routineChangeReason:    String   = ""
 }

@@ -73,20 +73,15 @@ class RoutineLoadingViewController: UIViewController {
                     prompt: prompt,
                     image: capturedImage
                 )
+
                 dataModel.saveAIRoutine(output.routine)
-<<<<<<< Updated upstream
                 await MainActor.run { self.transitionToOnboardingResult() }
-=======
-                if capturedImage != nil {
-                    dataModel.saveLastFaceScanResult(output.scanResult)
-                }
 
                 // Build and persist UserProfile with the real login name
                 let loginName = UserDefaults.standard.string(forKey: "userName") ?? "User"
                 if let profile = UserProfile.from(onboarding: self.onboardingData, name: loginName) {
                     AppDataModel.shared.saveProfile(profile)
                 }
-
                 await MainActor.run {
                     if self.returnToMainAppAfterGeneration {
                         self.transitionToMainApp()
@@ -95,7 +90,7 @@ class RoutineLoadingViewController: UIViewController {
                     }
                 }
 
->>>>>>> Stashed changes
+
             } catch {
                 await MainActor.run { self.showFailureAlert() }
             }
@@ -103,6 +98,19 @@ class RoutineLoadingViewController: UIViewController {
     }
 
     // MARK: - Navigation
+
+    private func transitionToMainApp() {
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        guard let tabBarVC = storyboard.instantiateViewController(
+            withIdentifier: "MainTabBarViewController"
+        ) as? MainTabBarViewController else { return }
+        tabBarVC.dataModel = dataModel
+        if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+           let sceneDelegate = windowScene.delegate as? SceneDelegate {
+            sceneDelegate.window?.rootViewController = tabBarVC
+            sceneDelegate.window?.makeKeyAndVisible()
+        }
+    }
 
     private func transitionToOnboardingResult() {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)

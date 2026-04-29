@@ -92,6 +92,167 @@ enum SkinLogPDFExporter {
         return url
     }
 
+    // MARK: - Range report (multiple entries)
+
+    static func generateReport(entries: [SkinLogEntry], from fromDate: Date, to toDate: Date) -> URL {
+        let pageWidth:  CGFloat = 595
+        let pageHeight: CGFloat = 842
+        let margin:     CGFloat = 48
+        let accentColor = UIColor(red: 0.91, green: 0.62, blue: 0.62, alpha: 1)
+        let roseColor   = UIColor(red: 0.65, green: 0.35, blue: 0.45, alpha: 1)
+
+        let rangeFmt = DateFormatter(); rangeFmt.dateFormat = "d MMM yyyy"
+        let entryFmt = DateFormatter(); entryFmt.dateFormat = "d MMM yyyy · h:mm a"
+        let genFmt   = DateFormatter(); genFmt.dateStyle = .medium; genFmt.timeStyle = .short
+
+        let sorted = entries.sorted { $0.date < $1.date }
+        let ts     = Int(Date().timeIntervalSince1970)
+        let url    = FileManager.default.temporaryDirectory
+                         .appendingPathComponent("SkinReport_\(ts).pdf")
+
+        let renderer = UIGraphicsPDFRenderer(
+            bounds: CGRect(x: 0, y: 0, width: pageWidth, height: pageHeight))
+
+        let data = renderer.pdfData { ctx in
+
+            // ── Cover page ──────────────────────────────────────
+            ctx.beginPage()
+
+            let headerRect = CGRect(x: 0, y: 0, width: pageWidth, height: 110)
+            accentColor.setFill(); UIRectFill(headerRect)
+
+            "Skin Log Report".draw(
+                at: CGPoint(x: margin, y: 24),
+                withAttributes: [.font: UIFont.systemFont(ofSize: 24, weight: .bold),
+                                 .foregroundColor: UIColor.white])
+
+            "AAINA".draw(
+                at: CGPoint(x: margin, y: 60),
+                withAttributes: [.font: UIFont.systemFont(ofSize: 13, weight: .medium),
+                                 .foregroundColor: UIColor.white.withAlphaComponent(0.75)])
+
+            var y: CGFloat = 130
+
+            let subAttrs: [NSAttributedString.Key: Any] = [
+                .font: UIFont.systemFont(ofSize: 13),
+                .foregroundColor: roseColor]
+
+            "Period:  \(rangeFmt.string(from: fromDate))  –  \(rangeFmt.string(from: toDate))"
+                .draw(at: CGPoint(x: margin, y: y), withAttributes: subAttrs); y += 22
+            "\(sorted.count) \(sorted.count == 1 ? "entry" : "entries") recorded"
+                .draw(at: CGPoint(x: margin, y: y), withAttributes: subAttrs); y += 36
+
+            accentColor.withAlphaComponent(0.25).setStroke()
+            let div = UIBezierPath()
+            div.move(to: CGPoint(x: margin, y: y))
+            div.addLine(to: CGPoint(x: pageWidth - margin, y: y))
+            div.lineWidth = 1; div.stroke(); y += 28
+
+            // ── Entries ─────────────────────────────────────────
+            func newPage() {
+                ctx.beginPage()
+                let stripRect = CGRect(x: 0, y: 0, width: pageWidth, height: 36)
+                accentColor.withAlphaComponent(0.12).setFill(); UIRectFill(stripRect)
+                "AAINA Skin Log Report".draw(
+                    at: CGPoint(x: margin, y: 10),
+                    withAttributes: [.font: UIFont.systemFont(ofSize: 11, weight: .medium),
+                                     .foregroundColor: roseColor])
+                y = 54
+            }
+
+            let noteAttrs: [NSAttributedString.Key: Any] = [
+                .font: UIFont.systemFont(ofSize: 12),
+                .foregroundColor: UIColor.darkGray]
+
+            for entry in sorted {
+                let needed = entryEstimate(entry: entry, width: pageWidth - margin * 2)
+                if y + needed > pageHeight - 60 { newPage() }
+
+                // Card background
+                let cardH = needed
+                let cardRect = CGRect(x: margin - 10, y: y - 8,
+                                      width: pageWidth - (margin - 10) * 2, height: cardH + 16)
+                UIColor(red: 0.99, green: 0.95, blue: 0.97, alpha: 1).setFill()
+                UIBezierPath(roundedRect: cardRect, cornerRadius: 8).fill()
+
+                // Date
+                entryFmt.string(from: entry.date).draw(
+                    at: CGPoint(x: margin, y: y),
+                    withAttributes: [.font: UIFont.systemFont(ofSize: 11, weight: .semibold),
+                                     .foregroundColor: roseColor]); y += 18
+
+                // Title
+                if !entry.title.isEmpty {
+                    entry.title.draw(
+                        at: CGPoint(x: margin, y: y),
+                        withAttributes: [.font: UIFont.systemFont(ofSize: 14, weight: .semibold),
+                                         .foregroundColor: UIColor.black]); y += 20
+                }
+
+                // Flare
+                if entry.isFlareUp {
+                    "Flare-up day".draw(
+                        at: CGPoint(x: margin, y: y),
+                        withAttributes: [.font: UIFont.systemFont(ofSize: 12),
+                                         .foregroundColor: UIColor(red: 0.8, green: 0.3, blue: 0.3, alpha: 1)])
+                    y += 18
+                }
+
+                // Concerns
+                if !entry.flareUps.isEmpty {
+                    "Concerns: \(entry.flareUps.joined(separator: ", "))".draw(
+                        at: CGPoint(x: margin, y: y), withAttributes: noteAttrs); y += 18
+                }
+
+                // Note
+                if !entry.note.isEmpty {
+                    let w = pageWidth - margin * 2
+                    let noteRect = CGRect(x: margin, y: y, width: w, height: 120)
+                    entry.note.draw(in: noteRect, withAttributes: noteAttrs)
+                    let h = min(120, entry.note.boundingRect(
+                        with: CGSize(width: w, height: 120),
+                        options: .usesLineFragmentOrigin,
+                        attributes: noteAttrs, context: nil).height)
+                    y += h + 4
+                }
+
+                // Photos
+                if !entry.photoFileNames.isEmpty {
+                    "\(entry.photoFileNames.count) photo(s) attached".draw(
+                        at: CGPoint(x: margin, y: y),
+                        withAttributes: [.font: UIFont.systemFont(ofSize: 11),
+                                         .foregroundColor: UIColor.gray]); y += 16
+                }
+
+                y += 26
+            }
+
+            // Footer
+            "Generated by AAINA  ·  \(genFmt.string(from: Date()))".draw(
+                at: CGPoint(x: margin, y: pageHeight - 36),
+                withAttributes: [.font: UIFont.systemFont(ofSize: 10),
+                                 .foregroundColor: UIColor.lightGray])
+        }
+
+        try? data.write(to: url)
+        return url
+    }
+
+    private static func entryEstimate(entry: SkinLogEntry, width: CGFloat) -> CGFloat {
+        var h: CGFloat = 18
+        if !entry.title.isEmpty { h += 20 }
+        if entry.isFlareUp      { h += 18 }
+        if !entry.flareUps.isEmpty { h += 18 }
+        if !entry.note.isEmpty {
+            let attrs: [NSAttributedString.Key: Any] = [.font: UIFont.systemFont(ofSize: 12)]
+            h += min(120, entry.note.boundingRect(
+                with: CGSize(width: width, height: 120),
+                options: .usesLineFragmentOrigin, attributes: attrs, context: nil).height) + 4
+        }
+        if !entry.photoFileNames.isEmpty { h += 16 }
+        return h
+    }
+
     // MARK: - Drawing helpers
 
     private static func draw(label: String, value: String,

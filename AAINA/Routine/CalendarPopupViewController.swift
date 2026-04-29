@@ -9,12 +9,11 @@ import UIKit
 
 final class CalendarPopupViewController: UIViewController {
 
-    // MARK: - Public
 
     var onDateSelected: ((Date) -> Void)?
     var selectedDate: Date = Date()
 
-    // MARK: - Private
+ 
 
     private let calendar = Calendar.current
     private var currentDate = Date()
@@ -25,7 +24,7 @@ final class CalendarPopupViewController: UIViewController {
     private let titleLabel = UILabel()
     private let collectionView: UICollectionView
 
-    // MARK: - Init
+
 
     init() {
         let layout = UICollectionViewFlowLayout()
@@ -56,7 +55,7 @@ final class CalendarPopupViewController: UIViewController {
         
         
         view.addSubview(containerView)
-        // 🌸 TOP RIGHT BLOB (small)
+        // TOP RIGHT BLOB (small)
         let topBlob = UIView()
         topBlob.backgroundColor = UIColor.ainaCoralPink.withAlphaComponent(0.18)
         topBlob.layer.cornerRadius = 100
@@ -71,7 +70,7 @@ final class CalendarPopupViewController: UIViewController {
             topBlob.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 10)
         ])
 
-        // 🌸 BOTTOM LEFT BLOB (smaller + softer)
+        //  BOTTOM LEFT BLOB (smaller + softer)
         let bottomBlob = UIView()
         bottomBlob.backgroundColor = UIColor.ainaDustyRose.withAlphaComponent(0.12)
         bottomBlob.layer.cornerRadius = 120
@@ -117,7 +116,7 @@ final class CalendarPopupViewController: UIViewController {
             containerView.heightAnchor.constraint(equalToConstant: 420)
         ])
 
-        // 🔥 HEADER STACK (FIXED UI)
+        //  HEADER STACK (FIXED UI)
         let headerStack = UIStackView()
         headerStack.axis = .horizontal
         headerStack.alignment = .center
@@ -218,7 +217,7 @@ final class CalendarPopupViewController: UIViewController {
         }
     }
 
-    // MARK: - Month Logic
+ 
 
     private func generateMonth() {
 
@@ -269,7 +268,7 @@ final class CalendarPopupViewController: UIViewController {
         present(picker, animated: false)
     }
 
-    // MARK: - Actions
+   
 
     @objc private func doneTapped() {
         onDateSelected?(selectedDate)
@@ -281,7 +280,7 @@ final class CalendarPopupViewController: UIViewController {
     }
 }
 
-// MARK: - CollectionView
+
 
 extension CalendarPopupViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
 
@@ -297,11 +296,21 @@ extension CalendarPopupViewController: UICollectionViewDataSource, UICollectionV
         let date = dates[indexPath.item]
 
         if date == Date.distantPast {
-            cell.configure(text: "", selected: false)
+            cell.configure(
+                text: "",
+                selected: false,
+                isToday: false
+            )
         } else {
             let day = calendar.component(.day, from: date)
             let isSelected = calendar.isDate(date, inSameDayAs: selectedDate)
-            cell.configure(text: "\(day)", selected: isSelected)
+            let isToday = calendar.isDateInToday(date)
+
+            cell.configure(
+                text: "\(day)",
+                selected: isSelected,
+                isToday: isToday
+            )
         }
 
         return cell
@@ -370,13 +379,13 @@ final class MonthYearPickerViewController: UIViewController, UIPickerViewDataSou
             container.heightAnchor.constraint(equalToConstant: 250)
         ])
 
-        // 🌟 PICKER
+        // PICKER
         picker.dataSource = self
         picker.delegate = self
         picker.translatesAutoresizingMaskIntoConstraints = false
         container.addSubview(picker)
 
-        // ✨ subtle selection strip (NOT pink)
+        // subtle selection strip (NOT pink)
         DispatchQueue.main.async {
             self.picker.subviews.forEach {
                 if $0.bounds.height < 1 {
@@ -385,7 +394,7 @@ final class MonthYearPickerViewController: UIViewController, UIPickerViewDataSou
             }
         }
 
-        // 🌟 DONE BUTTON (ONLY PINK ELEMENT)
+        // DONE BUTTON (ONLY PINK ELEMENT)
         let done = UIButton(type: .system)
      
         
@@ -397,7 +406,7 @@ final class MonthYearPickerViewController: UIViewController, UIPickerViewDataSou
         done.setTitleColor(UIColor.ainaCoralPink, for: .normal)
     
 
-        // glow
+       
         done.layer.shadowColor = UIColor.ainaCoralPink.cgColor
         done.layer.shadowOpacity = 0.35
         done.layer.shadowRadius = 10
@@ -408,7 +417,7 @@ final class MonthYearPickerViewController: UIViewController, UIPickerViewDataSou
         done.translatesAutoresizingMaskIntoConstraints = false
         container.addSubview(done)
 
-        // 🌟 CONSTRAINTS
+        //  CONSTRAINTS
         NSLayoutConstraint.activate([
             picker.topAnchor.constraint(equalTo: container.topAnchor),
             picker.leadingAnchor.constraint(equalTo: container.leadingAnchor),
@@ -422,7 +431,7 @@ final class MonthYearPickerViewController: UIViewController, UIPickerViewDataSou
         ])
     }
 
-    // MARK: - ACTION
+
 
     @objc private func doneTapped() {
         var comp = DateComponents()
@@ -437,7 +446,7 @@ final class MonthYearPickerViewController: UIViewController, UIPickerViewDataSou
     }
 }
 
-///////////////////////////////////////////////////////////////
+
 
 extension MonthYearPickerViewController {
 
@@ -449,7 +458,7 @@ extension MonthYearPickerViewController {
         return component == 0 ? months.count : years.count
     }
 
-    // 🔥 MAIN FIX: COLORS + STYLE
+
     func pickerView(_ pickerView: UIPickerView,
                     attributedTitleForRow row: Int,
                     forComponent component: Int) -> NSAttributedString {
@@ -483,7 +492,7 @@ extension MonthYearPickerViewController {
             selectedYear = years[row]
         }
 
-        // 🔥 refresh UI to update bold/black selection
+      
         pickerView.reloadAllComponents()
     }
 }
