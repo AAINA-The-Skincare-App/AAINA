@@ -3,8 +3,15 @@ import AVFoundation
 
 class OnboardingCameraViewController: UIViewController {
 
+    enum LaunchMode {
+        case onboarding
+        case homeFirstRoutineUpdate
+        case homeRepeatAnalysis
+    }
+
     var onboardingData: OnboardingData!
     var dataModel: AppDataModel!
+    var launchMode: LaunchMode = .onboarding
 
     private let session = AVCaptureSession()
     private let photoOutput = AVCapturePhotoOutput()
@@ -16,9 +23,9 @@ class OnboardingCameraViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .black
-        navigationItem.hidesBackButton = true
+        navigationItem.hidesBackButton = launchMode == .onboarding
         navigationItem.rightBarButtonItem = UIBarButtonItem(
-            title: "Skip",
+            title: launchMode == .onboarding ? "Skip" : "Cancel",
             style: .plain,
             target: self,
             action: #selector(skipTapped)
@@ -148,6 +155,11 @@ class OnboardingCameraViewController: UIViewController {
     }
 
     @objc private func skipTapped() {
+        guard launchMode == .onboarding else {
+            navigationController?.popViewController(animated: true)
+            return
+        }
+
         let loadingVC = RoutineLoadingViewController()
         loadingVC.onboardingData = onboardingData
         loadingVC.dataModel = dataModel
@@ -159,6 +171,14 @@ class OnboardingCameraViewController: UIViewController {
         faceScanVC.capturedImage = image
         faceScanVC.onboardingData = onboardingData
         faceScanVC.dataModel = dataModel
+        switch launchMode {
+        case .onboarding:
+            faceScanVC.launchMode = .onboarding
+        case .homeFirstRoutineUpdate:
+            faceScanVC.launchMode = .homeFirstRoutineUpdate
+        case .homeRepeatAnalysis:
+            faceScanVC.launchMode = .homeRepeatAnalysis
+        }
         navigationController?.pushViewController(faceScanVC, animated: true)
     }
 

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="24506" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/><dependencies><plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24504"/><capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/></dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/><placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="cell" customClass="ArticleGridCollectionViewCell" customModule="AAINA" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="341" height="118"/><autoresizingMask key="autoresizingMask"/>
+            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center"><rect key="frame" x="0.0" y="0.0" width="341" height="118"/><autoresizingMask key="autoresizingMask"/>
+                <subviews><view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="container"><rect key="frame" x="0.0" y="0.0" width="341" height="118"/>
+                    <subviews>
+                        <label opaque="NO" userInteractionEnabled="NO" text="✓" textAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="icon"><rect key="frame" x="22" y="44" width="34" height="30"/></label>
+                        <label opaque="NO" userInteractionEnabled="NO" text="Title" numberOfLines="2" translatesAutoresizingMaskIntoConstraints="NO" id="title"><rect key="frame" x="74" y="22" width="243" height="22"/></label>
+                        <label opaque="NO" userInteractionEnabled="NO" text="Description" numberOfLines="0" translatesAutoresizingMaskIntoConstraints="NO" id="desc"><rect key="frame" x="74" y="50" width="243" height="46"/></label>
+                    </subviews>
+                    <constraints>
+                        <constraint firstItem="icon" firstAttribute="leading" secondItem="container" secondAttribute="leading" constant="22" id="i1"/><constraint firstItem="icon" firstAttribute="centerY" secondItem="container" secondAttribute="centerY" id="i2"/><constraint firstItem="icon" firstAttribute="width" constant="34" id="i3"/>
+                        <constraint firstItem="title" firstAttribute="top" secondItem="container" secondAttribute="top" constant="22" id="t1"/><constraint firstItem="title" firstAttribute="leading" secondItem="icon" secondAttribute="trailing" constant="18" id="t2"/><constraint firstAttribute="trailing" secondItem="title" secondAttribute="trailing" constant="24" id="t3"/>
+                        <constraint firstItem="desc" firstAttribute="top" secondItem="title" secondAttribute="bottom" constant="4" id="d1"/><constraint firstItem="desc" firstAttribute="leading" secondItem="title" secondAttribute="leading" id="d2"/><constraint firstAttribute="trailing" secondItem="desc" secondAttribute="trailing" constant="24" id="d3"/><constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="desc" secondAttribute="bottom" constant="18" id="d4"/>
+                    </constraints></view></subviews>
+            </view>
+            <constraints><constraint firstItem="container" firstAttribute="top" secondItem="cell" secondAttribute="top" id="c1"/><constraint firstItem="container" firstAttribute="leading" secondItem="cell" secondAttribute="leading" id="c2"/><constraint firstAttribute="trailing" secondItem="container" secondAttribute="trailing" id="c3"/><constraint firstAttribute="bottom" secondItem="container" secondAttribute="bottom" id="c4"/></constraints>
+            <size key="customSize" width="341" height="118"/>
+            <connections><outlet property="containerView" destination="container" id="o1"/><outlet property="iconLabel" destination="icon" id="o2"/><outlet property="titleLabel" destination="title" id="o3"/><outlet property="descriptionLabel" destination="desc" id="o4"/></connections>
+        </collectionViewCell>
+    </objects>
+</document>
