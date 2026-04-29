@@ -11,9 +11,8 @@ class OnboardingDOBViewController: UIViewController,
     @IBOutlet weak var privacyContainerView: UIView!
     @IBOutlet weak var privacyIcon: UIImageView!
     @IBOutlet weak var privacyLabel: UILabel!
-    @IBOutlet weak var progressView: UIProgressView!
 
-    var dataModel: DataModel!
+    var dataModel: AppDataModel!
     var isEditingProfile: Bool = false
 
     var onboardingData = OnboardingData()
@@ -133,31 +132,26 @@ class OnboardingDOBViewController: UIViewController,
 
     private func setupPrivacyView() {
 
-        // Clean white card — no glass blur
-        privacyContainerView.backgroundColor = .white
+        privacyContainerView.backgroundColor = UIColor(red: 0.992, green: 0.910, blue: 0.933, alpha: 0.82)
         privacyContainerView.layer.cornerRadius = 14
         privacyContainerView.layer.masksToBounds = false
 
-        // Soft floating shadow
-        privacyContainerView.layer.shadowColor = UIColor.black.cgColor
-        privacyContainerView.layer.shadowOpacity = 0.07
-        privacyContainerView.layer.shadowOffset = CGSize(width: 0, height: 4)
-        privacyContainerView.layer.shadowRadius = 12
+        privacyContainerView.layer.shadowColor = UIColor.ainaCardShadowColor.cgColor
+        privacyContainerView.layer.shadowOpacity = 0.10
+        privacyContainerView.layer.shadowOffset = CGSize(width: 0, height: 5)
+        privacyContainerView.layer.shadowRadius = 14
 
-        // No border
-        privacyContainerView.layer.borderWidth = 0
+        privacyContainerView.layer.borderWidth = 1
+        privacyContainerView.layer.borderColor = UIColor(red: 0.929, green: 0.690, blue: 0.753, alpha: 1.0).cgColor
 
-        // Icon
-        privacyIcon.tintColor = .ainaCoralPink
+        privacyIcon.tintColor = UIColor(red: 0.839, green: 0.333, blue: 0.467, alpha: 1.0)
         privacyIcon.image = UIImage(systemName: "lock.shield.fill")
 
-        // Text style — slightly smaller, secondary colour, multi-line
         privacyLabel.font = UIFont.systemFont(ofSize: 13, weight: .regular)
-        privacyLabel.textColor = UIColor(red: 0.35, green: 0.35, blue: 0.35, alpha: 1)
+        privacyLabel.textColor = UIColor(red: 0.400, green: 0.180, blue: 0.240, alpha: 1.0)
         privacyLabel.numberOfLines = 0
         privacyLabel.lineBreakMode = .byWordWrapping
     }
-
     // MARK: - BUTTON
 
     private func setupNextButton() {

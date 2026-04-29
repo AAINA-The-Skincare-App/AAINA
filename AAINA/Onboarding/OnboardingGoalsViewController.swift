@@ -3,7 +3,7 @@ import UIKit
 class OnboardingGoalsViewController: UIViewController {
 
     var onboardingData: OnboardingData!
-    var dataModel: DataModel!
+    var dataModel: AppDataModel!
     var isEditingProfile: Bool = false
 
     @IBOutlet weak var progressView: UIProgressView!
